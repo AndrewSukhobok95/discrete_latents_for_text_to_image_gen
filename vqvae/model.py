@@ -1,3 +1,4 @@
+import os
 import torch
 import torch.nn as nn
 from vqvae.modules import Encoder, Decoder
@@ -24,4 +25,15 @@ class VQVAE(nn.Module):
         loss, quantized, perplexity, _ = self.quantizer(z)
         x_recon = self.decoder(quantized)
         return loss, x_recon, perplexity
+
+    def save_model(self, root_path, model_name):
+        if not os.path.exists(root_path):
+            os.makedirs(root_path)
+        encoder_path = os.path.join(root_path, model_name + "_encoder.pth")
+        torch.save(self.encoder.state_dict(), encoder_path)
+        decoder_path = os.path.join(root_path, model_name + "_decoder.pth")
+        torch.save(self.decoder.state_dict(), decoder_path)
+        quantizer_path = os.path.join(root_path, model_name + "_quantizer.pth")
+        torch.save(self.quantizer.state_dict(), quantizer_path)
+
 
