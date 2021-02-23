@@ -12,6 +12,6 @@ class Config:
     vqvae_decay = 0.99
     vqvae_num_x2downsamples = 3
     DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    BATCH_SIZE = 4
+    BATCH_SIZE = 64
     NUM_EPOCHS = 1000
     LR = 1e-3
