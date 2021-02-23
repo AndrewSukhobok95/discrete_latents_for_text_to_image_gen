@@ -27,6 +27,8 @@ optimizer = optim.Adam(model.parameters(), lr=Config.LR)
 
 
 if __name__ == '__main__':
+    print("Device in use: {}".format(Config.DEVICE))
+
     model.train()
     model.to(Config.DEVICE)
 
