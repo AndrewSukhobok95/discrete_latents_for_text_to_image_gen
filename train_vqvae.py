@@ -32,8 +32,6 @@ if __name__ == '__main__':
 
     iteration = 0
     for epoch in range(Config.NUM_EPOCHS):
-        print("Epoch: {}".format(epoch))
-
         for imgs, _ in train_loader:
             imgs = imgs.to(Config.DEVICE)
 
@@ -44,6 +42,8 @@ if __name__ == '__main__':
 
             optimizer.step()
             optimizer.zero_grad()
+
+            print("Epoch: {} Iter: {} Loss: {}".format(epoch, iteration, loss.item()))
 
             writer.add_scalar('Loss', loss.item(), iteration)
             writer.add_scalar('VQLoss', vq_loss.item(), iteration)
