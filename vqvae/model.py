@@ -26,14 +26,31 @@ class VQVAE(nn.Module):
         x_recon = self.decoder(quantized)
         return loss, x_recon, perplexity
 
+    def encode(self, x):
+        z = self.encoder(x)
+        loss, quantized, perplexity, encoding_info = self.quantizer(z)
+        return quantized, encoding_info
+
+    def decode(self, z):
+        x_recon = self.decoder(z)
+        return x_recon
+
+    def load_model(self, root_path, model_name, map_location=torch.device('cpu')):
+        encoder_path = os.path.join(root_path, model_name + "_encoder.pth")
+        decoder_path = os.path.join(root_path, model_name + "_decoder.pth")
+        quantizer_path = os.path.join(root_path, model_name + "_quantizer.pth")
+        self.encoder.load_state_dict(torch.load(encoder_path, map_location=map_location))
+        self.decoder.load_state_dict(torch.load(decoder_path, map_location=map_location))
+        self.quantizer.load_state_dict(torch.load(quantizer_path, map_location=map_location))
+
     def save_model(self, root_path, model_name):
         if not os.path.exists(root_path):
             os.makedirs(root_path)
         encoder_path = os.path.join(root_path, model_name + "_encoder.pth")
-        torch.save(self.encoder.state_dict(), encoder_path)
         decoder_path = os.path.join(root_path, model_name + "_decoder.pth")
-        torch.save(self.decoder.state_dict(), decoder_path)
         quantizer_path = os.path.join(root_path, model_name + "_quantizer.pth")
+        torch.save(self.encoder.state_dict(), encoder_path)
+        torch.save(self.decoder.state_dict(), decoder_path)
         torch.save(self.quantizer.state_dict(), quantizer_path)
 
 

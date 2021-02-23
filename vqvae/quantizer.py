@@ -32,6 +32,8 @@ class VectorQuantizer(nn.Module):
         encodings = torch.zeros(encoding_indices.shape[0], self._num_embeddings, device=inputs.device)
         encodings.scatter_(1, encoding_indices, 1)
 
+        encoding_codes = encoding_indices.view([input_shape[0], input_shape[1], input_shape[2]])
+
         # Quantize and unflatten
         quantized = torch.matmul(encodings, self._embedding.weight).view(input_shape)
 
@@ -45,7 +47,7 @@ class VectorQuantizer(nn.Module):
         perplexity = torch.exp(-torch.sum(avg_probs * torch.log(avg_probs + 1e-10)))
 
         # convert quantized from BHWC -> BCHW
-        return loss, quantized.permute(0, 3, 1, 2).contiguous(), perplexity, encodings
+        return loss, quantized.permute(0, 3, 1, 2).contiguous(), perplexity, (encodings, encoding_codes)
 
 
 class VectorQuantizerEMA(nn.Module):
@@ -84,6 +86,8 @@ class VectorQuantizerEMA(nn.Module):
         encodings = torch.zeros(encoding_indices.shape[0], self._num_embeddings, device=inputs.device)
         encodings.scatter_(1, encoding_indices, 1)
 
+        encoding_codes = encoding_indices.view([input_shape[0], input_shape[1], input_shape[2]])
+
         # Quantize and unflatten
         quantized = torch.matmul(encodings, self._embedding.weight).view(input_shape)
 
@@ -112,4 +116,12 @@ class VectorQuantizerEMA(nn.Module):
         perplexity = torch.exp(-torch.sum(avg_probs * torch.log(avg_probs + 1e-10)))
 
         # convert quantized from BHWC -> BCHW
-        return loss, quantized.permute(0, 3, 1, 2).contiguous(), perplexity, encodings
+        return loss, quantized.permute(0, 3, 1, 2).contiguous(), perplexity, (encodings, encoding_codes)
+
+
+if __name__ == '__main__':
+    q = VectorQuantizer(num_embeddings=10, embedding_dim=5, commitment_cost=0.25)
+
+    inputs = torch.rand((1, 5, 4, 4))
+    q.forward(inputs)
+
