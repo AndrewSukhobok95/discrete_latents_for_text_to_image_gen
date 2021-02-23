@@ -54,6 +54,3 @@ if __name__ == '__main__':
         model.save_model(root_path=Config.save_model_path, model_name="VQVAE")
 
     writer.close()
-
-    # x, _ = next(iter(train_loader))
-    # print()
