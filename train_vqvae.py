@@ -8,34 +8,36 @@ from vqvae.model import VQVAE
 from config import Config
 
 
+CONFIG = Config(local=False)
+
 writer = SummaryWriter()
 
-train_dataset = CubDataset(root_img_path=Config.root_img_path,
-                           root_text_path=Config.root_text_path,
-                           imgs_list_file_path=Config.imgs_list_file_path)
+train_dataset = CubDataset(root_img_path=CONFIG.root_img_path,
+                           root_text_path=CONFIG.root_text_path,
+                           imgs_list_file_path=CONFIG.imgs_list_file_path)
 train_loader = DataLoader(dataset=train_dataset,
-                          batch_size=Config.BATCH_SIZE,
+                          batch_size=CONFIG.BATCH_SIZE,
                           shuffle=True,
                           collate_fn=cub_collate)
 
-model = VQVAE(num_embeddings=Config.vqvae_num_embeddings,
-              embedding_dim=Config.vqvae_embedding_dim,
-              commitment_cost=Config.vqvae_commitment_cost,
-              decay=Config.vqvae_decay,
-              num_x2downsamples=Config.vqvae_num_x2downsamples)
-optimizer = optim.Adam(model.parameters(), lr=Config.LR)
+model = VQVAE(num_embeddings=CONFIG.vqvae_num_embeddings,
+              embedding_dim=CONFIG.vqvae_embedding_dim,
+              commitment_cost=CONFIG.vqvae_commitment_cost,
+              decay=CONFIG.vqvae_decay,
+              num_x2downsamples=CONFIG.vqvae_num_x2downsamples)
+optimizer = optim.Adam(model.parameters(), lr=CONFIG.LR)
 
 
 if __name__ == '__main__':
-    print("Device in use: {}".format(Config.DEVICE))
+    print("Device in use: {}".format(CONFIG.DEVICE))
 
     model.train()
-    model.to(Config.DEVICE)
+    model.to(CONFIG.DEVICE)
 
     iteration = 0
-    for epoch in range(Config.NUM_EPOCHS):
+    for epoch in range(CONFIG.NUM_EPOCHS):
         for imgs, _ in train_loader:
-            imgs = imgs.to(Config.DEVICE)
+            imgs = imgs.to(CONFIG.DEVICE)
 
             vq_loss, data_recon, perplexity = model(imgs)
             recon_error = F.mse_loss(data_recon, imgs)
@@ -53,6 +55,6 @@ if __name__ == '__main__':
             writer.add_scalar('Perplexity', perplexity.item(), iteration)
             iteration += 1
 
-        model.save_model(root_path=Config.save_model_path, model_name="VQVAE")
+        model.save_model(root_path=CONFIG.save_model_path, model_name="VQVAE")
 
     writer.close()
