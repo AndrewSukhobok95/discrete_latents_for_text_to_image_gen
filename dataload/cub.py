@@ -2,7 +2,7 @@ import os
 import numpy as np
 from PIL import Image
 import torch
-from torch.utils.data import Dataset
+from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms as torch_transforms
 
 
@@ -53,6 +53,8 @@ class CubDataset(Dataset):
 
         img = Image.open(img_full_path)
         x = self.transform(img)
+        if x.size(0) == 1:
+            x = x.repeat(3, 1, 1)
         x = torch.unsqueeze(x, 0)
 
         texts_list = _parse_text(txt_full_path)
@@ -79,6 +81,14 @@ if __name__ == '__main__':
     d = CubDataset(root_img_path="/home/andrey/Aalto/TA-VQVAE/data/CUB/CUB_200_2011/images",
                    root_text_path="/home/andrey/Aalto/TA-VQVAE/data/CUB/text",
                    imgs_list_file_path="/home/andrey/Aalto/TA-VQVAE/data/CUB/CUB_200_2011/images.txt")
-    print(d[1])
+    print(d[51])
+
+    train_loader = DataLoader(dataset=d,
+                              batch_size=64,
+                              shuffle=True,
+                              collate_fn=cub_collate)
+
+    for x, _ in train_loader:
+        print(x.size())
 
 
