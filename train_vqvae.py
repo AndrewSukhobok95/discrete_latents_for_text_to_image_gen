@@ -9,6 +9,7 @@ from config import Config
 
 
 CONFIG = Config(local=False)
+CONFIG.save_config()
 
 writer = SummaryWriter()
 
