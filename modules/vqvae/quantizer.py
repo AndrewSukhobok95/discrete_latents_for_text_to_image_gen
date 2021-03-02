@@ -49,6 +49,9 @@ class VectorQuantizer(nn.Module):
         # convert quantized from BHWC -> BCHW
         return loss, quantized.permute(0, 3, 1, 2).contiguous(), perplexity, (encodings, encoding_codes)
 
+    def get_by_index(self, index):
+        return self._embedding(index)
+
 
 class VectorQuantizerEMA(nn.Module):
     def __init__(self, num_embeddings, embedding_dim, commitment_cost, decay, epsilon=1e-5):
@@ -117,6 +120,9 @@ class VectorQuantizerEMA(nn.Module):
 
         # convert quantized from BHWC -> BCHW
         return loss, quantized.permute(0, 3, 1, 2).contiguous(), perplexity, (encodings, encoding_codes)
+
+    def get_by_index(self, index):
+        return self._embedding(index)
 
 
 if __name__ == '__main__':

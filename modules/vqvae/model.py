@@ -1,8 +1,8 @@
 import os
 import torch
 import torch.nn as nn
-from vqvae.modules import Encoder, Decoder
-from vqvae.quantizer import VectorQuantizer, VectorQuantizerEMA
+from modules.vqvae.blocks import Encoder, Decoder
+from modules.vqvae.quantizer import VectorQuantizer, VectorQuantizerEMA
 
 
 class VQVAE(nn.Module):
@@ -32,6 +32,11 @@ class VQVAE(nn.Module):
         return quantized, encoding_info
 
     def decode(self, z):
+        x_recon = self.decoder(z)
+        return x_recon
+
+    def decode_by_index_mask(self, index_mask):
+        z = self.quantizer.get_by_index(index_mask).permute(0, 3, 1, 2)
         x_recon = self.decoder(z)
         return x_recon
 

@@ -1,6 +1,6 @@
 import unittest
 import torch
-from vqvae.modules import Residual, ResidualStack, DownSampleX2, UpSampleX2, Encoder, Decoder
+from modules.vqvae.blocks import Residual, ResidualStack, DownSampleX2, UpSampleX2, Encoder, Decoder
 
 
 class TestVQVAEModules(unittest.TestCase):

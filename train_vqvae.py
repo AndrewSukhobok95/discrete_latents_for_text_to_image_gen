@@ -1,14 +1,13 @@
-import torch
 import torch.optim as optim
 import torch.nn.functional as F
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
-from dataload.cub import CubDataset, cub_collate
-from vqvae.model import VQVAE
+from datasets.cub import CubDataset, cub_collate
+from modules.vqvae.model import VQVAE
 from config import Config
 
 
-CONFIG = Config(local=False)
+CONFIG = Config(local=False, model_path="models/vqvae_e512x8138/")
 CONFIG.save_config()
 
 writer = SummaryWriter()
