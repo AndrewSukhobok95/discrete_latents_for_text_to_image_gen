@@ -3,7 +3,7 @@ import torch
 from modules.vqvae.blocks import Residual, ResidualStack, DownSampleX2, UpSampleX2, Encoder, Decoder
 
 
-class TestVQVAEModules(unittest.TestCase):
+class TestVQVAEBlocks(unittest.TestCase):
 
     def test_dim_Residual(self):
         x = torch.rand((1, 3, 128, 128))

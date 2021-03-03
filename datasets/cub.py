@@ -25,6 +25,10 @@ def _parse_text(txt_path):
     return texts
 
 
+def _prep_str(text):
+    return "[CLS] " + text.replace("\n", " ") + " [SEP]"
+
+
 class CubDataset(Dataset):
     def __init__(self, root_img_path, root_text_path, imgs_list_file_path=None, transform=None):
         self.root_img_path = root_img_path
@@ -61,19 +65,25 @@ class CubDataset(Dataset):
         text_num = np.random.choice(len(texts_list))
         text = texts_list[text_num]
 
-        # Remove later - used to check output
-        # a = x.numpy().transpose((1,2,0))*255
-        # a = a.astype(np.uint8)
-        # _img = Image.fromarray(a, "RGB")
-        # _img.show()
-        # _img.save('my.png')
-
         return x, text
 
 
 def cub_collate(samples):
     imgs, texts = list(zip(*samples))
     return torch.cat(imgs, dim=0), texts
+
+
+class CubCollater:
+    def __init__(self, tokenizer):
+        self.tokenizer = tokenizer
+
+    def collate(self, samples):
+        imgs, texts = list(zip(*samples))
+        padded_sequences = self.tokenizer(texts, padding=True)
+        token_tensor = torch.tensor(padded_sequences["input_ids"])
+        token_type_tensor = torch.tensor(padded_sequences["token_type_ids"])
+        attention_mask_tensor = torch.tensor(padded_sequences["attention_mask"])
+        return torch.cat(imgs, dim=0), (token_tensor, token_type_tensor, attention_mask_tensor)
 
 
 if __name__ == '__main__':
