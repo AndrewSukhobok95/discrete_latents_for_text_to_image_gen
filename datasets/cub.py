@@ -30,7 +30,12 @@ def _prep_str(text):
 
 
 class CubDataset(Dataset):
-    def __init__(self, root_img_path, root_text_path, imgs_list_file_path=None, transform=None):
+    def __init__(self,
+                 root_img_path,
+                 root_text_path,
+                 imgs_list_file_path=None,
+                 transform=None,
+                 img_size=256):
         self.root_img_path = root_img_path
         self.root_text_path = root_text_path
         if imgs_list_file_path is None:
@@ -39,8 +44,8 @@ class CubDataset(Dataset):
             self.data_paths = _read_imgs_list(imgs_list_file_path)
         if transform is None:
             transform = torch_transforms.Compose([
-                torch_transforms.Resize(270),
-                torch_transforms.RandomCrop(256),
+                torch_transforms.Resize(img_size + 10),
+                torch_transforms.RandomCrop(img_size),
                 torch_transforms.RandomHorizontalFlip(),
                 #torch_transforms.RandomRotation(5),
                 torch_transforms.ToTensor()

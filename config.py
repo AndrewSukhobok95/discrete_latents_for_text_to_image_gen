@@ -12,11 +12,12 @@ class Config:
             self.BATCH_SIZE = 8
         else:
             root_dir = "/u/82/sukhoba1/unix/Desktop/TA-VQVAE"
-            self.BATCH_SIZE = 32
+            self.BATCH_SIZE = 64
         self.save_model_path = os.path.join(os.path.normpath(root_dir), model_path)
         self.root_img_path = os.path.join(os.path.normpath(root_dir), "data/CUB/CUB_200_2011/images")
         self.root_text_path = os.path.join(os.path.normpath(root_dir), "data/CUB/text")
         self.imgs_list_file_path = os.path.join(os.path.normpath(root_dir), "data/CUB/CUB_200_2011/images.txt")
+        self.img_size = 128
         self.vqvae_num_embeddings = 8138
         self.vqvae_embedding_dim = 512
         self.vqvae_commitment_cost = 0.25
@@ -34,6 +35,7 @@ class Config:
             "root_text_path": self.root_text_path,
             "imgs_list_file_path": self.imgs_list_file_path,
             "save_model_path": self.save_model_path,
+            "img_size": self.img_size,
             "vqvae_num_embeddings": self.vqvae_num_embeddings,
             "vqvae_embedding_dim": self.vqvae_embedding_dim,
             "vqvae_commitment_cost": self.vqvae_commitment_cost,
@@ -51,10 +53,7 @@ class Config:
         save_path = os.path.join(self.save_model_path, 'config.json')
         with open(save_path, 'r') as file:
             info = json.load(file)
-        self.root_img_path = info["root_img_path"]
-        self.root_text_path = info["root_text_path"]
-        self.imgs_list_file_path = info["imgs_list_file_path"]
-        self.save_model_path = info["save_model_path"]
+        self.img_size = info["img_size"]
         self.vqvae_num_embeddings = info["vqvae_num_embeddings"]
         self.vqvae_embedding_dim = info["vqvae_embedding_dim"]
         self.vqvae_commitment_cost = info["vqvae_commitment_cost"]
@@ -62,6 +61,6 @@ class Config:
         self.vqvae_num_x2downsamples = info["vqvae_num_x2downsamples"]
 
 if __name__ == '__main__':
-    c = Config(local=True, model_path="models/vqvae_e512x8138/")
+    c = Config(local=True, model_path="models/vqvae/")
     c.save_config()
     c.load_config()

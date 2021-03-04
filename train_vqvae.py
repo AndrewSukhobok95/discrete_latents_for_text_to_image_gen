@@ -7,14 +7,15 @@ from modules.vqvae.model import VQVAE
 from config import Config
 
 
-CONFIG = Config(local=False, model_path="models/vqvae_e512x8138/")
+CONFIG = Config(local=False, model_path="models/vqvae_i128_e512x8138/")
 CONFIG.save_config()
 
 writer = SummaryWriter()
 
 train_dataset = CubDataset(root_img_path=CONFIG.root_img_path,
                            root_text_path=CONFIG.root_text_path,
-                           imgs_list_file_path=CONFIG.imgs_list_file_path)
+                           imgs_list_file_path=CONFIG.imgs_list_file_path,
+                           img_size=CONFIG.img_size)
 train_loader = DataLoader(dataset=train_dataset,
                           batch_size=CONFIG.BATCH_SIZE,
                           shuffle=True,
