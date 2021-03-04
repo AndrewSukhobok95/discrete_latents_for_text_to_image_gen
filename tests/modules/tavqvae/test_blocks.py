@@ -7,7 +7,7 @@ class TestTAVQVAEBlocks(unittest.TestCase):
 
     def test_dim_Attention(self):
         x = torch.rand((2, 16, 5, 5))
-        emb = torch.rand(2, 10, 16)
+        emb = torch.rand(10, 2, 16)
         mask = torch.tensor([
             [1,1,1,1,1,1,1,1,1,1],
             [1,1,1,1,1,0,0,0,0,0]

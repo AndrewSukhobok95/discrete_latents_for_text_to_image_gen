@@ -55,7 +55,7 @@ class Attention(nn.Module):
     def forward(self, imgh, texth, mask=None):
         """
         :param imgh: batch x emb_size x ih x iw (query_len=hxw)
-        :param texth: batch x seq_len x emb_size
+        :param texth: seq_len x batch x emb_size
         :param mask: batch x seq_len
         """
         batch_size = imgh.size(0)
@@ -67,9 +67,9 @@ class Attention(nn.Module):
         # --> query_len x batch x emb_size
         query = query.permute(2,0,1)
 
-        # --> seq_len x batch x emb_size
-        key = torch.transpose(texth, 0, 1)#.contiguous()
-        value = torch.transpose(texth, 0, 1)#.contiguous()
+        # # --> seq_len x batch x emb_size
+        # key = torch.transpose(texth, 0, 1)#.contiguous()
+        # value = torch.transpose(texth, 0, 1)#.contiguous()
 
         # Mask in troch.multihead_attn notations
         # True value corresponds to padding places
@@ -77,7 +77,8 @@ class Attention(nn.Module):
         if mask is not None:
             pad_mask = (1 - mask).bool()
 
-        attn, _ = self.multihead_attn(query, key, value, key_padding_mask=pad_mask)
+        attn, _ = self.multihead_attn(query=query, key=texth, value=texth,
+                                      key_padding_mask=pad_mask)
 
         # --> batch x emb_size x query_len
         attn = attn.permute(1,2,0)

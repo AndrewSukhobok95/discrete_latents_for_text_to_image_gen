@@ -78,6 +78,13 @@ class Discriminator(nn.Module):
         self.apply(init_weights)
 
     def forward(self, img, txt, len_txt, negative=False):
+        """
+        :param img:
+        :param txt:
+        :param len_txt:
+        :param negative:
+        """
+
         img_feat_1 = self.encoder_1(img)
         img_feat_2 = self.encoder_2(img_feat_1)
         img_feat_3 = self.encoder_3(img_feat_2)

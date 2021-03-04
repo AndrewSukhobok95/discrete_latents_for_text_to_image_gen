@@ -16,6 +16,11 @@ class TextRebuildBlock(nn.Module):
         self.convert_ch_2 = ChangeChannels(in_channels=embed_dim, out_channels=channel_dim, bias=bias)
 
     def forward(self, imgh, texth, text_mask=None):
+        """
+        :param imgh: batch x emb_size x ih x iw (query_len=hxw)
+        :param texth: seq_len x batch x emb_size
+        :param text_mask: batch x seq_len
+        """
         x = self.convert_ch_1(imgh)
         x = self.attn_1(x, texth, text_mask)
         x = self.res_block(x)
