@@ -12,17 +12,18 @@ class Config:
             self.BATCH_SIZE = 8
         else:
             root_dir = "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/"
-            self.BATCH_SIZE = 32
+            self.BATCH_SIZE = 64
         self.save_model_path = os.path.join(os.path.normpath(root_dir), model_path)
         self.root_img_path = os.path.join(os.path.normpath(root_dir), "data/CUB/CUB_200_2011/images")
         self.root_text_path = os.path.join(os.path.normpath(root_dir), "data/CUB/text")
         self.imgs_list_file_path = os.path.join(os.path.normpath(root_dir), "data/CUB/CUB_200_2011/images.txt")
-        self.img_size = 256
-        self.vqvae_num_embeddings = 8138
-        self.vqvae_embedding_dim = 512
+        self.img_size = 128
+        self.vqvae_num_embeddings = 4096
+        self.vqvae_embedding_dim = 256
         self.vqvae_commitment_cost = 0.25
         self.vqvae_decay = 0.99
         self.vqvae_num_x2downsamples = 3
+        self.vqvae_num_residual_layers = 4
         self.DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.NUM_EPOCHS = 3000
         self.LR = 1e-3
@@ -41,6 +42,7 @@ class Config:
             "vqvae_commitment_cost": self.vqvae_commitment_cost,
             "vqvae_decay": self.vqvae_decay,
             "vqvae_num_x2downsamples": self.vqvae_num_x2downsamples,
+            "vqvae_num_residual_layers": self.vqvae_num_residual_layers,
             "BATCH_SIZE": self.BATCH_SIZE,
             "NUM_EPOCHS": self.NUM_EPOCHS,
             "LR": self.LR
@@ -59,6 +61,7 @@ class Config:
         self.vqvae_commitment_cost = info["vqvae_commitment_cost"]
         self.vqvae_decay = info["vqvae_decay"]
         self.vqvae_num_x2downsamples = info["vqvae_num_x2downsamples"]
+        self.vqvae_num_residual_layers = info["vqvae_num_residual_layers"]
 
 
 if __name__ == '__main__':

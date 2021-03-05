@@ -72,7 +72,7 @@ class ChangeChannels(nn.Module):
 
 
 class Encoder(nn.Module):
-    def __init__(self, in_channels, out_channels, num_downsamples=2):
+    def __init__(self, in_channels, out_channels, num_downsamples=2, num_residual_layers=4):
         super(Encoder, self).__init__()
         _out_ch = out_channels // (2**num_downsamples)
         self._change_ch_block = ChangeChannels(in_channels, _out_ch)
@@ -83,7 +83,7 @@ class Encoder(nn.Module):
             down_sample_block += [DownSampleX2(in_channels=_in_ch, out_channels=_out_ch),
                                   ResidualStack(in_channels=_out_ch, out_channels=_out_ch, num_residual_layers=1)]
         self._down_sample_block = nn.Sequential(*down_sample_block)
-        self._res_block = ResidualStack(in_channels=out_channels, out_channels=out_channels, num_residual_layers=2)
+        self._res_block = ResidualStack(in_channels=out_channels, out_channels=out_channels, num_residual_layers=num_residual_layers)
         #self._conv1x1 = nn.Conv2d(out_channels, out_channels, kernel_size=1, stride=1, padding=0, bias=False)
 
     def forward(self, x):
@@ -94,11 +94,11 @@ class Encoder(nn.Module):
 
 
 class Decoder(nn.Module):
-    def __init__(self, in_channels, out_channels, num_upsamples=2):
+    def __init__(self, in_channels, out_channels, num_upsamples=2, num_residual_layers=4):
         super(Decoder, self).__init__()
         #self._conv1x1 = nn.Conv2d(in_channels, in_channels, kernel_size=1, stride=1, padding=0, bias=False)
         _out_ch = in_channels
-        self._res_block = ResidualStack(in_channels=in_channels, out_channels=in_channels, num_residual_layers=2)
+        self._res_block = ResidualStack(in_channels=in_channels, out_channels=in_channels, num_residual_layers=num_residual_layers)
         up_sample_block = []
         for _ in range(num_upsamples):
             _in_ch = _out_ch
