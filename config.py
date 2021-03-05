@@ -11,7 +11,7 @@ class Config:
             root_dir = "/home/andrey/Aalto/TA-VQVAE/"
             self.BATCH_SIZE = 8
         else:
-            root_dir = "/u/82/sukhoba1/unix/Desktop/TA-VQVAE"
+            root_dir = "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/"
             self.BATCH_SIZE = 64
         self.save_model_path = os.path.join(os.path.normpath(root_dir), model_path)
         self.root_img_path = os.path.join(os.path.normpath(root_dir), "data/CUB/CUB_200_2011/images")
@@ -59,6 +59,7 @@ class Config:
         self.vqvae_commitment_cost = info["vqvae_commitment_cost"]
         self.vqvae_decay = info["vqvae_decay"]
         self.vqvae_num_x2downsamples = info["vqvae_num_x2downsamples"]
+
 
 if __name__ == '__main__':
     c = Config(local=True, model_path="models/vqvae/")
