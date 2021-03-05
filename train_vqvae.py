@@ -25,7 +25,8 @@ model = VQVAE(num_embeddings=CONFIG.vqvae_num_embeddings,
               embedding_dim=CONFIG.vqvae_embedding_dim,
               commitment_cost=CONFIG.vqvae_commitment_cost,
               decay=CONFIG.vqvae_decay,
-              num_x2downsamples=CONFIG.vqvae_num_x2downsamples)
+              num_x2downsamples=CONFIG.vqvae_num_x2downsamples,
+              num_residual_layers=CONFIG.vqvae_num_residual_layers)
 optimizer = optim.Adam(model.parameters(), lr=CONFIG.LR)
 
 
