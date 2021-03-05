@@ -12,7 +12,7 @@ class Config:
             self.BATCH_SIZE = 8
         else:
             root_dir = "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/"
-            self.BATCH_SIZE = 64
+            self.BATCH_SIZE = 32
         self.save_model_path = os.path.join(os.path.normpath(root_dir), model_path)
         self.root_img_path = os.path.join(os.path.normpath(root_dir), "data/CUB/CUB_200_2011/images")
         self.root_text_path = os.path.join(os.path.normpath(root_dir), "data/CUB/text")
