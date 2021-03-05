@@ -22,7 +22,7 @@ class Config:
         self.vqvae_embedding_dim = 256
         self.vqvae_commitment_cost = 0.25
         self.vqvae_decay = 0.99
-        self.vqvae_num_x2downsamples = 3
+        self.vqvae_num_x2downsamples = 2
         self.vqvae_num_residual_layers = 4
         self.DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.NUM_EPOCHS = 3000
