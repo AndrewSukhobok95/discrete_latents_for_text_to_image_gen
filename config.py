@@ -17,12 +17,12 @@ class Config:
         self.root_img_path = os.path.join(os.path.normpath(root_dir), "data/CUB/CUB_200_2011/images")
         self.root_text_path = os.path.join(os.path.normpath(root_dir), "data/CUB/text")
         self.imgs_list_file_path = os.path.join(os.path.normpath(root_dir), "data/CUB/CUB_200_2011/images.txt")
-        self.img_size = 128
+        self.img_size = 256
         self.vqvae_num_embeddings = 8138
         self.vqvae_embedding_dim = 512
         self.vqvae_commitment_cost = 0.25
         self.vqvae_decay = 0.99
-        self.vqvae_num_x2downsamples = 2
+        self.vqvae_num_x2downsamples = 3
         self.DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.NUM_EPOCHS = 3000
         self.LR = 1e-3
