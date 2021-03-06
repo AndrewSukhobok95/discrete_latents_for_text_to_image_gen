@@ -3,6 +3,7 @@ from torch.optim.lr_scheduler import MultiStepLR
 import torch.nn.functional as F
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
+import torchvision
 from datasets.cub import CubDataset, cub_collate
 from modules.vqvae.model import VQVAE
 from config import Config
@@ -61,7 +62,11 @@ if __name__ == '__main__':
             writer.add_scalar('VQLoss', vq_loss.item(), iteration)
             writer.add_scalar('ReconLoss', recon_error.item(), iteration)
             writer.add_scalar('Perplexity', perplexity.item(), iteration)
+
             iteration += 1
+
+        img_recon_grid = torchvision.utils.make_grid(data_recon.detach().cpu())
+        writer.add_image('BirdReconstruction', img_recon_grid)
 
         lr_scheduler.step()
 

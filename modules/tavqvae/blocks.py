@@ -2,49 +2,51 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-
-class Residual(nn.Module):
-    def __init__(self, in_channels, out_channels, bias=False):
-        super(Residual, self).__init__()
-        self._block = nn.Sequential(
-            nn.ReLU(True),
-            nn.Conv2d(in_channels=in_channels, out_channels=out_channels,
-                      kernel_size=3, stride=1, padding=1, bias=bias),
-            nn.ReLU(True),
-            nn.Conv2d(in_channels=out_channels, out_channels=out_channels,
-                      kernel_size=1, stride=1, bias=bias)
-        )
-
-    def forward(self, x):
-        return x + self._block(x)
+from modules.common_blocks import Residual, ResidualStack, ChangeChannels
 
 
-class ResidualStack(nn.Module):
-    def __init__(self, in_channels, out_channels, num_residual_layers, bias=False):
-        super(ResidualStack, self).__init__()
-        self._num_residual_layers = num_residual_layers
-        self._layers = nn.ModuleList([Residual(in_channels, out_channels, bias=bias)
-                                      for _ in range(self._num_residual_layers)])
-
-    def forward(self, x):
-        for i in range(self._num_residual_layers):
-            x = self._layers[i](x)
-        return F.relu(x)
-
-
-class ChangeChannels(nn.Module):
-    def __init__(self, in_channels, out_channels, bias=False):
-        super(ChangeChannels, self).__init__()
-        self._block = nn.Sequential(
-            nn.Conv2d(in_channels=in_channels, out_channels=out_channels,
-                      kernel_size=3, stride=1, padding=1, bias=bias),
-            nn.ReLU(True),
-            nn.Conv2d(in_channels=out_channels, out_channels=out_channels,
-                      kernel_size=1, stride=1, bias=bias)
-        )
-
-    def forward(self, x):
-        return self._block(x)
+# class Residual(nn.Module):
+#     def __init__(self, in_channels, out_channels, bias=False):
+#         super(Residual, self).__init__()
+#         self._block = nn.Sequential(
+#             nn.ReLU(True),
+#             nn.Conv2d(in_channels=in_channels, out_channels=out_channels,
+#                       kernel_size=3, stride=1, padding=1, bias=bias),
+#             nn.ReLU(True),
+#             nn.Conv2d(in_channels=out_channels, out_channels=out_channels,
+#                       kernel_size=1, stride=1, bias=bias)
+#         )
+#
+#     def forward(self, x):
+#         return x + self._block(x)
+#
+#
+# class ResidualStack(nn.Module):
+#     def __init__(self, in_channels, out_channels, num_residual_layers, bias=False):
+#         super(ResidualStack, self).__init__()
+#         self._num_residual_layers = num_residual_layers
+#         self._layers = nn.ModuleList([Residual(in_channels, out_channels, bias=bias)
+#                                       for _ in range(self._num_residual_layers)])
+#
+#     def forward(self, x):
+#         for i in range(self._num_residual_layers):
+#             x = self._layers[i](x)
+#         return F.relu(x)
+#
+#
+# class ChangeChannels(nn.Module):
+#     def __init__(self, in_channels, out_channels, bias=False):
+#         super(ChangeChannels, self).__init__()
+#         self._block = nn.Sequential(
+#             nn.Conv2d(in_channels=in_channels, out_channels=out_channels,
+#                       kernel_size=3, stride=1, padding=1, bias=bias),
+#             nn.ReLU(True),
+#             nn.Conv2d(in_channels=out_channels, out_channels=out_channels,
+#                       kernel_size=1, stride=1, bias=bias)
+#         )
+#
+#     def forward(self, x):
+#         return self._block(x)
 
 
 class Attention(nn.Module):
@@ -66,10 +68,6 @@ class Attention(nn.Module):
         query = imgh.view(batch_size, -1, query_len)
         # --> query_len x batch x emb_size
         query = query.permute(2,0,1)
-
-        # # --> seq_len x batch x emb_size
-        # key = torch.transpose(texth, 0, 1)#.contiguous()
-        # value = torch.transpose(texth, 0, 1)#.contiguous()
 
         # Mask in troch.multihead_attn notations
         # True value corresponds to padding places

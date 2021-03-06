@@ -79,10 +79,10 @@ class Discriminator(nn.Module):
 
     def forward(self, img, txt, len_txt, negative=False):
         """
-        :param img:
-        :param txt:
-        :param len_txt:
-        :param negative:
+        :param img: batch x ich x ih x iw (query_len=hxw)
+        :param txt: seq_len x batch x emb_size
+        :param len_txt: batch
+        :param negative: bool
         """
 
         img_feat_1 = self.encoder_1(img)

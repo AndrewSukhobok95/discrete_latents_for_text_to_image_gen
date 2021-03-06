@@ -1,7 +1,8 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from modules.tavqvae.blocks import ChangeChannels, ResidualStack, Attention, MaskBlock, masking_sum
+from modules.tavqvae.blocks import Attention, MaskBlock, masking_sum
+from modules.common_blocks import ChangeChannels, ResidualStack
 
 
 class TextRebuildBlock(nn.Module):

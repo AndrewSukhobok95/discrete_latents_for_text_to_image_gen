@@ -15,12 +15,22 @@ class Generator(nn.Module):
                  decay=0.0,
                  num_x2downsamples=2,
                  vqvae_num_residual_layers=2,
-                 text_rebuild_num_residual_layers=2):
+                 text_rebuild_num_residual_layers=2,
+                 use_batch_norm=False,
+                 vqvae_use_conv1x1=False):
         super(Generator, self).__init__()
-        self.vqvae = VQVAE(
-            num_embeddings, img_embedding_dim, commitment_cost, decay, num_x2downsamples, vqvae_num_residual_layers)
-        self.rebuild_block = TextRebuildBlock(
-            img_embedding_dim, text_embedding_dim, text_rebuild_num_residual_layers, bias=False)
+        self.vqvae = VQVAE(num_embeddings,
+                           img_embedding_dim,
+                           commitment_cost,
+                           decay,
+                           num_x2downsamples,
+                           vqvae_num_residual_layers,
+                           use_batch_norm=use_batch_norm,
+                           use_conv1x1=vqvae_use_conv1x1)
+        self.rebuild_block = TextRebuildBlock(img_embedding_dim,
+                                              text_embedding_dim,
+                                              text_rebuild_num_residual_layers,
+                                              bias=False)
 
     def forward(self, imgh, texth, text_mask=None):
         s = self.vqvae.encode(imgh)
