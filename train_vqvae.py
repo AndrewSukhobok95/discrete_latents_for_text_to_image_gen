@@ -8,7 +8,7 @@ from modules.vqvae.model import VQVAE
 from config import Config
 
 
-CONFIG = Config(local=True, model_path="models/vqvae_i128_e256x4096/")
+CONFIG = Config(local=False, model_path="models/vqvae_i128_e256x4096/")
 CONFIG.save_config()
 
 writer = SummaryWriter()
