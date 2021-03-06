@@ -53,7 +53,6 @@ if __name__ == '__main__':
 
             optimizer.step()
             optimizer.zero_grad()
-            lr_scheduler.step()
 
             _last_lr = lr_scheduler.get_last_lr()
             print("Epoch: {} Iter: {} Loss: {} LR: {}".format(epoch, iteration, loss.item(), _last_lr))
@@ -63,6 +62,8 @@ if __name__ == '__main__':
             writer.add_scalar('ReconLoss', recon_error.item(), iteration)
             writer.add_scalar('Perplexity', perplexity.item(), iteration)
             iteration += 1
+
+        lr_scheduler.step()
 
         model.save_model(root_path=CONFIG.save_model_path, model_name="VQVAE")
 
