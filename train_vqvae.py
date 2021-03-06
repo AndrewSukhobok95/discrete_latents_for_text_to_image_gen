@@ -65,8 +65,11 @@ if __name__ == '__main__':
 
             iteration += 1
 
-        img_recon_grid = torchvision.utils.make_grid(data_recon.detach().cpu())
-        writer.add_image('BirdReconstruction', img_recon_grid)
+        img_grid = torchvision.utils.make_grid(imgs[:8, :, :, :].detach().cpu())
+        writer.add_image('BirdImg', img_grid)
+
+        img_recon_grid = torchvision.utils.make_grid(data_recon[:8, :, :, :].detach().cpu())
+        writer.add_image('BirdImgReconstruction', img_recon_grid)
 
         lr_scheduler.step()
 
