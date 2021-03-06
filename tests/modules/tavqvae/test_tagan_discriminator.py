@@ -12,7 +12,7 @@ class TestTAGANDiscriminator(unittest.TestCase):
             [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 1, 1, 1, 1, 0, 0, 0, 0, 0]
         ])
-        model = Discriminator(embedding_dim=16)
+        model = Discriminator(text_embedding_dim=16)
         model.eval()
         disc, sim, sim_n = model.forward(img=x, txt=emb, len_txt=mask.sum(dim=1), negative=True)
         expected_disc_size = torch.Size([2])

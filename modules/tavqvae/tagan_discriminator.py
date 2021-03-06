@@ -18,7 +18,7 @@ def init_weights(m):
 
 
 class Discriminator(nn.Module):
-    def __init__(self, embedding_dim):
+    def __init__(self, text_embedding_dim):
         super(Discriminator, self).__init__()
         self.eps = 1e-7
 
@@ -60,8 +60,8 @@ class Discriminator(nn.Module):
         )
 
         # text feature
-        self.txt_encoder_f = nn.GRUCell(embedding_dim, 512)
-        self.txt_encoder_b = nn.GRUCell(embedding_dim, 512)
+        self.txt_encoder_f = nn.GRUCell(text_embedding_dim, 512)
+        self.txt_encoder_b = nn.GRUCell(text_embedding_dim, 512)
 
         self.gen_filter = nn.ModuleList([
             nn.Linear(512, 256 + 1),

@@ -24,9 +24,12 @@ class Config:
         self.vqvae_decay = 0.99
         self.vqvae_num_x2downsamples = 2
         self.vqvae_num_residual_layers = 4
+        self.text_rebuild_num_residual_layers = 4
         self.DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.NUM_EPOCHS = 3000
-        self.LR = 1e-3
+        self.LR = 0.01
+        self.LR_gamma = 0.1
+        self.step_LR_milestones = [10, 100, 300]
 
     def save_config(self):
         if not os.path.exists(self.save_model_path):
@@ -43,9 +46,12 @@ class Config:
             "vqvae_decay": self.vqvae_decay,
             "vqvae_num_x2downsamples": self.vqvae_num_x2downsamples,
             "vqvae_num_residual_layers": self.vqvae_num_residual_layers,
+            "text_rebuild_num_residual_layers": self.text_rebuild_num_residual_layers,
             "BATCH_SIZE": self.BATCH_SIZE,
             "NUM_EPOCHS": self.NUM_EPOCHS,
-            "LR": self.LR
+            "LR": self.LR,
+            "LR_gamma": self.LR_gamma,
+            "step_LR_milestones": self.step_LR_milestones
         }
         save_path = os.path.join(self.save_model_path, 'config.json')
         with open(save_path, 'w') as outfile:
@@ -62,6 +68,7 @@ class Config:
         self.vqvae_decay = info["vqvae_decay"]
         self.vqvae_num_x2downsamples = info["vqvae_num_x2downsamples"]
         self.vqvae_num_residual_layers = info["vqvae_num_residual_layers"]
+        self.text_rebuild_num_residual_layers = info["text_rebuild_num_residual_layers"]
 
 
 if __name__ == '__main__':
