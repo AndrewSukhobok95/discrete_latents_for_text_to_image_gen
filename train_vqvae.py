@@ -47,9 +47,9 @@ optimizer = optim.Adam(model.parameters(), lr=CONFIG.LR)
 lr_scheduler = MultiStepLR(optimizer, milestones=CONFIG.step_LR_milestones, gamma=CONFIG.LR_gamma)
 
 
-def validate():
+def validate(test_loader, model):
     n = 0
-    test_loss = torch.tensor(0)
+    test_loss = torch.tensor(0, device=CONFIG.DEVICE)
     for imgs, _ in test_loader:
         imgs = imgs.to(CONFIG.DEVICE)
         with torch.no_grad():
@@ -81,7 +81,7 @@ if __name__ == '__main__':
             optimizer.step()
             optimizer.zero_grad()
 
-            test_loss = validate()
+            test_loss = validate(test_loader, model)
 
             _last_lr = lr_scheduler.get_last_lr()
             print("Epoch: {} Iter: {} Loss: {} Test Loss: {} LR: {}".format(
