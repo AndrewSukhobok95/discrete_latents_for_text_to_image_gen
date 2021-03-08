@@ -49,7 +49,7 @@ lr_scheduler = MultiStepLR(optimizer, milestones=CONFIG.step_LR_milestones, gamm
 
 def validate(test_loader, model):
     n = 0
-    test_loss = torch.tensor(0, device=CONFIG.DEVICE)
+    test_loss = torch.tensor(0.0, device=CONFIG.DEVICE)
     for imgs, _ in test_loader:
         imgs = imgs.to(CONFIG.DEVICE)
         with torch.no_grad():
