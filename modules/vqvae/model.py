@@ -34,18 +34,24 @@ class VQVAE(nn.Module):
                                use_conv1x1=use_conv1x1)
 
     def forward(self, x):
-        z = self.encoder(x)
-        loss, quantized, perplexity, _ = self.quantizer(z)
+        latent = self.encoder(x)
+        vq_loss, quantized, perplexity, encoding_info = self.quantizer(latent)
         x_recon = self.decoder(quantized)
-        return loss, x_recon, perplexity
+        return vq_loss, quantized, x_recon, perplexity
+
+    def get_encoder_decoder_params(self):
+        return list(self.encoder.parameters()) + list(self.decoder.parameters())
+
+    def get_quantizer_params(self):
+        return self.quantizer.parameters()
 
     def encode(self, x):
         z = self.encoder(x)
         return z
 
-    def quantize(self, x):
-        loss, quantized, perplexity, encoding_info = self.quantizer(z)
-        return quantized, perplexity, encoding_info
+    def quantize(self, z):
+        vq_loss, quantized, perplexity, encoding_info = self.quantizer(z)
+        return vq_loss, quantized, perplexity, encoding_info
 
     def decode(self, z):
         x_recon = self.decoder(z)

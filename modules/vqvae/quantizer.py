@@ -1,3 +1,4 @@
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -48,6 +49,9 @@ class VectorQuantizer(nn.Module):
 
         # convert quantized from BHWC -> BCHW
         return loss, quantized.permute(0, 3, 1, 2).contiguous(), perplexity, (encodings, encoding_codes)
+
+    def init_weights(self, weight_tensor: np.array):
+        self._embedding.weight.data.copy_(torch.from_numpy(weight_tensor))
 
     def get_by_index(self, index):
         return self._embedding(index)
@@ -120,6 +124,9 @@ class VectorQuantizerEMA(nn.Module):
 
         # convert quantized from BHWC -> BCHW
         return loss, quantized.permute(0, 3, 1, 2).contiguous(), perplexity, (encodings, encoding_codes)
+
+    def init_weights(self, weight_tensor: np.array):
+        self._embedding.weight.data.copy_(torch.from_numpy(weight_tensor))
 
     def get_by_index(self, index):
         return self._embedding(index)
