@@ -87,14 +87,11 @@ if __name__ == '__main__':
             print("Epoch: {} Iter: {} Loss: {} Test Loss: {} LR: {}".format(
                 epoch, iteration, loss.item(), test_loss.item(), _last_lr))
 
-            tag_scalar_dict = {
-                "train": loss.item(),
-                "test": test_loss.item()
-            }
-            writer.add_scalar('Loss', tag_scalar_dict, iteration)
-            writer.add_scalar('VQLoss', vq_loss.item(), iteration)
-            writer.add_scalar('ReconLoss', recon_error.item(), iteration)
-            writer.add_scalar('Perplexity', perplexity.item(), iteration)
+            writer.add_scalar('Loss/train', loss.item(), iteration)
+            writer.add_scalar('Loss/test', test_loss.item(), iteration)
+            writer.add_scalar('VQLoss/train', vq_loss.item(), iteration)
+            writer.add_scalar('ReconLoss/train', recon_error.item(), iteration)
+            writer.add_scalar('Perplexity/train', perplexity.item(), iteration)
 
             iteration += 1
 
