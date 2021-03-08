@@ -18,7 +18,7 @@ class Config:
         self.root_text_path = os.path.join(os.path.normpath(root_dir), "data/CUB/text")
         self.imgs_list_file_path = os.path.join(os.path.normpath(root_dir), "data/CUB/CUB_200_2011/images.txt")
         self.img_size = 128
-        self.vqvae_num_embeddings = 8192
+        self.vqvae_num_embeddings = 4096
         self.vqvae_embedding_dim = 256
         self.vqvae_commitment_cost = 0.25
         self.vqvae_decay = 0.99
