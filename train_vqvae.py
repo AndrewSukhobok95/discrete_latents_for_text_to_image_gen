@@ -72,7 +72,7 @@ if __name__ == '__main__':
         for imgs, _ in train_loader:
             imgs = imgs.to(CONFIG.DEVICE)
 
-            vq_loss, data_recon, perplexity = model(imgs)
+            vq_loss, quantized, data_recon, perplexity = model(imgs)
 
             recon_error = F.mse_loss(data_recon, imgs)
             loss = recon_error + vq_loss
