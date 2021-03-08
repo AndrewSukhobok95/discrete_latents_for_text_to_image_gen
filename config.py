@@ -12,7 +12,7 @@ class Config:
             self.BATCH_SIZE = 8
         else:
             root_dir = "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/"
-            self.BATCH_SIZE = 64
+            self.BATCH_SIZE = 32
         self.save_model_path = os.path.join(os.path.normpath(root_dir), model_path)
         self.root_img_path = os.path.join(os.path.normpath(root_dir), "data/CUB/CUB_200_2011/images")
         self.root_text_path = os.path.join(os.path.normpath(root_dir), "data/CUB/text")
@@ -22,7 +22,7 @@ class Config:
         self.vqvae_embedding_dim = 256
         self.vqvae_commitment_cost = 0.25
         self.vqvae_decay = 0.99
-        self.vqvae_num_x2downsamples = 2
+        self.vqvae_num_x2downsamples = 1
         self.vqvae_num_residual_layers = 4
         self.text_rebuild_num_residual_layers = 6
         self.tagan_lambda_cond_loss = 10
@@ -31,7 +31,7 @@ class Config:
         self.NUM_EPOCHS = 3000
         self.LR = 0.1
         self.LR_gamma = 0.1
-        self.step_LR_milestones = [30, 90, 300]
+        self.step_LR_milestones = [10, 80, 300]
 
     def save_config(self):
         if not os.path.exists(self.save_model_path):
