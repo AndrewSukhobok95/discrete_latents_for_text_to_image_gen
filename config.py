@@ -37,6 +37,9 @@ class Config:
         if not os.path.exists(self.save_model_path):
             os.makedirs(self.save_model_path)
         config_params = vars(self)
+        for k, v in config_params.items():
+            if isinstance(v, torch.device):
+                config_params[k] = str(v)
         save_path = os.path.join(self.save_model_path, 'config.json')
         with open(save_path, 'w') as outfile:
             json.dump(config_params, outfile, indent=4)
