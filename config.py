@@ -31,7 +31,7 @@ class Config:
         self.NUM_EPOCHS = 3000
         self.LR = 0.1
         self.LR_gamma = 0.1
-        self.step_LR_milestones = [10, 80, 300]
+        self.step_LR_milestones = [1, 60]
 
     def save_config(self):
         if not os.path.exists(self.save_model_path):
