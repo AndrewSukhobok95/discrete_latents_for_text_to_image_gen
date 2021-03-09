@@ -29,9 +29,9 @@ class Config:
         self.tagan_lambda_recon_loss = 0.2
         self.DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.NUM_EPOCHS = 3000
-        self.LR = 0.1
+        self.LR = 0.01
         self.LR_gamma = 0.1
-        self.step_LR_milestones = [1, 60]
+        self.step_LR_milestones = [80]
 
     def save_config(self):
         if not os.path.exists(self.save_model_path):
