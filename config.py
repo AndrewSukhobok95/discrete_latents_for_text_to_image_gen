@@ -26,6 +26,7 @@ class Config:
         self.vqvae_commitment_cost = 0.25
         self.vqvae_decay = 0.99
         self.vqvae_num_x2downsamples = 2
+        self.vqvae_num_downsample_residual_layers = 2
         self.vqvae_num_residual_layers = 4
         self.text_rebuild_num_residual_layers = 6
         self.tagan_lambda_cond_loss = 10

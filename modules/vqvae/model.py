@@ -19,7 +19,7 @@ class VQVAE(nn.Module):
         self.encoder = Encoder(in_channels=3,
                                out_channels=embedding_dim,
                                num_downsamples=num_x2downsamples,
-                               num_residual_layers=num_residual_layers,
+                               num_resid_bottleneck=num_residual_layers,
                                use_bn=use_batch_norm,
                                use_conv1x1=use_conv1x1)
         if decay > 0.0:
@@ -29,7 +29,7 @@ class VQVAE(nn.Module):
         self.decoder = Decoder(in_channels=embedding_dim,
                                out_channels=3,
                                num_upsamples=num_x2downsamples,
-                               num_residual_layers=num_residual_layers,
+                               num_resid_bottleneck=num_residual_layers,
                                use_bn=use_batch_norm,
                                use_conv1x1=use_conv1x1)
 
