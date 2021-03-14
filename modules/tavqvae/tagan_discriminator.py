@@ -102,9 +102,10 @@ class Discriminator(nn.Module):
         print("att_txt_exp: ", torch.isnan(att_txt_exp).any())
         print("att_txt before: ", torch.isnan(att_txt).any())
 
-        att_txt = att_txt_exp / att_txt_exp.sum(0, keepdim=True)
+        att_txt = att_txt_exp / (att_txt_exp.sum(0, keepdim=True) + self.eps)
 
         print("att_txt after: ", torch.isnan(att_txt).any())
+        print("------------------------")
 
         weight = self.gen_weight(u).permute(2, 1, 0)
 
@@ -123,9 +124,6 @@ class Discriminator(nn.Module):
                 W_cond_n, b_cond_n, weight_n = W_cond[idx_n], b_cond[idx_n], weight[i][idx_n]
                 sim_n += torch.sigmoid(torch.bmm(W_cond_n, img_feat) + b_cond_n).squeeze(-1) * weight_n
             sim += torch.sigmoid(torch.bmm(W_cond, img_feat) + b_cond).squeeze(-1) * weight[i]
-
-        print("ATTN: ", torch.isnan(att_txt).any())
-        print("-----------------")
 
         if negative:
             att_txt_n = att_txt[:, idx_n]
