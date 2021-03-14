@@ -35,7 +35,7 @@ class Config:
         self.LR = 0.001
         self.quantizer_LR = 0.1
         self.LR_gamma = 0.1
-        self.step_LR_milestones = [50, 200]
+        self.step_LR_milestones = [10, 200]
 
     def save_config(self):
         if not os.path.exists(self.save_model_path):
