@@ -115,8 +115,12 @@ class Discriminator(nn.Module):
                 sim_n += torch.sigmoid(torch.bmm(W_cond_n, img_feat) + b_cond_n).squeeze(-1) * weight_n
             sim += torch.sigmoid(torch.bmm(W_cond, img_feat) + b_cond).squeeze(-1) * weight[i]
 
-        print("sim:", sim)
-        print("---")
+        with open('debug_output.txt', 'w') as f:
+            print("SIM:   ", sim, file=f)
+            print("--------------------------------------", file=f)
+            print("ATTN:    ", att_txt, file=f)
+            print("--------------------------------------", file=f)
+            print(".", file=f)
 
         if negative:
             att_txt_n = att_txt[:, idx_n]
