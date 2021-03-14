@@ -143,7 +143,7 @@ if __name__ == '__main__':
             optimizer_G.zero_grad()
 
             fake, _ = G(imgh=imgs, texth=texth_neg, text_mask=mask_tensor_neg)
-            fake_logit, fake_c_prob = D(fake, txt=texth_neg, txt_len=mask_tensor_neg.sum(dim=1))
+            fake_logit, fake_c_prob = D(fake, txt=texth_neg, len_txt=mask_tensor_neg.sum(dim=1))
 
             fake_loss = F.binary_cross_entropy_with_logits(fake_logit, ones_like(fake_logit))
             fake_c_loss = F.binary_cross_entropy(fake_c_prob, ones_like(fake_c_prob))
