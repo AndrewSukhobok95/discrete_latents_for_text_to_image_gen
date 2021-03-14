@@ -95,7 +95,7 @@ class Discriminator(nn.Module):
         u, m, mask = self._encode_txt(txt, len_txt)
         att_txt = (u * m.unsqueeze(0)).sum(-1)
         att_txt_exp = att_txt.exp() * mask.squeeze(-1)
-        att_txt = (att_txt_exp / att_txt_exp.sum(0, keepdim=True))
+        att_txt = att_txt_exp / (att_txt_exp.sum(0, keepdim=True) + self.eps)
 
         weight = self.gen_weight(u).permute(2, 1, 0)
 
