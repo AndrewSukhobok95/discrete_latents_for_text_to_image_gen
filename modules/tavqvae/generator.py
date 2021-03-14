@@ -42,4 +42,7 @@ class Generator(nn.Module):
     def get_rebuild_parameters(self):
         return self.rebuild_block.parameters()
 
+    def load_vqvae_weights(self, root_path, model_name):
+        self.vqvae.load_model(root_path, model_name)
+
 

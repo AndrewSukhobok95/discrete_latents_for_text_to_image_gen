@@ -12,14 +12,16 @@ class VQVAE(nn.Module):
                  commitment_cost,
                  decay=0.0,
                  num_x2downsamples=2,
-                 num_residual_layers=2,
+                 num_resid_downsample_layers=1,
+                 num_resid_bottleneck_layers=2,
                  use_batch_norm=False,
                  use_conv1x1=False):
         super(VQVAE, self).__init__()
         self.encoder = Encoder(in_channels=3,
                                out_channels=embedding_dim,
                                num_downsamples=num_x2downsamples,
-                               num_resid_bottleneck=num_residual_layers,
+                               num_resid_downsample=num_resid_downsample_layers,
+                               num_resid_bottleneck=num_resid_bottleneck_layers,
                                use_bn=use_batch_norm,
                                use_conv1x1=use_conv1x1)
         if decay > 0.0:
@@ -29,7 +31,8 @@ class VQVAE(nn.Module):
         self.decoder = Decoder(in_channels=embedding_dim,
                                out_channels=3,
                                num_upsamples=num_x2downsamples,
-                               num_resid_bottleneck=num_residual_layers,
+                               num_resid_upsample=num_resid_downsample_layers,
+                               num_resid_bottleneck=num_resid_bottleneck_layers,
                                use_bn=use_batch_norm,
                                use_conv1x1=use_conv1x1)
 

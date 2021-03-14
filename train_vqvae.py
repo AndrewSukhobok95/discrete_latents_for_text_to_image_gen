@@ -5,7 +5,8 @@ import torch.nn.functional as F
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 import torchvision
-from datasets.cub import CubDataset, cub_collate
+from datasets.cub import CubDataset
+from datasets.common import collate_fn
 from modules.vqvae.model import VQVAE
 from config import Config
 
@@ -30,18 +31,19 @@ train_dataset, test_dataset = torch.utils.data.random_split(
 train_loader = DataLoader(dataset=train_dataset,
                           batch_size=CONFIG.BATCH_SIZE,
                           shuffle=True,
-                          collate_fn=cub_collate)
+                          collate_fn=collate_fn)
 test_loader = DataLoader(dataset=test_dataset,
                          batch_size=CONFIG.BATCH_SIZE,
                          shuffle=True,
-                         collate_fn=cub_collate)
+                         collate_fn=collate_fn)
 
 model = VQVAE(num_embeddings=CONFIG.vqvae_num_embeddings,
               embedding_dim=CONFIG.vqvae_embedding_dim,
               commitment_cost=CONFIG.vqvae_commitment_cost,
               decay=CONFIG.vqvae_decay,
               num_x2downsamples=CONFIG.vqvae_num_x2downsamples,
-              num_residual_layers=CONFIG.vqvae_num_residual_layers,
+              num_resid_downsample_layers=CONFIG.vqvae_num_downsample_residual_layers,
+              num_resid_bottleneck_layers=CONFIG.vqvae_num_bottleneck_residual_layers,
               use_batch_norm=True,
               use_conv1x1=True)
 

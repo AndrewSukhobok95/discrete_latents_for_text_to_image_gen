@@ -73,24 +73,6 @@ class CubDataset(Dataset):
         return x, text
 
 
-def cub_collate(samples):
-    imgs, texts = list(zip(*samples))
-    return torch.cat(imgs, dim=0), texts
-
-
-class CubCollater:
-    def __init__(self, tokenizer):
-        self.tokenizer = tokenizer
-
-    def collate(self, samples):
-        imgs, texts = list(zip(*samples))
-        padded_sequences = self.tokenizer(texts, padding=True)
-        token_tensor = torch.tensor(padded_sequences["input_ids"])
-        token_type_tensor = torch.tensor(padded_sequences["token_type_ids"])
-        attention_mask_tensor = torch.tensor(padded_sequences["attention_mask"])
-        return torch.cat(imgs, dim=0), (token_tensor, token_type_tensor, attention_mask_tensor)
-
-
 if __name__ == '__main__':
 
     d = CubDataset(root_img_path="/home/andrey/Aalto/TA-VQVAE/data/CUB/CUB_200_2011/images",
@@ -98,12 +80,12 @@ if __name__ == '__main__':
                    imgs_list_file_path="/home/andrey/Aalto/TA-VQVAE/data/CUB/CUB_200_2011/images.txt")
     print(d[51])
 
-    train_loader = DataLoader(dataset=d,
-                              batch_size=64,
-                              shuffle=True,
-                              collate_fn=cub_collate)
-
-    for x, _ in train_loader:
-        print(x.size())
+    # train_loader = DataLoader(dataset=d,
+    #                           batch_size=64,
+    #                           shuffle=True,
+    #                           collate_fn=cub_collate)
+    #
+    # for x, _ in train_loader:
+    #     print(x.size())
 
 
