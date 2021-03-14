@@ -93,13 +93,14 @@ class Discriminator(nn.Module):
 
         # text attention
         u, m, mask = self._encode_txt(txt, len_txt)
+        att_txt = (u * m.unsqueeze(0)).sum(-1)
+        att_txt_exp = att_txt.exp() * mask.squeeze(-1)
 
         print("U: ", torch.isnan(u).any())
         print("M: ", torch.isnan(m).any())
         print("mask: ", torch.isnan(mask).any())
+        print("att_txt_exp: ", torch.isnan(att_txt_exp).any())
 
-        att_txt = (u * m.unsqueeze(0)).sum(-1)
-        att_txt_exp = att_txt.exp() * mask.squeeze(-1)
         att_txt = att_txt_exp / att_txt_exp.sum(0, keepdim=True)
 
         weight = self.gen_weight(u).permute(2, 1, 0)
