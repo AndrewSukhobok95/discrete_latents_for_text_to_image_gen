@@ -96,17 +96,17 @@ class Discriminator(nn.Module):
         att_txt = (u * m.unsqueeze(0)).sum(-1)
         att_txt_exp = att_txt.exp() * mask.squeeze(-1)
 
-        print("U: ", torch.isnan(u).any())
-        print("M: ", torch.isnan(m).any())
-        print("mask: ", torch.isnan(mask).any())
-        print("att_txt_exp: ", torch.isnan(att_txt_exp).any())
-        print("att_txt before: ", torch.isnan(att_txt).any())
+        print("U: ", torch.isinf(u).any())
+        print("M: ", torch.isinf(m).any())
+        print("mask: ", torch.isinf(mask).any())
+        print("att_txt_exp: ", torch.isinf(att_txt_exp).any())
+        print("att_txt before: ", torch.isinf(att_txt).any())
 
         att_txt_exp_sum = att_txt_exp.sum(0, keepdim=True)
         att_txt = att_txt_exp / att_txt_exp_sum
         #att_txt = torch.exp(torch.log(att_txt_exp) - torch.log(att_txt_exp_sum))
 
-        print("att_txt_exp_sum: ", att_txt_exp_sum)
+        print("att_txt_exp_sum: ", torch.isinf(att_txt_exp_sum).any())
         print("att_txt after: ", torch.isnan(att_txt).any())
         print("------------------------")
 
