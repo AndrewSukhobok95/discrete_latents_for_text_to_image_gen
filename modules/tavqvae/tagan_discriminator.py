@@ -97,19 +97,19 @@ class Discriminator(nn.Module):
         #att_txt_exp = att_txt.exp() * mask.squeeze(-1)
         att_txt_exp = torch.clamp(att_txt, max=50.).exp() * mask.squeeze(-1)
 
-        print("U: ", torch.isinf(u).any())
-        print("M: ", torch.isinf(m).any())
-        print("mask: ", torch.isinf(mask).any())
-        print("att_txt_exp: ", torch.isinf(att_txt_exp).any())
-        print("att_txt before: ", torch.isinf(att_txt).any())
+        # print("U: ", torch.isinf(u).any())
+        # print("M: ", torch.isinf(m).any())
+        # print("mask: ", torch.isinf(mask).any())
+        # print("att_txt_exp: ", torch.isinf(att_txt_exp).any())
+        # print("att_txt before: ", torch.isinf(att_txt).any())
 
         att_txt_exp_sum = att_txt_exp.sum(0, keepdim=True)
         att_txt = att_txt_exp / att_txt_exp_sum
         #att_txt = torch.exp(torch.log(att_txt_exp) - torch.log(att_txt_exp_sum))
 
-        print("att_txt_exp_sum: ", torch.isinf(att_txt_exp_sum).any())
-        print("att_txt after: ", torch.isnan(att_txt).any())
-        print("------------------------")
+        # print("att_txt_exp_sum: ", torch.isinf(att_txt_exp_sum).any())
+        # print("att_txt after: ", torch.isnan(att_txt).any())
+        # print("------------------------")
 
         weight = self.gen_weight(u).permute(2, 1, 0)
 
