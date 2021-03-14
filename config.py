@@ -29,7 +29,6 @@ class Config:
         self.text_rebuild_num_residual_layers = 4
         self.tagan_lambda_cond_loss = 10
         self.tagan_lambda_recon_loss = 0.2
-        #self.DEVICE = torch.device("cpu")
         self.DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.NUM_EPOCHS = 3000
         self.LR = 0.001

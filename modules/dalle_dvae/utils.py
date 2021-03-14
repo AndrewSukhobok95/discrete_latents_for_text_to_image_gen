@@ -41,12 +41,14 @@ class Conv2d(nn.Module):
 			w, b = self.w, self.b
 		return F.conv2d(x, w, b, padding=(self.kw - 1) // 2)
 
+
 def map_pixels(x: torch.Tensor) -> torch.Tensor:
 	if len(x.shape) != 4:
 		raise ValueError('expected input to be 4d')
 	if x.dtype != torch.float:
 		raise ValueError('expected input to have type float')
 	return (1 - 2 * logit_laplace_eps) * x + logit_laplace_eps
+
 
 def unmap_pixels(x: torch.Tensor) -> torch.Tensor:
 	if len(x.shape) != 4:
