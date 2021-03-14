@@ -1,3 +1,4 @@
+import os
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -46,5 +47,17 @@ class Generator(nn.Module):
 
     def load_vqvae_weights(self, root_path, model_name):
         self.vqvae.load_model(root_path, model_name)
+
+    def save_model(self, root_path, model_name):
+        if not os.path.exists(root_path):
+            os.makedirs(root_path)
+        encoder_path = os.path.join(root_path, model_name + "_encoder.pth")
+        decoder_path = os.path.join(root_path, model_name + "_decoder.pth")
+        quantizer_path = os.path.join(root_path, model_name + "_quantizer.pth")
+        text_rebuild_path = os.path.join(root_path, model_name + "_text_rebuild.pth")
+        torch.save(self.encoder.state_dict(), encoder_path)
+        torch.save(self.decoder.state_dict(), decoder_path)
+        torch.save(self.quantizer.state_dict(), quantizer_path)
+        torch.save(self.rebuild_block.state_dict(), text_rebuild_path)
 
 

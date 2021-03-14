@@ -1,3 +1,4 @@
+import os
 import torch
 import torch.optim as optim
 from torch.optim.lr_scheduler import MultiStepLR
@@ -172,6 +173,10 @@ if __name__ == '__main__':
 
         lr_scheduler_G.step()
         lr_scheduler_D.step()
+
+        G.save_model(root_path=CONFIG.save_model_path, model_name="TAVQVAE")
+        text_rebuild_path = os.path.join(CONFIG.save_model_path, "TAVQVAE_discriminator.pth")
+        torch.save(D.state_dict(), text_rebuild_path)
 
         print()
 
