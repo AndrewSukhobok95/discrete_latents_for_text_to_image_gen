@@ -112,7 +112,7 @@ if __name__ == '__main__':
             mask_tensor_neg = torch.cat((mask_tensor[-1, :].unsqueeze(0), mask_tensor[:-1, :]), 0)
 
             ##### UPDATE DISCRIMINATOR #####
-            optimizer_D.zero_grad()
+            D.zero_grad()
 
             # real images
             real_logit, real_c_prob, real_c_prob_n = D(img=imgs, txt=texth, len_txt=mask_tensor.sum(dim=1), negative=True)
@@ -142,7 +142,7 @@ if __name__ == '__main__':
             optimizer_D.step()
 
             ##### UPDATE GENERATOR #####
-            optimizer_G.zero_grad()
+            G.zero_grad()
 
             fake, _ = G(imgh=imgs, texth=texth_neg, text_mask=mask_tensor_neg)
             fake_logit, fake_c_prob = D(fake, txt=texth_neg, len_txt=mask_tensor_neg.sum(dim=1))
