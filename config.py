@@ -14,7 +14,7 @@ class Config:
             root_dir = "/u/82/sukhoba1/unix/Desktop/projects/TA-VQVAE/"
             self.BATCH_SIZE = 32
         self.save_model_path = os.path.join(os.path.normpath(root_dir), model_path)
-        self.load_vae_path = os.path.join(os.path.normpath(root_dir), "models/vqvae_i128_e256x8192_lr_split/")
+        self.load_vae_path = os.path.join(os.path.normpath(root_dir), "models/vqvae_i128_e256x8192/")
         self.root_img_path = os.path.join(os.path.normpath(root_dir), "data/CUB/CUB_200_2011/images")
         self.root_text_path = os.path.join(os.path.normpath(root_dir), "data/CUB/text")
         self.imgs_list_file_path = os.path.join(os.path.normpath(root_dir), "data/CUB/CUB_200_2011/images.txt")

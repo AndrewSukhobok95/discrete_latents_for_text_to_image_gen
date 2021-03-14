@@ -27,7 +27,7 @@ def ones_like(x):
     return label_like(1, x)
 
 
-CONFIG = Config(local=True, model_path="models/tavqvae_e256x8138/")
+CONFIG = Config(local=False, model_path="models/tavqvae_e256x8138/")
 CONFIG.save_config()
 
 writer = SummaryWriter()
