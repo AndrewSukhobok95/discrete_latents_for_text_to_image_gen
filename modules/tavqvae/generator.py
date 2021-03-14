@@ -55,9 +55,9 @@ class Generator(nn.Module):
         decoder_path = os.path.join(root_path, model_name + "_decoder.pth")
         quantizer_path = os.path.join(root_path, model_name + "_quantizer.pth")
         text_rebuild_path = os.path.join(root_path, model_name + "_text_rebuild.pth")
-        torch.save(self.encoder.state_dict(), encoder_path)
-        torch.save(self.decoder.state_dict(), decoder_path)
-        torch.save(self.quantizer.state_dict(), quantizer_path)
+        torch.save(self.vqvae.encoder.state_dict(), encoder_path)
+        torch.save(self.vqvae.decoder.state_dict(), decoder_path)
+        torch.save(self.vqvae.quantizer.state_dict(), quantizer_path)
         torch.save(self.rebuild_block.state_dict(), text_rebuild_path)
 
 
