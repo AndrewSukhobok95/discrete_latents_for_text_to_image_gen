@@ -171,6 +171,8 @@ if __name__ == '__main__':
 
             print("Epoch: {} Iter: {}".format(epoch, iteration))
 
+            iteration += 1
+
         lr_scheduler_G.step()
         lr_scheduler_D.step()
 
