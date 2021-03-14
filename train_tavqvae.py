@@ -27,7 +27,7 @@ def ones_like(x):
     return label_like(1, x)
 
 
-CONFIG = Config(local=False, model_path="models/tavqvae_e256x8138/")
+CONFIG = Config(local=True, model_path="models/tavqvae_e256x8138/")
 CONFIG.save_config()
 
 writer = SummaryWriter()
@@ -128,7 +128,7 @@ if __name__ == '__main__':
             real_loss.backward()
 
             # synthesized images
-            fake, _ = G(imgs, texth_neg, mask_tensor_neg.sum(dim=1))
+            fake, _ = G(imgh=imgs, texth=texth_neg, text_mask=mask_tensor_neg)
             fake_logit, _ = D(img=fake.detach(), txt=texth_neg, len_txt=mask_tensor_neg.sum(dim=1))
 
             fake_loss = F.binary_cross_entropy_with_logits(fake_logit, zeros_like(fake_logit))
@@ -142,7 +142,7 @@ if __name__ == '__main__':
             ##### UPDATE GENERATOR #####
             optimizer_G.zero_grad()
 
-            fake, _ = G(imgs, texth_neg, mask_tensor_neg.sum(dim=1))
+            fake, _ = G(imgh=imgs, texth=texth_neg, text_mask=mask_tensor_neg)
             fake_logit, fake_c_prob = D(fake, txt=texth_neg, txt_len=mask_tensor_neg.sum(dim=1))
 
             fake_loss = F.binary_cross_entropy_with_logits(fake_logit, ones_like(fake_logit))
@@ -157,7 +157,7 @@ if __name__ == '__main__':
             G_loss.backward()
 
             # reconstruction for matching input
-            recon, perplexity = G(imgs, texth, mask_tensor.sum(dim=1))
+            recon, perplexity = G(imgh=imgs, texth=texth, text_mask=mask_tensor)
 
             recon_loss = F.l1_loss(recon, imgs)
             G_loss = CONFIG.tagan_lambda_recon_loss * recon_loss
