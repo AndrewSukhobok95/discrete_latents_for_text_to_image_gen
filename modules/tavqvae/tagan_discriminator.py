@@ -102,8 +102,10 @@ class Discriminator(nn.Module):
         print("att_txt_exp: ", torch.isnan(att_txt_exp).any())
         print("att_txt before: ", torch.isnan(att_txt).any())
 
-        att_txt = att_txt_exp / (att_txt_exp.sum(0, keepdim=True) + 1e-4)
+        att_txt_exp_sum = att_txt_exp.sum(0, keepdim=True)
+        att_txt = att_txt_exp / att_txt_exp_sum
 
+        print("att_txt_exp_sum: ", torch.isnan(att_txt_exp_sum).any())
         print("att_txt after: ", torch.isnan(att_txt).any())
         print("------------------------")
 
