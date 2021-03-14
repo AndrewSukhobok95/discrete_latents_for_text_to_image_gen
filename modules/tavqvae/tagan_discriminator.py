@@ -115,6 +115,9 @@ class Discriminator(nn.Module):
                 sim_n += torch.sigmoid(torch.bmm(W_cond_n, img_feat) + b_cond_n).squeeze(-1) * weight_n
             sim += torch.sigmoid(torch.bmm(W_cond, img_feat) + b_cond).squeeze(-1) * weight[i]
 
+        print("sim:", sim)
+        print("---")
+
         if negative:
             att_txt_n = att_txt[:, idx_n]
             sim_n = torch.clamp(sim_n + self.eps, min=0.0, max=1.0).t().pow(att_txt_n).prod(0)
