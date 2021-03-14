@@ -117,8 +117,8 @@ class Discriminator(nn.Module):
 
         if negative:
             att_txt_n = att_txt[:, idx_n]
-            sim_n = torch.clamp(sim_n + self.eps, max=1).t().pow(att_txt_n).prod(0)
-        sim = torch.clamp(sim + self.eps, max=1).t().pow(att_txt).prod(0)
+            sim_n = torch.clamp(sim_n + self.eps, min=0.0, max=1.0).t().pow(att_txt_n).prod(0)
+        sim = torch.clamp(sim + self.eps, min=0.0, max=1.0).t().pow(att_txt).prod(0)
 
         if negative:
             return D, sim, sim_n
