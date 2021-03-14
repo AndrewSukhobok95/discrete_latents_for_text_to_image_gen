@@ -37,7 +37,7 @@ class Generator(nn.Module):
     def forward(self, imgh, texth, text_mask=None):
         s = self.vqvae.encode(imgh)
         s_rebuild = self.rebuild_block(s, texth, text_mask)
-        quantized, perplexity, _ = self.vqvae.quantize(s_rebuild)
+        vq_loss, quantized, perplexity, encoding_info = self.vqvae.quantize(s_rebuild)
         x_recon = self.vqvae.decode(quantized)
         return x_recon, perplexity
 
