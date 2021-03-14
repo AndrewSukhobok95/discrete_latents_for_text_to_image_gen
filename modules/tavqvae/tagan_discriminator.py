@@ -94,7 +94,7 @@ class Discriminator(nn.Module):
         # text attention
         u, m, mask = self._encode_txt(txt, len_txt)
 
-        with open('debug_output.txt', 'w') as f:
+        with open('debug_output.txt', 'a') as f:
             print("U:   ", u, file=f)
             print("--------------------------------------", file=f)
             print("M:   ", m, file=f)
@@ -124,7 +124,7 @@ class Discriminator(nn.Module):
                 sim_n += torch.sigmoid(torch.bmm(W_cond_n, img_feat) + b_cond_n).squeeze(-1) * weight_n
             sim += torch.sigmoid(torch.bmm(W_cond, img_feat) + b_cond).squeeze(-1) * weight[i]
 
-        with open('debug_output.txt', 'w') as f:
+        with open('debug_output.txt', 'a') as f:
             print("ATTN:    ", att_txt, file=f)
             print("--------------------------------------", file=f)
             print(".", file=f)
