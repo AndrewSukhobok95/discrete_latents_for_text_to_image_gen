@@ -94,7 +94,8 @@ class Discriminator(nn.Module):
         # text attention
         u, m, mask = self._encode_txt(txt, len_txt)
         att_txt = (u * m.unsqueeze(0)).sum(-1)
-        att_txt_exp = att_txt.exp() * mask.squeeze(-1)
+        #att_txt_exp = att_txt.exp() * mask.squeeze(-1)
+        att_txt_exp = torch.clamp(att_txt, max=50.).exp() * mask.squeeze(-1)
 
         print("U: ", torch.isinf(u).any())
         print("M: ", torch.isinf(m).any())
