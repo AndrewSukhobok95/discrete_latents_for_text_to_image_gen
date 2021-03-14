@@ -3,6 +3,7 @@
 ## Base implementations
 
 - TAGAN: https://github.com/woozzu/tagan
+- DALLE: https://github.com/openai/DALL-E
 
 ## Data
 
