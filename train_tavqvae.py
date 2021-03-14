@@ -149,6 +149,8 @@ if __name__ == '__main__':
             fake_loss = F.binary_cross_entropy_with_logits(fake_logit, ones_like(fake_logit))
             fake_c_loss = F.binary_cross_entropy(fake_c_prob, ones_like(fake_c_prob))
 
+            print(fake_c_prob)
+
             G_loss = fake_loss + CONFIG.tagan_lambda_cond_loss * fake_c_loss
 
             writer.add_scalar('G/fake_loss', fake_loss.item(), iteration)
