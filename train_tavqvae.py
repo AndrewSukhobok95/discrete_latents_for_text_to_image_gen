@@ -28,7 +28,7 @@ def ones_like(x):
     return label_like(1, x)
 
 
-CONFIG = Config(local=False, model_path="models/tavqvae_e256x8138/")
+CONFIG = Config(local=True, model_path="models/tavqvae_e256x8138/")
 CONFIG.save_config()
 
 writer = SummaryWriter()
@@ -78,7 +78,8 @@ lr_scheduler_D = MultiStepLR(optimizer_D, milestones=CONFIG.step_LR_milestones, 
 if __name__ == '__main__':
     print("Device in use: {}".format(CONFIG.DEVICE))
 
-    G.train()
+    G.vqvae.eval()
+    G.rebuild_block.train()
     D.train()
     bert_model.eval()
 
