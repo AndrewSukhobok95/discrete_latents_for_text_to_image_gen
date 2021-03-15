@@ -97,6 +97,8 @@ if __name__ == '__main__':
             token_type_tensor = token_type_tensor.to(CONFIG.DEVICE)
             mask_tensor = mask_tensor.to(CONFIG.DEVICE)
 
+            imgs = imgs.to(CONFIG.DEVICE)
+
             with torch.no_grad():
                 # See the models docstrings for the detail of the inputs
                 outputs = bert_model(token_tensor,
@@ -106,7 +108,8 @@ if __name__ == '__main__':
                 # batch x seq_len x emb_dim --> to seq_len x batch x emb_dim
                 texth = texth.transpose(1, 0)
 
-            imgs = imgs.to(CONFIG.DEVICE)
+                _, _, imgs_recon, _ = G.vqvae(imgs)
+
             texth = texth.to(CONFIG.DEVICE)
 
             texth_neg = torch.cat((texth[:, -1, :].unsqueeze(1), texth[:, :-1, :]), 1)
@@ -114,7 +117,7 @@ if __name__ == '__main__':
 
             ##### UPDATE DISCRIMINATOR #####
             # real images
-            real_logit, real_c_prob, real_c_prob_n = D(img=imgs, txt=texth, len_txt=mask_tensor.sum(dim=1), negative=True)
+            real_logit, real_c_prob, real_c_prob_n = D(img=imgs_recon, txt=texth, len_txt=mask_tensor.sum(dim=1), negative=True)
 
             real_loss = F.binary_cross_entropy_with_logits(real_logit, ones_like(real_logit))
             real_c_pos_loss = F.binary_cross_entropy(real_c_prob, ones_like(real_c_prob))
@@ -159,7 +162,7 @@ if __name__ == '__main__':
             # reconstruction for matching input
             recon, perplexity = G(imgh=imgs, texth=texth, text_mask=mask_tensor)
 
-            recon_loss = F.l1_loss(recon, imgs)
+            recon_loss = F.l1_loss(recon, imgs_recon)
             G_loss = CONFIG.tagan_lambda_recon_loss * recon_loss
 
             writer.add_scalar('G/recon_loss', recon_loss.item(), iteration)
