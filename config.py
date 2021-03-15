@@ -28,13 +28,13 @@ class Config:
         self.vqvae_num_bottleneck_residual_layers = 4
         self.text_rebuild_num_residual_layers = 4
         self.tagan_lambda_cond_loss = 10
-        self.tagan_lambda_recon_loss = 0.2
+        self.tagan_lambda_recon_loss = 2
         self.DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.NUM_EPOCHS = 3000
-        self.LR = 0.001
+        self.LR = 0.0002
         self.quantizer_LR = 0.1
-        self.LR_gamma = 0.1
-        self.step_LR_milestones = [10, 200]
+        self.LR_gamma = 0.5
+        self.step_LR_milestones = [50, 200, 300, 400]
 
     def save_config(self):
         if not os.path.exists(self.save_model_path):
