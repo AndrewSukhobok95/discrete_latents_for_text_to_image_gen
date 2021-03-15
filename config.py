@@ -11,7 +11,8 @@ class Config:
             root_dir = "/home/andrey/Aalto/thesis/TA-VQVAE/"
             self.BATCH_SIZE = 8
         else:
-            root_dir = "/u/82/sukhoba1/unix/Desktop/projects/TA-VQVAE/"
+            #root_dir = "/u/82/sukhoba1/unix/Desktop/projects/TA-VQVAE/"
+            root_dir = "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/"
             self.BATCH_SIZE = 16
         self.save_model_path = os.path.join(os.path.normpath(root_dir), model_path)
         self.load_vae_path = os.path.join(os.path.normpath(root_dir), "models/vqvae_i128_e256x8192/")
