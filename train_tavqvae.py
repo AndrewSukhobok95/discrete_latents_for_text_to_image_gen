@@ -30,6 +30,7 @@ def ones_like(x):
 
 CONFIG = Config(local=False, model_path="models/tavqvae_e256x8138/")
 CONFIG.save_config()
+CONFIG.print_config_info()
 
 writer = SummaryWriter()
 
