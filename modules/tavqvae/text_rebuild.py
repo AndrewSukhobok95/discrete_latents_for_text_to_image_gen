@@ -18,7 +18,7 @@ class TextRebuildBlock(nn.Module):
 
     def forward(self, imgh, texth, text_mask=None):
         """
-        :param imgh: batch x emb_size x ih x iw (query_len=hxw)
+        :param imgh: batch x ch x h x w (query_len=hxw)
         :param texth: seq_len x batch x emb_size
         :param text_mask: batch x seq_len
         """
@@ -28,6 +28,6 @@ class TextRebuildBlock(nn.Module):
         x = self.attn_2(x, texth, text_mask)
         mask = self.mask_block(x)
         x = self.convert_ch_2(x)
-        return masking_sum(x, imgh, mask)
+        return masking_sum(x, imgh, mask), mask
 
 

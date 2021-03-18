@@ -91,7 +91,7 @@ if __name__ == '__main__':
     iteration = 0
     for epoch in range(CONFIG.NUM_EPOCHS):
         for imgs, text_info in train_loader:
-            token_tensor, token_type_tensor, mask_tensor = text_info
+            token_tensor, token_type_tensor, mask_tensor, _ = text_info
 
             token_tensor = token_tensor.to(CONFIG.DEVICE)
             token_type_tensor = token_type_tensor.to(CONFIG.DEVICE)

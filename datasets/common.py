@@ -19,4 +19,4 @@ class Collater:
         token_tensor = torch.tensor(padded_sequences["input_ids"])
         token_type_tensor = torch.tensor(padded_sequences["token_type_ids"])
         attention_mask_tensor = torch.tensor(padded_sequences["attention_mask"])
-        return torch.cat(imgs, dim=0), (token_tensor, token_type_tensor, attention_mask_tensor)
+        return torch.cat(imgs, dim=0), (token_tensor, token_type_tensor, attention_mask_tensor, texts)

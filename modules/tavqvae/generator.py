@@ -37,10 +37,10 @@ class Generator(nn.Module):
 
     def forward(self, imgh, texth, text_mask=None):
         s = self.vqvae.encode(imgh)
-        s_rebuild = self.rebuild_block(s, texth, text_mask)
+        s_rebuild, mask = self.rebuild_block(s, texth, text_mask)
         vq_loss, quantized, perplexity, encoding_info = self.vqvae.quantize(s_rebuild)
         x_recon = self.vqvae.decode(quantized)
-        return x_recon, perplexity
+        return x_recon, mask
 
     def get_rebuild_parameters(self):
         return self.rebuild_block.parameters()
@@ -59,5 +59,15 @@ class Generator(nn.Module):
         torch.save(self.vqvae.decoder.state_dict(), decoder_path)
         torch.save(self.vqvae.quantizer.state_dict(), quantizer_path)
         torch.save(self.rebuild_block.state_dict(), text_rebuild_path)
+
+    def load_model(self, root_path, model_name, map_location=torch.device('cpu')):
+        encoder_path = os.path.join(root_path, model_name + "_encoder.pth")
+        decoder_path = os.path.join(root_path, model_name + "_decoder.pth")
+        quantizer_path = os.path.join(root_path, model_name + "_quantizer.pth")
+        rebuild_block_path = os.path.join(root_path, model_name + "_text_rebuild.pth")
+        self.vqvae.encoder.load_state_dict(torch.load(encoder_path, map_location=map_location))
+        self.vqvae.decoder.load_state_dict(torch.load(decoder_path, map_location=map_location))
+        self.vqvae.quantizer.load_state_dict(torch.load(quantizer_path, map_location=map_location))
+        self.rebuild_block.load_state_dict(torch.load(rebuild_block_path, map_location=map_location))
 
 

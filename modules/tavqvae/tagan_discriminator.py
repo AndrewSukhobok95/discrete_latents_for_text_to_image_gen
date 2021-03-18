@@ -92,7 +92,7 @@ class Discriminator(nn.Module):
         D = self.classifier(img_feat_3).squeeze()
 
         # text attention
-        txt_scaled = txt * 0.1
+        txt_scaled = txt * 0.1  # multiply by 0.1 in order to avoid inf after exp()
         u, m, mask = self._encode_txt(txt_scaled, len_txt)
         att_txt = (u * m.unsqueeze(0)).sum(-1)
         att_txt_exp = att_txt.exp() * mask.squeeze(-1)
