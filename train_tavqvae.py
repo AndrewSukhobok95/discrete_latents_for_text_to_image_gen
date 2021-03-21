@@ -132,13 +132,12 @@ if __name__ == '__main__':
             real_loss.backward()
 
             # synthesized images
-            fake, _, _, _, perplexity1 = G(imgh=imgs, texth=texth_neg, text_mask=mask_tensor_neg)
+            fake, _, _, _, _ = G(imgh=imgs, texth=texth_neg, text_mask=mask_tensor_neg)
             fake_logit, _ = D(img=fake.detach(), txt=texth_neg, len_txt=mask_tensor_neg.sum(dim=1))
 
             fake_loss = F.binary_cross_entropy_with_logits(fake_logit, zeros_like(fake_logit))
 
             writer.add_scalar('D/fake_loss', fake_loss.item(), iteration)
-            writer.add_scalar('G/perplexity_1', perplexity1.item(), iteration)
 
             fake_loss.backward()
 
@@ -146,7 +145,7 @@ if __name__ == '__main__':
             D.zero_grad()
 
             ##### UPDATE GENERATOR #####
-            fake, _, _, _, perplexity2 = G(imgh=imgs, texth=texth_neg, text_mask=mask_tensor_neg)
+            fake, _, _, _, _ = G(imgh=imgs, texth=texth_neg, text_mask=mask_tensor_neg)
             fake_logit, fake_c_prob = D(fake, txt=texth_neg, len_txt=mask_tensor_neg.sum(dim=1))
 
             fake_loss = F.binary_cross_entropy_with_logits(fake_logit, ones_like(fake_logit))
@@ -157,18 +156,17 @@ if __name__ == '__main__':
             writer.add_scalar('G/fake_loss', fake_loss.item(), iteration)
             writer.add_scalar('G/fake_c_loss', fake_c_loss.item(), iteration)
             writer.add_scalar('G/G_loss', G_loss.item(), iteration)
-            writer.add_scalar('G/perplexity_2', perplexity2.item(), iteration)
 
             G_loss.backward()
 
             # reconstruction for matching input
-            recon, _, _, _, perplexity3 = G(imgh=imgs, texth=texth, text_mask=mask_tensor)
+            recon, _, _, _, perplexity = G(imgh=imgs, texth=texth, text_mask=mask_tensor)
 
             recon_loss = F.l1_loss(recon, imgs_recon)
             G_loss = CONFIG.tagan_lambda_recon_loss * recon_loss
 
             writer.add_scalar('G/recon_loss', recon_loss.item(), iteration)
-            writer.add_scalar('G/perplexity_3', perplexity3.item(), iteration)
+            writer.add_scalar('G/perplexity', perplexity.item(), iteration)
 
             G_loss.backward()
 
