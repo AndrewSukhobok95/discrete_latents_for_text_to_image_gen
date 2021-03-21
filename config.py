@@ -27,7 +27,7 @@ class Config:
         self.vqvae_num_x2downsamples = 2
         self.vqvae_num_downsample_residual_layers = 1
         self.vqvae_num_bottleneck_residual_layers = 4
-        self.text_rebuild_num_residual_layers = 8
+        self.text_rebuild_num_residual_layers = 4
         self.tagan_lambda_cond_loss = 10
         self.tagan_lambda_recon_loss = 1
         self.DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")

@@ -1,6 +1,6 @@
 import unittest
 import torch
-from modules.tavqvae.tagan_discriminator import Discriminator
+from modules.tavqvae_discriminator.tagan_model import Discriminator
 
 
 class TestTAGANDiscriminator(unittest.TestCase):

@@ -57,9 +57,15 @@ class MaskBlock(nn.Module):
 
 
 def masking_sum(x1, x2, mask):
-    masked_x1 = x1 * mask
-    masked_x2 = x2 * (1 - mask)
+    mask_ch = mask.repeat((1, x1.size(1), 1, 1))
+    masked_x1 = x1 * mask_ch
+    masked_x2 = x2 * (1 - mask_ch)
     return masked_x1 + masked_x2
+
+
+def mask_tensor(x, mask):
+    mask_ch = mask.repeat((1, x.size(1), 1, 1))
+    return x * mask_ch
 
 
 

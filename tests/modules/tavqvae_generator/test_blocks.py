@@ -1,6 +1,6 @@
 import unittest
 import torch
-from modules.tavqvae.blocks import Attention, MaskBlock, masking_sum
+from modules.tavqvae_generator.blocks import Attention, MaskBlock, masking_sum
 
 
 class TestTAVQVAEBlocks(unittest.TestCase):
@@ -26,14 +26,14 @@ class TestTAVQVAEBlocks(unittest.TestCase):
         self.assertEqual(f.size(), expected_out_size)
 
     def test_masking_sum(self):
-        x1 = torch.ones((2, 2, 3, 3)) * 2
-        x2 = torch.ones((2, 2, 3, 3)) * 3
+        x1 = torch.ones((2, 4, 3, 3)) * 2
+        x2 = torch.ones((2, 4, 3, 3)) * 3
         mask = torch.ones((2, 1, 3, 3))
         mask[0, :, 0, 0] = 0
         mask[0, :, 1, 1] = 0
         mask[1, :, 2, 0] = 0
         mask[1, :, 2, 2] = 0
-        expected_result = torch.ones((2, 2, 3, 3)) * 2
+        expected_result = torch.ones((2, 4, 3, 3)) * 2
         expected_result[0, :, 0, 0] = 3
         expected_result[0, :, 1, 1] = 3
         expected_result[1, :, 2, 0] = 3

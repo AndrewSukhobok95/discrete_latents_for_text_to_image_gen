@@ -4,7 +4,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from modules.vqvae.model import VQVAE
-from modules.tavqvae.text_rebuild import TextRebuildBlock
+from modules.tavqvae_generator.text_rebuild import TextRebuildBlock
 
 
 class Generator(nn.Module):
@@ -40,7 +40,7 @@ class Generator(nn.Module):
         s_rebuild, mask = self.rebuild_block(s, texth, text_mask)
         vq_loss, quantized, perplexity, encoding_info = self.vqvae.quantize(s_rebuild)
         x_recon = self.vqvae.decode(quantized)
-        return x_recon, mask
+        return x_recon, mask, quantized, encoding_info, perplexity
 
     def get_rebuild_parameters(self):
         return self.rebuild_block.parameters()

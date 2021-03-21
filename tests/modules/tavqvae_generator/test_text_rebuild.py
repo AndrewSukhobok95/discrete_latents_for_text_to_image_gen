@@ -1,6 +1,6 @@
 import unittest
 import torch
-from modules.tavqvae.text_rebuild import TextRebuildBlock
+from modules.tavqvae_generator.text_rebuild import TextRebuildBlock
 
 
 class TestTAVQVAETextRebuildBlock(unittest.TestCase):
