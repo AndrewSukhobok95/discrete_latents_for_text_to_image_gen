@@ -138,6 +138,7 @@ if __name__ == '__main__':
             fake_loss = F.binary_cross_entropy_with_logits(fake_logit, zeros_like(fake_logit))
 
             writer.add_scalar('D/fake_loss', fake_loss.item(), iteration)
+            writer.add_scalar('G/perplexity_1', perplexity1.item(), iteration)
 
             fake_loss.backward()
 
@@ -156,16 +157,18 @@ if __name__ == '__main__':
             writer.add_scalar('G/fake_loss', fake_loss.item(), iteration)
             writer.add_scalar('G/fake_c_loss', fake_c_loss.item(), iteration)
             writer.add_scalar('G/G_loss', G_loss.item(), iteration)
+            writer.add_scalar('G/perplexity_2', perplexity2.item(), iteration)
 
             G_loss.backward()
 
             # reconstruction for matching input
-            recon, _, _, _, perplexity = G(imgh=imgs, texth=texth, text_mask=mask_tensor)
+            recon, _, _, _, perplexity3 = G(imgh=imgs, texth=texth, text_mask=mask_tensor)
 
             recon_loss = F.l1_loss(recon, imgs_recon)
             G_loss = CONFIG.tagan_lambda_recon_loss * recon_loss
 
             writer.add_scalar('G/recon_loss', recon_loss.item(), iteration)
+            writer.add_scalar('G/perplexity_3', perplexity3.item(), iteration)
 
             G_loss.backward()
 
