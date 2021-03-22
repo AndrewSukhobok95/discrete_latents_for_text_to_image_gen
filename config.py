@@ -29,7 +29,7 @@ class Config:
         self.vqvae_num_bottleneck_residual_layers = 4
         self.text_rebuild_num_residual_layers = 4
         self.tagan_lambda_cond_loss = 10
-        self.tagan_lambda_recon_loss = 3
+        self.tagan_lambda_recon_loss = 4
         self.DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.NUM_EPOCHS = 800
         self.LR = 0.0002
