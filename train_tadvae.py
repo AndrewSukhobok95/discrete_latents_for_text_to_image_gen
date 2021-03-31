@@ -13,7 +13,7 @@ from train_utils.data_utils import get_cub_dataloaders
 
 
 # CONFIG = ConfigReader(config_path="/home/andrey/Aalto/thesis/TA-VQVAE/configs/tadvae_cub_local.yaml")
-CONFIG = ConfigReader(config_path="/home/andrey/Aalto/thesis/TA-VQVAE/configs/tadvae_cub_remote.yaml")
+CONFIG = ConfigReader(config_path="/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/tadvae_cub_remote.yaml")
 CONFIG.print_config_info()
 
 writer = SummaryWriter()
