@@ -49,6 +49,8 @@ train_loader, _ = get_cub_dataloaders(tokenizer=BERT_tokenizer,
                                       img_size=CONFIG.img_size,
                                       batch_size=CONFIG.BATCH_SIZE)
 
+n_iter_to_accumulate_grad = 16
+
 if __name__ == '__main__':
     print("Device in use: {}".format(CONFIG.DEVICE))
 
@@ -110,7 +112,7 @@ if __name__ == '__main__':
 
             G_recon_loss = CONFIG.lambda_recon_loss * F.l1_loss(gen_img, imgs_recon)
 
-            if (iteration + 1) % 32 == 0:
+            if (iteration + 1) % n_iter_to_accumulate_grad == 0:
                 writer.add_scalar('D/D_fake_loss', D_fake_loss.item(), iteration)
                 writer.add_scalar('D/D_real_loss', D_real_loss.item(), iteration)
                 writer.add_scalar('D/D_real_c_pos_loss', real_c_pos_loss.item(), iteration)
@@ -122,7 +124,7 @@ if __name__ == '__main__':
 
             (D_real_loss + D_fake_loss + G_recon_loss + G_cond_loss).backward()
 
-            if (iteration + 1) % 4 == 0:
+            if (iteration + 1) % n_iter_to_accumulate_grad == 0:
                 optimizer_D.step()
                 D.zero_grad()
                 optimizer_G.step()
