@@ -59,8 +59,7 @@ class Decoder(nn.Module):
 		blk_range  = range(self.n_blk_per_group)
 		n_layers   = self.group_count * self.n_blk_per_group
 		make_conv  = partial(Conv2d, device=self.device, requires_grad=self.requires_grad)
-		make_blk   = partial(DecoderBlock, n_layers=n_layers, device=self.device,
-				requires_grad=self.requires_grad)
+		make_blk   = partial(DecoderBlock, n_layers=n_layers, device=self.device, requires_grad=self.requires_grad)
 
 		self.blocks = nn.Sequential(OrderedDict([
 			('input', make_conv(self.vocab_size, self.n_init, 1, use_float16=False)),

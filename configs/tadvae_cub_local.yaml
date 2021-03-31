@@ -1,0 +1,23 @@
+paths:
+  save_model_path: "/home/andrey/Aalto/thesis/TA-VQVAE/models/tadvae/"
+  save_model_name: "TADVAE"
+  load_dvae_path: "/home/andrey/Aalto/thesis/TA-VQVAE/models/DALLE_dvae/"
+  root_img_path: "/home/andrey/Aalto/thesis/TA-VQVAE/data/CUB/CUB_200_2011/images"
+  root_text_path: "/home/andrey/Aalto/thesis/TA-VQVAE/data/CUB/text"
+  imgs_list_file_path: "/home/andrey/Aalto/thesis/TA-VQVAE/data/CUB/CUB_200_2011/images.txt"
+
+model:
+  img_size: 256
+  lambda_cond_loss: 10
+  lambda_recon_loss: 1
+
+training:
+  NUM_EPOCHS: 800
+  BATCH_SIZE: 2
+  LR: 0.0002
+  LR_gamma: 0.5
+  step_LR_milestones:
+    - 50
+    - 200
+    - 300
+    - 400

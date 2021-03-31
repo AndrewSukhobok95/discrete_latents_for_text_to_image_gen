@@ -8,19 +8,27 @@ from modules.dalle_dvae.utils import map_pixels, unmap_pixels
 
 
 class DVAE(nn.Module):
-    def __init__(self):
+    def __init__(self,
+                 vocab_size=8192,
+                 requires_grad=True):
         super(DVAE, self).__init__()
-        self.encoder = Encoder()
-        self.decoder = Decoder()
+        self.encoder = Encoder(vocab_size=vocab_size,
+                               requires_grad=requires_grad)
+        self.decoder = Decoder(vocab_size=vocab_size,
+                               requires_grad=requires_grad)
 
     def encode(self, x):
         x = map_pixels(x)
         z_logits = self.encoder(x)
         return z_logits
 
-    def quantize(self, z_logits):
+    def quantize_by_argmax(self, z_logits):
         z = torch.argmax(z_logits, dim=1)
         z = F.one_hot(z, num_classes=self.encoder.vocab_size).permute(0, 3, 1, 2).float()
+        return z
+
+    def quantize(self, z_logits, tau=1/16, hard=True):
+        z = F.gumbel_softmax(z_logits, tau=tau, hard=hard, dim=1)
         return z
 
     def decode(self, z):

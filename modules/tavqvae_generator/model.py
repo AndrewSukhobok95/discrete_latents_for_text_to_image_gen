@@ -4,7 +4,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from modules.vqvae.model import VQVAE
-from modules.tavqvae_generator.text_rebuild import TextRebuildBlock
+from modules.tavqvae_generator.text_rebuild_block import TextRebuildBlock
 
 
 class Generator(nn.Module):

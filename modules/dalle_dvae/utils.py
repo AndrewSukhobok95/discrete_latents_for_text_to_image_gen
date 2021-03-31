@@ -22,7 +22,7 @@ class Conv2d(nn.Module):
 
 		w = torch.empty((self.n_out, self.n_in, self.kw, self.kw), dtype=torch.float32,
 			device=self.device, requires_grad=self.requires_grad)
-		w.normal_(std=1 / math.sqrt(self.n_in * self.kw ** 2))
+		# w.normal_(std=1 / math.sqrt(self.n_in * self.kw ** 2))
 
 		b = torch.zeros((self.n_out,), dtype=torch.float32, device=self.device,
 			requires_grad=self.requires_grad)
