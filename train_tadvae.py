@@ -27,7 +27,7 @@ G = Generator(
     n_trd_blocks=3,
     num_trd_block_for_mask=2,
     n_attn_heads=4,
-    linear_hidden_dim=512,
+    linear_hidden_dim=1024,
     dropout_prob=0.1,
     n_img_hidden_positions=32*32)
 G.load_dvae_weights(CONFIG.load_dvae_path, CONFIG.dvae_model_name)
@@ -110,17 +110,16 @@ if __name__ == '__main__':
 
             G_recon_loss = CONFIG.lambda_recon_loss * F.l1_loss(gen_img, imgs_recon)
 
-            writer.add_scalar('D/D_fake_loss', D_fake_loss.item(), iteration)
-            writer.add_scalar('D/D_real_loss', D_real_loss.item(), iteration)
-            writer.add_scalar('D/D_real_c_pos_loss', real_c_pos_loss.item(), iteration)
-            writer.add_scalar('D/D_real_c_neg_loss', real_c_neg_loss.item(), iteration)
-            writer.add_scalar('G/G_cond_fake_loss', fake_loss.item(), iteration)
-            writer.add_scalar('G/G_cond_fake_c_loss', fake_c_loss.item(), iteration)
-            writer.add_scalar('G/G_cond_loss', G_cond_loss.item(), iteration)
-            writer.add_scalar('G/G_recon_loss', G_recon_loss.item(), iteration)
+            if (iteration + 1) % 32 == 0:
+                writer.add_scalar('D/D_fake_loss', D_fake_loss.item(), iteration)
+                writer.add_scalar('D/D_real_loss', D_real_loss.item(), iteration)
+                writer.add_scalar('D/D_real_c_pos_loss', real_c_pos_loss.item(), iteration)
+                writer.add_scalar('D/D_real_c_neg_loss', real_c_neg_loss.item(), iteration)
+                writer.add_scalar('G/G_cond_fake_loss', fake_loss.item(), iteration)
+                writer.add_scalar('G/G_cond_fake_c_loss', fake_c_loss.item(), iteration)
+                writer.add_scalar('G/G_cond_loss', G_cond_loss.item(), iteration)
+                writer.add_scalar('G/G_recon_loss', G_recon_loss.item(), iteration)
 
-            # (G_recon_loss + G_cond_loss).backward()
-            # (D_real_loss + D_fake_loss).backward()
             (D_real_loss + D_fake_loss + G_recon_loss + G_cond_loss).backward()
 
             if (iteration + 1) % 4 == 0:
@@ -128,8 +127,9 @@ if __name__ == '__main__':
                 D.zero_grad()
                 optimizer_G.step()
                 G.zero_grad()
-
-            print("Epoch: {} Iter: {}".format(epoch, iteration))
+                print("Epoch: {} Iter: {} Step performed.".format(epoch, iteration))
+            else:
+                print("Epoch: {} Iter: {}".format(epoch, iteration))
             iteration += 1
 
         lr_scheduler_G.step()
