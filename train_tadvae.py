@@ -3,8 +3,8 @@ import torch
 import torch.nn.functional as F
 import torch.optim as optim
 from torch.optim.lr_scheduler import MultiStepLR
-from transformers import BertTokenizer, BertModel
 from torch.utils.tensorboard import SummaryWriter
+from transformers import BertTokenizer, BertModel
 from modules.tadvae_generator.model import Generator
 from modules.tadvae_discriminator.model import Discriminator
 from config_reader import ConfigReader
@@ -12,8 +12,8 @@ from train_utils.utils import zeros_like, ones_like
 from train_utils.data_utils import get_cub_dataloaders
 
 
-# CONFIG = ConfigReader(config_path="/home/andrey/Aalto/thesis/TA-VQVAE/configs/tadvae_cub_local.yaml")
-CONFIG = ConfigReader(config_path="/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/tadvae_cub_remote.yaml")
+CONFIG = ConfigReader(config_path="/home/andrey/Aalto/thesis/TA-VQVAE/configs/tadvae_cub_local.yaml")
+# CONFIG = ConfigReader(config_path="/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/tadvae_cub_remote.yaml")
 CONFIG.print_config_info()
 
 writer = SummaryWriter()
@@ -74,8 +74,8 @@ if __name__ == '__main__':
             with torch.no_grad():
                 imgs_recon = G.dvae(imgs)
 
-            bert_output = BERT_model(token_tensor, attention_mask=mask_tensor, token_type_ids=token_type_tensor)
-            text_embeddings = bert_output[0]
+            text_embeddings = BERT_model(token_tensor, attention_mask=mask_tensor, token_type_ids=token_type_tensor)
+            text_embeddings = text_embeddings[0]
 
             text_embeddings_neg = torch.cat((text_embeddings[:, -1, :].unsqueeze(1), text_embeddings[:, :-1, :]), 1)
             mask_tensor_neg = torch.cat((mask_tensor[-1, :].unsqueeze(0), mask_tensor[:-1, :]), 0)
@@ -93,18 +93,18 @@ if __name__ == '__main__':
             writer.add_scalar('D/D_real_c_pos_loss', real_c_pos_loss.item(), iteration)
             writer.add_scalar('D/D_real_c_neg_loss', real_c_neg_loss.item(), iteration)
 
-            D_real_loss.backward(retain_graph=True)
+            D_real_loss.backward()
 
             # UPDATE DISCRIMINATOR: SYNTHESIZED IMAGE
             with torch.no_grad():
                 gen_img = G(img=imgs, txt_h=text_embeddings_neg, txt_pad_mask=mask_tensor_neg)
-            fake_logit, _ = D(img=gen_img, txt=text_embeddings_neg, txt_mask=mask_tensor_neg)
+            fake_logit, _ = D(img=gen_img.detach(), txt=text_embeddings_neg, txt_mask=mask_tensor_neg)
 
             D_fake_loss = F.binary_cross_entropy_with_logits(fake_logit, zeros_like(fake_logit))
 
             writer.add_scalar('D/D_fake_loss', D_fake_loss.item(), iteration)
 
-            D_fake_loss.backward(retain_graph=True)
+            D_fake_loss.backward()
 
             optimizer_D.step()
             D.zero_grad()
@@ -138,7 +138,6 @@ if __name__ == '__main__':
             G.zero_grad()
 
             print("Epoch: {} Iter: {}".format(epoch, iteration))
-
             iteration += 1
 
         lr_scheduler_G.step()
@@ -146,6 +145,8 @@ if __name__ == '__main__':
 
         G.save_rebuild_model(root_path=CONFIG.save_model_path, model_name=CONFIG.save_model_name)
         D.save_model(root_path=CONFIG.save_model_path, model_name=CONFIG.save_model_name)
+        embedding_path = os.path.join(CONFIG.save_model_path, "embedding.pth")
+        torch.save(BERT_model.state_dict(), embedding_path)
 
         #print()
 
