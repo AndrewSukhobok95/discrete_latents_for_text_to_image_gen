@@ -1,5 +1,6 @@
 paths:
   save_model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/tadvae/"
+  save_model_name: "TADVAE"
   load_vae_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/DALLE_dvae/"
   root_img_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/CUB/CUB_200_2011/images"
   root_text_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/CUB/text"
