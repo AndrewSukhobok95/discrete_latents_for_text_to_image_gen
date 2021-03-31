@@ -30,7 +30,7 @@ G = Generator(
     linear_hidden_dim=1024,
     dropout_prob=0.1,
     n_img_hidden_positions=32*32)
-G.load_state_dict(CONFIG.load_dvae_path)
+G.load_dvae_weights(CONFIG.load_dvae_path, CONFIG.dvae_model_name)
 
 D = Discriminator(
     txt_in_dim=BERT_model.config.hidden_size,
