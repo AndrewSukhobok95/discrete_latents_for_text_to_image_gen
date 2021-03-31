@@ -81,19 +81,19 @@ if __name__ == '__main__':
             mask_tensor_neg = torch.cat((mask_tensor[-1, :].unsqueeze(0), mask_tensor[:-1, :]), 0)
 
             # UPDATE DISCRIMINATOR: REAL IMAGE
-            real_logit, real_c_prob = D(img=imgs_recon, txt=text_embeddings, txt_mask=mask_tensor)
-            real_c_prob_neg = D(img=imgs_recon, txt=text_embeddings_neg, txt_mask=mask_tensor_neg, only_conditional=True)
-
-            D_real_loss = F.binary_cross_entropy_with_logits(real_logit, ones_like(real_logit))
-            real_c_pos_loss = F.binary_cross_entropy(real_c_prob, ones_like(real_c_prob))
-            real_c_neg_loss = F.binary_cross_entropy(real_c_prob_neg, zeros_like(real_c_prob_neg))
-            D_real_loss = D_real_loss + CONFIG.lambda_cond_loss * (real_c_pos_loss + real_c_neg_loss) / 2
-
-            writer.add_scalar('D/D_real_loss', D_real_loss.item(), iteration)
-            writer.add_scalar('D/D_real_c_pos_loss', real_c_pos_loss.item(), iteration)
-            writer.add_scalar('D/D_real_c_neg_loss', real_c_neg_loss.item(), iteration)
-
-            D_real_loss.backward()
+            # real_logit, real_c_prob = D(img=imgs_recon, txt=text_embeddings, txt_mask=mask_tensor)
+            # real_c_prob_neg = D(img=imgs_recon, txt=text_embeddings_neg, txt_mask=mask_tensor_neg, only_conditional=True)
+            #
+            # D_real_loss = F.binary_cross_entropy_with_logits(real_logit, ones_like(real_logit))
+            # real_c_pos_loss = F.binary_cross_entropy(real_c_prob, ones_like(real_c_prob))
+            # real_c_neg_loss = F.binary_cross_entropy(real_c_prob_neg, zeros_like(real_c_prob_neg))
+            # D_real_loss = D_real_loss + CONFIG.lambda_cond_loss * (real_c_pos_loss + real_c_neg_loss) / 2
+            #
+            # writer.add_scalar('D/D_real_loss', D_real_loss.item(), iteration)
+            # writer.add_scalar('D/D_real_c_pos_loss', real_c_pos_loss.item(), iteration)
+            # writer.add_scalar('D/D_real_c_neg_loss', real_c_neg_loss.item(), iteration)
+            #
+            # D_real_loss.backward()
 
             # UPDATE DISCRIMINATOR: SYNTHESIZED IMAGE
             with torch.no_grad():
