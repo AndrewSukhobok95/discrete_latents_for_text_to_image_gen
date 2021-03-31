@@ -122,10 +122,12 @@ if __name__ == '__main__':
             # (G_recon_loss + G_cond_loss).backward()
             # (D_real_loss + D_fake_loss).backward()
             (D_real_loss + D_fake_loss + G_recon_loss + G_cond_loss).backward()
-            optimizer_D.step()
-            D.zero_grad()
-            optimizer_G.step()
-            G.zero_grad()
+
+            if (iteration + 1) % 4 == 0:
+                optimizer_D.step()
+                D.zero_grad()
+                optimizer_G.step()
+                G.zero_grad()
 
             print("Epoch: {} Iter: {}".format(epoch, iteration))
             iteration += 1
