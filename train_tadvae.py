@@ -24,10 +24,10 @@ BERT_model = BertModel.from_pretrained('bert-base-uncased')
 G = Generator(
     img_embedding_dim=8192,
     text_embedding_dim=BERT_model.config.hidden_size,
-    n_trd_blocks=4,
-    num_trd_block_for_mask=3,
+    n_trd_blocks=3,
+    num_trd_block_for_mask=2,
     n_attn_heads=4,
-    linear_hidden_dim=1024,
+    linear_hidden_dim=512,
     dropout_prob=0.1,
     n_img_hidden_positions=32*32)
 G.load_dvae_weights(CONFIG.load_dvae_path, CONFIG.dvae_model_name)
