@@ -81,19 +81,13 @@ if __name__ == '__main__':
             mask_tensor_neg = torch.cat((mask_tensor[-1, :].unsqueeze(0), mask_tensor[:-1, :]), 0)
 
             # UPDATE DISCRIMINATOR: REAL IMAGE
-            # real_logit, real_c_prob = D(img=imgs_recon, txt=text_embeddings, txt_mask=mask_tensor)
-            # real_c_prob_neg = D(img=imgs_recon, txt=text_embeddings_neg, txt_mask=mask_tensor_neg, only_conditional=True)
-            #
-            # D_real_loss = F.binary_cross_entropy_with_logits(real_logit, ones_like(real_logit))
-            # real_c_pos_loss = F.binary_cross_entropy(real_c_prob, ones_like(real_c_prob))
-            # real_c_neg_loss = F.binary_cross_entropy(real_c_prob_neg, zeros_like(real_c_prob_neg))
-            # D_real_loss = D_real_loss + CONFIG.lambda_cond_loss * (real_c_pos_loss + real_c_neg_loss) / 2
-            #
-            # writer.add_scalar('D/D_real_loss', D_real_loss.item(), iteration)
-            # writer.add_scalar('D/D_real_c_pos_loss', real_c_pos_loss.item(), iteration)
-            # writer.add_scalar('D/D_real_c_neg_loss', real_c_neg_loss.item(), iteration)
-            #
-            # D_real_loss.backward()
+            real_logit, real_c_prob = D(img=imgs_recon, txt=text_embeddings, txt_mask=mask_tensor)
+            real_c_prob_neg = D(img=imgs_recon, txt=text_embeddings_neg, txt_mask=mask_tensor_neg, only_conditional=True)
+
+            D_real_loss = F.binary_cross_entropy_with_logits(real_logit, ones_like(real_logit))
+            real_c_pos_loss = F.binary_cross_entropy(real_c_prob, ones_like(real_c_prob))
+            real_c_neg_loss = F.binary_cross_entropy(real_c_prob_neg, zeros_like(real_c_prob_neg))
+            D_real_loss = D_real_loss + CONFIG.lambda_cond_loss * (real_c_pos_loss + real_c_neg_loss) / 2
 
             # UPDATE DISCRIMINATOR: SYNTHESIZED IMAGE
             with torch.no_grad():
@@ -101,13 +95,6 @@ if __name__ == '__main__':
             fake_logit, _ = D(img=gen_img.detach(), txt=text_embeddings_neg, txt_mask=mask_tensor_neg)
 
             D_fake_loss = F.binary_cross_entropy_with_logits(fake_logit, zeros_like(fake_logit))
-
-            writer.add_scalar('D/D_fake_loss', D_fake_loss.item(), iteration)
-
-            D_fake_loss.backward()
-
-            optimizer_D.step()
-            D.zero_grad()
 
             # UPDATE GENERATOR: CONDITIONAL
             gen_img = G(img=imgs, txt_h=text_embeddings_neg, txt_pad_mask=mask_tensor_neg)
@@ -118,22 +105,25 @@ if __name__ == '__main__':
 
             G_cond_loss = fake_loss + CONFIG.lambda_cond_loss * fake_c_loss
 
-            writer.add_scalar('G/G_cond_fake_loss', fake_loss.item(), iteration)
-            writer.add_scalar('G/G_cond_fake_c_loss', fake_c_loss.item(), iteration)
-            writer.add_scalar('G/G_cond_loss', G_cond_loss.item(), iteration)
-
-            G_cond_loss.backward(retain_graph=True)
-
             # UPDATE GENERATOR: RECONSTRUCTION
             gen_img = G(img=imgs, txt_h=text_embeddings, txt_pad_mask=mask_tensor)
 
-            recon_loss = F.l1_loss(gen_img, imgs_recon)
-            G_recon_loss = CONFIG.lambda_recon_loss * recon_loss
+            G_recon_loss = CONFIG.lambda_recon_loss * F.l1_loss(gen_img, imgs_recon)
 
-            writer.add_scalar('G/G_recon_loss', recon_loss.item(), iteration)
+            writer.add_scalar('D/D_fake_loss', D_fake_loss.item(), iteration)
+            writer.add_scalar('D/D_real_loss', D_real_loss.item(), iteration)
+            writer.add_scalar('D/D_real_c_pos_loss', real_c_pos_loss.item(), iteration)
+            writer.add_scalar('D/D_real_c_neg_loss', real_c_neg_loss.item(), iteration)
+            writer.add_scalar('G/G_cond_fake_loss', fake_loss.item(), iteration)
+            writer.add_scalar('G/G_cond_fake_c_loss', fake_c_loss.item(), iteration)
+            writer.add_scalar('G/G_cond_loss', G_cond_loss.item(), iteration)
+            writer.add_scalar('G/G_recon_loss', G_recon_loss.item(), iteration)
 
-            G_recon_loss.backward(retain_graph=True)
-
+            # (G_recon_loss + G_cond_loss).backward()
+            # (D_real_loss + D_fake_loss).backward()
+            (D_real_loss + D_fake_loss + G_recon_loss + G_cond_loss).backward()
+            optimizer_D.step()
+            D.zero_grad()
             optimizer_G.step()
             G.zero_grad()
 
