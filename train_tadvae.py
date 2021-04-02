@@ -12,8 +12,8 @@ from train_utils.utils import zeros_like, ones_like
 from train_utils.data_utils import get_cub_dataloaders
 
 
-# CONFIG = ConfigReader(config_path="/home/andrey/Aalto/thesis/TA-VQVAE/configs/tadvae_cub_local.yaml")
-CONFIG = ConfigReader(config_path="/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/tadvae_cub_remote.yaml")
+CONFIG = ConfigReader(config_path="/home/andrey/Aalto/thesis/TA-VQVAE/configs/tadvae_cub_local.yaml")
+# CONFIG = ConfigReader(config_path="/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/tadvae_cub_remote.yaml")
 CONFIG.print_config_info()
 
 writer = SummaryWriter()
@@ -86,14 +86,13 @@ if __name__ == '__main__':
             real_logit, real_c_prob = D(img=imgs_recon, txt=text_embeddings, txt_mask=mask_tensor)
             real_c_prob_neg = D(img=imgs_recon, txt=text_embeddings_neg, txt_mask=mask_tensor_neg, only_conditional=True)
 
-            D_real_loss = F.binary_cross_entropy_with_logits(real_logit, ones_like(real_logit))
+            real_loss = F.binary_cross_entropy_with_logits(real_logit, ones_like(real_logit))
             real_c_pos_loss = F.binary_cross_entropy(real_c_prob, ones_like(real_c_prob))
             real_c_neg_loss = F.binary_cross_entropy(real_c_prob_neg, zeros_like(real_c_prob_neg))
-            D_real_loss = D_real_loss + CONFIG.lambda_cond_loss * (real_c_pos_loss + real_c_neg_loss) / 2
+            D_real_loss = real_loss + CONFIG.lambda_cond_loss * (real_c_pos_loss + real_c_neg_loss) / 2
 
             # UPDATE DISCRIMINATOR: SYNTHESIZED IMAGE
-            with torch.no_grad():
-                gen_img = G(img=imgs, txt_h=text_embeddings_neg, txt_pad_mask=mask_tensor_neg)
+            gen_img = G(img=imgs, txt_h=text_embeddings_neg, txt_pad_mask=mask_tensor_neg)
             fake_logit, _ = D(img=gen_img.detach(), txt=text_embeddings_neg, txt_mask=mask_tensor_neg)
 
             D_fake_loss = F.binary_cross_entropy_with_logits(fake_logit, zeros_like(fake_logit))

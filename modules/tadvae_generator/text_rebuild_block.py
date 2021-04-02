@@ -62,5 +62,5 @@ class TextRebuildBlock(nn.Module):
         x = x.permute(1, 2, 0).view(eb, ech, eh, ew)
         img_h_new = self.logits_predictor(x)
 
-        return masking_sum(img_h_new, img_h, mask_img_h)
+        return masking_sum(img_h_new, img_h, mask_img_h), mask_img_h
 

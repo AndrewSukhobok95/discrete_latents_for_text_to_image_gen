@@ -1,5 +1,5 @@
 paths:
-  save_model_path: "/home/andrey/Aalto/thesis/TA-VQVAE/models/tadvae/"
+  save_model_path: "/home/andrey/Aalto/thesis/TA-VQVAE/models/tadvae_v1/"
   save_model_name: "TADVAE"
   load_dvae_path: "/home/andrey/Aalto/thesis/TA-VQVAE/models/DALLE_dvae/"
   dvae_model_name: "dvae"

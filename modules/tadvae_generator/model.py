@@ -28,11 +28,13 @@ class Generator(nn.Module):
                                                    dropout_prob=dropout_prob,
                                                    n_img_hidden_positions=n_img_hidden_positions)
 
-    def forward(self, img, txt_h, txt_pad_mask):
+    def forward(self, img, txt_h, txt_pad_mask, return_mask=False):
         z = self.dvae.encode(img)
-        z_new = self.text_rebuild_block(z, txt_h, txt_pad_mask)
+        z_new, z_mask = self.text_rebuild_block(z, txt_h, txt_pad_mask)
         z_onehot = self.dvae.quantize(z_new)
         img_recon = self.dvae.decode(z_onehot)
+        if return_mask:
+            return img_recon, z_mask
         return img_recon
 
     def load_dvae_weights(self, root_path, model_name):
@@ -46,5 +48,9 @@ class Generator(nn.Module):
             os.makedirs(root_path)
         path = os.path.join(root_path, model_name + "_text_rebuild.pth")
         torch.save(self.text_rebuild_block.state_dict(), path)
+
+    def load_rebuild_model(self, root_path, model_name):
+        path = os.path.join(root_path, model_name + "_text_rebuild.pth")
+        self.text_rebuild_block.load_state_dict(torch.load(path, map_location=torch.device('cpu')))
 
 
