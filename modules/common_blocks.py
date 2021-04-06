@@ -8,13 +8,13 @@ class Residual(nn.Module):
         super(Residual, self).__init__()
         self.use_bn = use_bn
         self.conv_1 = nn.Sequential(
-            nn.ReLU(True),
+            nn.ReLU(),
             nn.Conv2d(in_channels=in_channels, out_channels=out_channels,
                       kernel_size=3, stride=1, padding=1, bias=bias)
         )
         self.bn = nn.BatchNorm2d(out_channels)
         self.conv_2 = nn.Sequential(
-            nn.ReLU(True),
+            nn.ReLU(),
             nn.Conv2d(in_channels=out_channels, out_channels=out_channels,
                       kernel_size=1, stride=1, bias=bias)
         )
@@ -50,7 +50,7 @@ class ChangeChannels(nn.Module):
         )
         self.bn = nn.BatchNorm2d(out_channels)
         self.conv_2 = nn.Sequential(
-            nn.ReLU(True),
+            nn.ReLU(),
             nn.Conv2d(in_channels=out_channels, out_channels=out_channels,
                       kernel_size=1, stride=1, bias=bias)
         )

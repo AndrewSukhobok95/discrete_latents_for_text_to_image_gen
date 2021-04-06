@@ -1,0 +1,91 @@
+import os
+import torch
+import torchvision
+import torch.nn.functional as F
+import torch.optim as optim
+from torch.optim.lr_scheduler import MultiStepLR
+from torch.utils.data import DataLoader
+from torch.utils.tensorboard import SummaryWriter
+from config_reader import ConfigReader
+from datasets.triple_mnist import TripleMnistDataset
+from modules.dvae.model import DVAE
+from train_utils.dvae_utils import KLD_loss, TemperatureAnnealer, KLDWeightAnnealer
+
+
+# CONFIG = ConfigReader(config_path="/home/andrey/Aalto/thesis/TA-VQVAE/configs/dvae_triplemnist_local.yaml")
+CONFIG = ConfigReader(config_path="/u/82/sukhoba1/unix/Desktop/projects/TA-VQVAE/configs/dvae_triplemnist_remote.yaml")
+CONFIG.print_config_info()
+
+writer = SummaryWriter()
+
+
+dataset = TripleMnistDataset(
+    root_img_path=CONFIG.root_img_path)
+
+train_loader = DataLoader(
+    dataset=dataset,
+    batch_size=CONFIG.BATCH_SIZE,
+    shuffle=True)
+
+model = DVAE(in_channels=CONFIG.in_channels,
+             vocab_size=CONFIG.vocab_size,
+             num_x2downsamples=CONFIG.num_x2downsamples,
+             num_resids_downsample=CONFIG.num_resids_downsample,
+             num_resids_bottleneck=CONFIG.num_resids_bottleneck)
+
+optimizer = optim.Adam(model.parameters(), lr=CONFIG.LR)
+lr_scheduler = MultiStepLR(optimizer, milestones=CONFIG.step_LR_milestones, gamma=CONFIG.LR_gamma)
+
+
+if __name__ == '__main__':
+    print("Device in use: {}".format(CONFIG.DEVICE))
+
+    temp_annealer = TemperatureAnnealer(
+        start_temp=CONFIG.temp_start,
+        end_temp=CONFIG.temp_end,
+        n_steps=CONFIG.temp_steps)
+
+    kl_annealer = KLDWeightAnnealer(
+        start_lambda=CONFIG.KLD_lambda_start,
+        end_lambda=CONFIG.KLD_lambda_end,
+        n_steps=CONFIG.KLD_lambda_steps)
+
+    torch.autograd.set_detect_anomaly(True)
+
+    iteration = 0
+    for epoch in range(CONFIG.NUM_EPOCHS):
+        for x, _ in train_loader:
+            optimizer.zero_grad()
+
+            temp = temp_annealer.step(iteration)
+            x_recon, z_dist = model(x, temp)
+
+            recon_loss = F.mse_loss(x_recon, x)
+            kld_loss = KLD_loss(z_dist)
+            kl_weight = kl_annealer.step(iteration)
+
+            loss = recon_loss + kl_weight * kld_loss
+
+            loss.backward()
+            optimizer.step()
+
+            print("Epoch: {} Iter: {} Loss: {}".format(epoch, iteration, loss.item()))
+
+            writer.add_scalar('loss/recon_loss', recon_loss.item(), iteration)
+            writer.add_scalar('loss/kld_loss', kld_loss.item(), iteration)
+            writer.add_scalar('rates/temperature', temp, iteration)
+            writer.add_scalar('rates/kl_weight', kl_weight, iteration)
+
+            iteration += 1
+
+        img_grid = torchvision.utils.make_grid(x[:8, :, :, :].detach().cpu())
+        writer.add_image('original_image', img_grid, epoch)
+
+        img_recon_grid = torchvision.utils.make_grid(x_recon[:8, :, :, :].detach().cpu())
+        writer.add_image('reconstruction_image', img_recon_grid, epoch)
+
+        lr_scheduler.step()
+
+
+
+

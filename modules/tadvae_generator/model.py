@@ -29,12 +29,24 @@ class Generator(nn.Module):
                                                    n_img_hidden_positions=n_img_hidden_positions)
 
     def forward(self, img, txt_h, txt_pad_mask, return_mask=False):
+        # z = self.dvae.encode(img)
+        # z_new, z_mask = self.text_rebuild_block(z, txt_h, txt_pad_mask)
+        # z_onehot = self.dvae.quantize(z_new)
+        # img_recon = self.dvae.decode(z_onehot)
+        z_new, z_onehot, z_mask = self.encode(img, txt_h, txt_pad_mask)
+        img_recon = self.decode(z_onehot)
+        if return_mask:
+            return img_recon, z_mask
+        return img_recon
+
+    def encode(self, img, txt_h, txt_pad_mask):
         z = self.dvae.encode(img)
         z_new, z_mask = self.text_rebuild_block(z, txt_h, txt_pad_mask)
         z_onehot = self.dvae.quantize(z_new)
-        img_recon = self.dvae.decode(z_onehot)
-        if return_mask:
-            return img_recon, z_mask
+        return z_new, z_onehot, z_mask
+
+    def decode(self, z):
+        img_recon = self.dvae.decode(z)
         return img_recon
 
     def load_dvae_weights(self, root_path, model_name):
