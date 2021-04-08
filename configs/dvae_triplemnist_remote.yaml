@@ -5,7 +5,7 @@ paths:
 
 model:
   in_channels: 1
-  vocab_size: 128
+  vocab_size: 64
   num_x2downsamples: 2
   num_resids_downsample: 2
   num_resids_bottleneck: 2

@@ -80,11 +80,12 @@ if __name__ == '__main__':
 
         img_grid = torchvision.utils.make_grid(x[:8, :, :, :].detach().cpu())
         writer.add_image('original_image', img_grid, epoch)
-
         img_recon_grid = torchvision.utils.make_grid(x_recon[:8, :, :, :].detach().cpu())
         writer.add_image('reconstruction_image', img_recon_grid, epoch)
 
         lr_scheduler.step()
+
+        model.save_model(CONFIG.save_model_path, CONFIG.save_model_name)
 
 
 
