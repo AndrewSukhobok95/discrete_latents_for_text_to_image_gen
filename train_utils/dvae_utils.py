@@ -42,7 +42,7 @@ class KLDWeightAnnealer:
     def step(self, step):
         if step == 0:
             return self.start_lambda
-        elif step > self.n_steps:
+        elif step >= self.n_steps:
             return self.end_lambda
         else:
             return self.start_lambda + sigmoid(self.lin_space[step]) * self.end_lambda

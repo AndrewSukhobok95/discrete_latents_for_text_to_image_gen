@@ -33,6 +33,7 @@ def get_data_paths(root_path):
         data_list = _recusive_collect_files_paths(root_path)
         with open(summary_file_paths, "w") as f:
             f.write("\n".join(data_list))
+        print("File with data paths is created at {}.".format(summary_file_paths))
     return data_list
 
 
