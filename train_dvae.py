@@ -13,7 +13,7 @@ from train_utils.dvae_utils import KLD_loss, TemperatureAnnealer, KLDWeightAnnea
 
 
 # CONFIG = ConfigReader(config_path="/home/andrey/Aalto/thesis/TA-VQVAE/configs/dvae_triplemnist_local.yaml")
-CONFIG = ConfigReader(config_path="/u/82/sukhoba1/unix/Desktop/projects/TA-VQVAE/configs/dvae_triplemnist_remote.yaml")
+CONFIG = ConfigReader(config_path="/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/dvae_triplemnist_remote.yaml")
 CONFIG.print_config_info()
 
 writer = SummaryWriter()
