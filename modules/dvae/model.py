@@ -37,9 +37,6 @@ class DVAE(nn.Module):
     def quantize(self, z_logits, tau=1/16, hard=False):
         return F.gumbel_softmax(z_logits, tau=tau, hard=hard, dim=1)
 
-    # def quantize(self, z_logits, tau=1/16, hard=False):
-    #     return gumbel_softmax(z_logits, tau, hard=hard, dim=1)
-
     def decode(self, z):
         x_rec = self.decoder(z)
         return x_rec

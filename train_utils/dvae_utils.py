@@ -2,12 +2,16 @@ import torch
 import numpy as np
 
 
-def KLD_loss(z_dist):
+def KLD_uniform_loss(z_dist):
     eps = 1e-20
     b, lat_dim, h, w = z_dist.size()
-    z_dist_flatten = z_dist.view(b, -1)
-    log_ratio = torch.log(z_dist_flatten * lat_dim + eps)
-    KLD = torch.sum(z_dist_flatten * log_ratio, dim=-1).mean()
+
+    log_prior = torch.log(torch.ones((b, lat_dim, h*w), device=z_dist.device) / lat_dim)
+
+    z_dist_flatten = z_dist.view(b, lat_dim, -1)
+    log_z_dist = torch.log(z_dist_flatten + eps)
+
+    KLD = torch.sum(z_dist_flatten * (log_z_dist - log_prior), dim=[1, 2]).mean()
     return KLD
 
 

@@ -9,7 +9,7 @@ from torch.utils.tensorboard import SummaryWriter
 from config_reader import ConfigReader
 from datasets.triple_mnist import TripleMnistDataset
 from modules.dvae.model import DVAE
-from train_utils.dvae_utils import KLD_loss, TemperatureAnnealer, KLDWeightAnnealer
+from train_utils.dvae_utils import KLD_uniform_loss, TemperatureAnnealer, KLDWeightAnnealer
 
 
 # CONFIG = ConfigReader(config_path="/home/andrey/Aalto/thesis/TA-VQVAE/configs/dvae_triplemnist_local.yaml")
@@ -64,7 +64,7 @@ if __name__ == '__main__':
             x_recon, z_dist = model(x, temp)
 
             recon_loss = F.mse_loss(x_recon, x)
-            kld_loss = KLD_loss(z_dist)
+            kld_loss = KLD_uniform_loss(z_dist)
             kl_weight = kl_annealer.step(iteration)
 
             loss = recon_loss + kl_weight * kld_loss
