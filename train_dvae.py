@@ -12,8 +12,8 @@ from modules.dvae.model import DVAE
 from train_utils.dvae_utils import KLD_loss, TemperatureAnnealer, KLDWeightAnnealer
 
 
-# CONFIG = ConfigReader(config_path="/home/andrey/Aalto/thesis/TA-VQVAE/configs/dvae_triplemnist_local.yaml")
-CONFIG = ConfigReader(config_path="/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/dvae_triplemnist_remote.yaml")
+CONFIG = ConfigReader(config_path="/home/andrey/Aalto/thesis/TA-VQVAE/configs/dvae_triplemnist_local.yaml")
+# CONFIG = ConfigReader(config_path="/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/dvae_triplemnist_remote.yaml")
 CONFIG.print_config_info()
 
 writer = SummaryWriter()
@@ -50,11 +50,14 @@ if __name__ == '__main__':
         end_lambda=CONFIG.KLD_lambda_end,
         n_steps=CONFIG.KLD_lambda_steps)
 
-    torch.autograd.set_detect_anomaly(True)
+    model.train()
+    model.to(CONFIG.DEVICE)
 
     iteration = 0
     for epoch in range(CONFIG.NUM_EPOCHS):
         for x, _ in train_loader:
+            x = x.to(CONFIG.DEVICE)
+
             optimizer.zero_grad()
 
             temp = temp_annealer.step(iteration)
