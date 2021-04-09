@@ -22,5 +22,5 @@ training:
   temp_end: 0.0625
   temp_steps: 1600
   KLD_lambda_start: 0
-  KLD_lambda_end: 6
+  KLD_lambda_end: 10
   KLD_lambda_steps: 800

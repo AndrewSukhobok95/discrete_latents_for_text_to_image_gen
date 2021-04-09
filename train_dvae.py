@@ -12,8 +12,8 @@ from modules.dvae.model import DVAE
 from train_utils.dvae_utils import KLD_loss, TemperatureAnnealer, KLDWeightAnnealer
 
 
-# CONFIG = ConfigReader(config_path="/home/andrey/Aalto/thesis/TA-VQVAE/configs/dvae_triplemnist_local.yaml")
-CONFIG = ConfigReader(config_path="/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/dvae_triplemnist_remote.yaml")
+CONFIG = ConfigReader(config_path="/home/andrey/Aalto/thesis/TA-VQVAE/configs/dvae_triplemnist_local.yaml")
+# CONFIG = ConfigReader(config_path="/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/dvae_triplemnist_remote.yaml")
 CONFIG.print_config_info()
 
 writer = SummaryWriter()
@@ -72,7 +72,9 @@ if __name__ == '__main__':
             loss.backward()
             optimizer.step()
 
-            print("Epoch: {} Iter: {} Loss: {}".format(epoch, iteration, loss.item()))
+            print("Epoch: {} Iter: {} Loss: {} KL Loss (weighted): {} Recon Loss {}".format(
+                epoch, iteration, loss.item(), kl_weight * kld_loss.item(), recon_loss.item()))
+            print("N codes used: {}".format(len(z_dist.detach().cpu().argmax(dim=1).view(-1).unique())))
 
             writer.add_scalar('loss/recon_loss', recon_loss.item(), iteration)
             writer.add_scalar('loss/kld_loss', kld_loss.item(), iteration)
