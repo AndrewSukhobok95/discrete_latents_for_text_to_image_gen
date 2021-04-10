@@ -12,8 +12,8 @@ from modules.dvae.model import DVAE
 from train_utils.dvae_utils import KLD_uniform_loss, TemperatureAnnealer, KLDWeightAnnealer
 
 
-# CONFIG = ConfigReader(config_path="/home/andrey/Aalto/thesis/TA-VQVAE/configs/dvae_triplemnist_local.yaml")
-CONFIG = ConfigReader(config_path="/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/dvae_triplemnist_remote.yaml")
+CONFIG = ConfigReader(config_path="/home/andrey/Aalto/thesis/TA-VQVAE/configs/dvae_triplemnist_local.yaml")
+# CONFIG = ConfigReader(config_path="/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/dvae_triplemnist_remote.yaml")
 CONFIG.print_config_info()
 
 writer = SummaryWriter()
@@ -63,7 +63,7 @@ if __name__ == '__main__':
             temp = temp_annealer.step(iteration)
             x_recon, z_dist = model(x, temp)
 
-            recon_loss = F.mse_loss(x_recon, x)
+            recon_loss = F.binary_cross_entropy(x_recon, x)
             kld_loss = KLD_uniform_loss(z_dist)
             kl_weight = kl_annealer.step(iteration)
 
@@ -84,9 +84,9 @@ if __name__ == '__main__':
             iteration += 1
 
         img_grid = torchvision.utils.make_grid(x[:8, :, :, :].detach().cpu())
-        writer.add_image('original_image', img_grid, epoch)
+        writer.add_image('images/original', img_grid, epoch)
         img_recon_grid = torchvision.utils.make_grid(x_recon[:8, :, :, :].detach().cpu())
-        writer.add_image('reconstruction_image', img_recon_grid, epoch)
+        writer.add_image('images/reconstruction', img_recon_grid, epoch)
 
         lr_scheduler.step()
 
