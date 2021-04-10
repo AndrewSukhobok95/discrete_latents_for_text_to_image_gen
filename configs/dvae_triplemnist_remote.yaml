@@ -5,7 +5,7 @@ paths:
 
 model:
   in_channels: 1
-  vocab_size: 64
+  vocab_size: 16
   num_x2downsamples: 2
   num_resids_downsample: 2
   num_resids_bottleneck: 2
@@ -20,7 +20,7 @@ training:
     - 100
   temp_start: 1
   temp_end: 0.0625
-  temp_steps: 1600
+  temp_steps: 8000
   KLD_lambda_start: 0
-  KLD_lambda_end: 6
-  KLD_lambda_steps: 800
+  KLD_lambda_end: 1
+  KLD_lambda_steps: 2500
