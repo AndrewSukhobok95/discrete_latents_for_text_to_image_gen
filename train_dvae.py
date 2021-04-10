@@ -67,7 +67,7 @@ if __name__ == '__main__':
             kld_loss = KLD_uniform_loss(z_dist)
             kl_weight = kl_annealer.step(iteration)
 
-            loss = recon_loss + kl_weight * kld_loss
+            loss = recon_loss - kl_weight * kld_loss
 
             loss.backward()
             optimizer.step()
