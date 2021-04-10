@@ -8,7 +8,7 @@ model:
   vocab_size: 16
   num_x2downsamples: 2
   num_resids_downsample: 2
-  num_resids_bottleneck: 2
+  num_resids_bottleneck: 4
 
 training:
   NUM_EPOCHS: 800
@@ -16,8 +16,8 @@ training:
   LR: 0.0001
   LR_gamma: 0.35
   step_LR_milestones:
-    - 50
-    - 100
+    - 5
+    - 10
   temp_start: 1
   temp_end: 0.0625
   temp_steps: 8000
