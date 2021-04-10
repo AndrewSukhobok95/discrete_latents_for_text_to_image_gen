@@ -12,8 +12,8 @@ from modules.dvae.model import DVAE
 from train_utils.dvae_utils import KLD_uniform_loss, TemperatureAnnealer, KLDWeightAnnealer
 
 
-CONFIG = ConfigReader(config_path="/home/andrey/Aalto/thesis/TA-VQVAE/configs/dvae_triplemnist_local.yaml")
-# CONFIG = ConfigReader(config_path="/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/dvae_triplemnist_remote.yaml")
+# CONFIG = ConfigReader(config_path="/home/andrey/Aalto/thesis/TA-VQVAE/configs/dvae_triplemnist_local.yaml")
+CONFIG = ConfigReader(config_path="/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/dvae_triplemnist_remote.yaml")
 CONFIG.print_config_info()
 
 writer = SummaryWriter()
