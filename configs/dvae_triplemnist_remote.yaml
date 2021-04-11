@@ -9,11 +9,11 @@ model:
   num_x2downsamples: 2
   num_resids_downsample: 2
   num_resids_bottleneck: 4
-  hidden_dim: 128
+  hidden_dim: 64
 
 training:
   NUM_EPOCHS: 800
-  BATCH_SIZE: 512
+  BATCH_SIZE: 256
   LR: 0.0001
   LR_gamma: 0.35
   step_LR_milestones:
