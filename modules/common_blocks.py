@@ -28,16 +28,19 @@ class Residual(nn.Module):
 
 
 class ResidualStack(nn.Module):
-    def __init__(self, in_channels, out_channels, num_residual_layers, bias=False, use_bn=False):
+    def __init__(self, in_channels, out_channels, num_residual_layers, bias=False, use_bn=False, final_relu=True):
         super(ResidualStack, self).__init__()
         self._num_residual_layers = num_residual_layers
+        self.final_relu = final_relu
         self._layers = nn.ModuleList([Residual(in_channels, out_channels, bias, use_bn)
                                       for _ in range(self._num_residual_layers)])
 
     def forward(self, x):
         for i in range(self._num_residual_layers):
             x = self._layers[i](x)
-        return F.relu(x)
+        if self.final_relu:
+            return F.relu(x)
+        return x
 
 
 class ChangeChannels(nn.Module):

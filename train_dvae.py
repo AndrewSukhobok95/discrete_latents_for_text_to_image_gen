@@ -31,7 +31,10 @@ model = DVAE(in_channels=CONFIG.in_channels,
              vocab_size=CONFIG.vocab_size,
              num_x2downsamples=CONFIG.num_x2downsamples,
              num_resids_downsample=CONFIG.num_resids_downsample,
-             num_resids_bottleneck=CONFIG.num_resids_bottleneck)
+             num_resids_bottleneck=CONFIG.num_resids_bottleneck,
+             hidden_dim=CONFIG.hidden_dim)
+
+model.show_model_architecture()
 
 optimizer = optim.Adam(model.parameters(), lr=CONFIG.LR)
 lr_scheduler = MultiStepLR(optimizer, milestones=CONFIG.step_LR_milestones, gamma=CONFIG.LR_gamma)

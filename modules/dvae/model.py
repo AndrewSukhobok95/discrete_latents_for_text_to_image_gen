@@ -13,13 +13,15 @@ class DVAE(nn.Module):
                  vocab_size,
                  num_x2downsamples=2,
                  num_resids_downsample=2,
-                 num_resids_bottleneck=2):
+                 num_resids_bottleneck=2,
+                 hidden_dim=None):
         super(DVAE, self).__init__()
         self.encoder = Encoder(in_channels=in_channels,
                                out_channels=vocab_size,
                                num_x2downsamples=num_x2downsamples,
                                num_resids_downsample=num_resids_downsample,
                                num_resids_bottleneck=num_resids_bottleneck,
+                               hidden_channels=hidden_dim,
                                bias=True,
                                use_bn=True)
         self.decoder = Decoder(in_channels=vocab_size,
@@ -27,6 +29,7 @@ class DVAE(nn.Module):
                                num_x2upsamples=num_x2downsamples,
                                num_resids_upsample=num_resids_downsample,
                                num_resids_bottleneck=num_resids_bottleneck,
+                               hidden_channels=hidden_dim,
                                bias=True,
                                use_bn=True)
 
@@ -61,3 +64,11 @@ class DVAE(nn.Module):
         decoder_path = os.path.join(root_path, model_name + "_decoder.pth")
         torch.save(self.encoder.state_dict(), encoder_path)
         torch.save(self.decoder.state_dict(), decoder_path)
+
+    def show_model_architecture(self):
+        print("DVAE architecture:")
+        print()
+        self.encoder.show_model_architecture()
+        print()
+        self.decoder.show_model_architecture()
+        print()
