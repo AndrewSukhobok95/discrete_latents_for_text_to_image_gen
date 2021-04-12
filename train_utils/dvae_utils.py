@@ -15,6 +15,19 @@ def KLD_uniform_loss(z_dist):
     return KLD
 
 
+def KLD_uniform_for_codes(z_dist):
+    eps = 1e-20
+    b, lat_dim, h, w = z_dist.size()
+
+    log_prior = torch.log(torch.ones((b, lat_dim), device=z_dist.device) / lat_dim)
+
+    z_dist_flatten = z_dist.view(b, lat_dim, -1).sum(dim=2) / (h * w)
+    log_z_dist = torch.log(z_dist_flatten + eps)
+
+    KLD = torch.sum(z_dist_flatten * (log_z_dist - log_prior), dim=1).mean()
+    return KLD
+
+
 class TemperatureAnnealer:
     def __init__(self, start_temp=1, end_temp=1/16, n_steps=100000):
         self.start_temp = start_temp
