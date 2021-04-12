@@ -7,21 +7,22 @@ model:
   in_channels: 1
   vocab_size: 16
   num_x2downsamples: 2
-  num_resids_downsample: 2
+  num_resids_downsample: 3
   num_resids_bottleneck: 4
   hidden_dim: 64
 
 training:
   NUM_EPOCHS: 800
   BATCH_SIZE: 256
-  LR: 0.0001
+  LR: 0.001
   LR_gamma: 0.35
   step_LR_milestones:
+    - 5
     - 30
     - 50
   temp_start: 1
   temp_end: 0.0625
   temp_steps: 8000
   KLD_lambda_start: 0
-  KLD_lambda_end: 1
+  KLD_lambda_end: 6
   KLD_lambda_steps: 2500
