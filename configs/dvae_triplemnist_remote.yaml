@@ -17,7 +17,7 @@ training:
   LR: 0.001
   LR_gamma: 0.35
   step_LR_milestones:
-    - 5
+    - 2
     - 30
     - 50
   temp_start: 1
