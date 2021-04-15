@@ -1,27 +1,30 @@
-import torch
 import numpy as np
+import torch
+import torch.nn.functional as F
 
 
-def KLD_uniform_loss(z_dist):
+def KLD_uniform_loss(z_logits):
     eps = 1e-20
-    b, lat_dim, h, w = z_dist.size()
+    b, lat_dim, h, w = z_logits.size()
+    log_prior = torch.log(torch.ones((b, lat_dim, h * w), device=z_logits.device) / lat_dim)
 
-    log_prior = torch.log(torch.ones((b, lat_dim, h*w), device=z_dist.device) / lat_dim)
+    z_probs = F.softmax(z_logits, dim=1)
 
-    z_dist_flatten = z_dist.view(b, lat_dim, -1)
+    z_dist_flatten = z_probs.view(b, lat_dim, -1)
     log_z_dist = torch.log(z_dist_flatten + eps)
 
     KLD = torch.sum(z_dist_flatten * (log_z_dist - log_prior), dim=[1, 2]).mean()
     return KLD
 
 
-def KLD_uniform_for_codes(z_dist):
+def KLD_codes_uniform_loss(z):
     eps = 1e-20
-    b, lat_dim, h, w = z_dist.size()
+    b, lat_dim, h, w = z.size()
+    N = h * w
 
-    log_prior = torch.log(torch.ones((b, lat_dim), device=z_dist.device) / lat_dim)
+    log_prior = torch.log(torch.ones((b, lat_dim), device=z.device) / lat_dim)
 
-    z_dist_flatten = z_dist.view(b, lat_dim, -1).sum(dim=2) / (h * w)
+    z_dist_flatten = z.sum(dim=[2, 3]) / N
     log_z_dist = torch.log(z_dist_flatten + eps)
 
     KLD = torch.sum(z_dist_flatten * (log_z_dist - log_prior), dim=1).mean()

@@ -9,7 +9,7 @@ from torch.utils.tensorboard import SummaryWriter
 from config_reader import ConfigReader
 from datasets.triple_mnist import TripleMnistDataset
 from modules.dvae.model import DVAE
-from train_utils.dvae_utils import TemperatureAnnealer, KLDWeightAnnealer, KLD_uniform_loss
+from train_utils.dvae_utils import TemperatureAnnealer, KLDWeightAnnealer, KLD_uniform_loss, KLD_codes_uniform_loss
 
 
 # CONFIG = ConfigReader(config_path="/home/andrey/Aalto/thesis/TA-VQVAE/configs/dvae_triplemnist_local.yaml")
@@ -64,20 +64,25 @@ if __name__ == '__main__':
             optimizer.zero_grad()
 
             temp = temp_annealer.step(iteration)
-            x_recon, z_dist = model(x, temp)
+            x_recon, z_logits, z = model(x, temp)
 
             recon_loss = F.binary_cross_entropy(x_recon, x)
-            kld_loss = KLD_uniform_loss(z_dist)
+            kld_loss = KLD_uniform_loss(z_logits)
             kl_weight = kl_annealer.step(iteration)
 
-            loss = recon_loss - kl_weight * kld_loss
+            kld_codes_loss = KLD_codes_uniform_loss(z)
+
+            loss = recon_loss - kl_weight * kld_loss + kld_codes_loss
 
             loss.backward()
             optimizer.step()
 
-            print("Epoch: {} Iter: {} Loss: {} KL Loss (weighted): {} Recon Loss {}".format(
-                epoch, iteration, loss.item(), kl_weight * kld_loss.item(), recon_loss.item()))
-            print("N codes used: {}".format(len(z_dist.detach().cpu().argmax(dim=1).view(-1).unique())))
+            with torch.no_grad():
+                n_used_codes = len(z.detach().cpu().argmax(dim=1).view(-1).unique())
+                if (iteration + 1) % 40 == 0:
+                    print("Epoch: {} Iter: {} Loss: {} KL Loss (weighted): {} Recon Loss {} N codes used: {}".format(
+                        epoch, iteration, loss.item(), kl_weight * kld_loss.mean().item(), recon_loss.mean().item(),
+                        n_used_codes))
 
             writer.add_scalar('loss/recon_loss', recon_loss.item(), iteration)
             writer.add_scalar('loss/kld_loss', kld_loss.item(), iteration)

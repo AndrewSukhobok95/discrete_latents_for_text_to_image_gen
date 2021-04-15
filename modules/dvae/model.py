@@ -48,8 +48,7 @@ class DVAE(nn.Module):
         z_logits = self.encode(x)
         z = self.quantize(z_logits, tau=tau, hard=hard)
         x_rec = self.decode(z)
-        z_dist = F.softmax(z_logits, dim=1)
-        return x_rec, z_dist
+        return x_rec, z_logits, z
 
     def load_model(self, root_path, model_name, map_location=torch.device('cpu')):
         encoder_path = os.path.join(root_path, model_name + "_encoder.pth")

@@ -2,7 +2,7 @@ import unittest
 import torch
 import torch.nn.functional as F
 
-from train_utils.dvae_utils import KLD_uniform_loss, KLD_uniform_for_codes
+from train_utils.dvae_utils import KLD_uniform_loss
 
 
 class TestDVAETrainUtils(unittest.TestCase):
@@ -23,19 +23,19 @@ class TestDVAETrainUtils(unittest.TestCase):
         )
         kld_loss_fixed = KLD_uniform_loss(z_dist_fixed)
 
-        # def next_num(max_num):
-        #     num = -1
-        #     while True:
-        #         if num == max_num:
-        #             num = -1
-        #         num += 1
-        #         yield num
-        #
-        # z_logits_every = torch.rand((4, 10, 5, 5))
-        # g = next_num(9)
-        # for i in range(5):
-        #     for j in range(5):
-        #         z_logits_every[:, next(g), i, j] = 10
+        def next_num(max_num):
+            num = -1
+            while True:
+                if num == max_num:
+                    num = -1
+                num += 1
+                yield num
+
+        z_logits_every = torch.zeros((4, 10, 5, 5))
+        g = next_num(9)
+        for i in range(5):
+            for j in range(5):
+                z_logits_every[:, next(g), i, j] = 1
         # z_dist_every = F.softmax(
         #     z_logits_every,
         #     dim=1
