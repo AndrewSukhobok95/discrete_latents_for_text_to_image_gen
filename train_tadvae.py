@@ -5,8 +5,8 @@ import torch.optim as optim
 from torch.optim.lr_scheduler import MultiStepLR
 from torch.utils.tensorboard import SummaryWriter
 from transformers import BertTokenizer, BertModel
-from modules.tadvae_generator.model import Generator
-from modules.tadvae_discriminator.model import Discriminator
+from modules.tadvae.generator.model import Generator
+from modules.tadvae.discriminator.model import Discriminator
 from config_reader import ConfigReader
 from train_utils.utils import zeros_like, ones_like
 from train_utils.data_utils import get_cub_dataloaders

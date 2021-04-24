@@ -44,6 +44,16 @@ class DVAE(nn.Module):
         x_rec = self.decoder(z)
         return x_rec
 
+    def q_encode(self, x, tau=1/16, hard=False):
+        z_logits = self.encoder(x)
+        z = F.gumbel_softmax(z_logits, tau=tau, hard=hard, dim=1)
+        return z
+
+    def q_decode(self, z_logits, tau=1/16, hard=False):
+        z = F.gumbel_softmax(z_logits, tau=tau, hard=hard, dim=1)
+        x_rec = self.decoder(z)
+        return x_rec
+
     def forward(self, x, tau=1/16, hard=False):
         z_logits = self.encode(x)
         z = self.quantize(z_logits, tau=tau, hard=hard)

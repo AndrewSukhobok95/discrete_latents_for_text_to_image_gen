@@ -9,8 +9,8 @@ from transformers import BertTokenizer, BertModel
 from datasets.cub import CubDataset
 from datasets.common import Collater
 from config import Config
-from modules.tavqvae_generator.model import Generator
-from modules.tavqvae_discriminator.tagan_model import Discriminator
+from modules.tavqvae.generator.model import Generator
+from modules.tavqvae.discriminator.tagan_model import Discriminator
 
 
 def label_like(label, x):
