@@ -21,13 +21,13 @@ class PositionalEmbedding(nn.Module):
 
 
 class MLP(nn.Module):
-    def __init__(self, in_dim, out_dim, dropout_prob=0.1):
+    def __init__(self, in_dim, out_dim, dropout_prob=0.1, bias=False):
         super(MLP, self).__init__()
         self.block = nn.Sequential(
-            nn.Linear(in_dim, out_dim),
-            nn.GELU(),
+            nn.Linear(in_dim, out_dim, bias=bias),
+            nn.ReLU(),  # nn.GELU(),
             nn.Dropout(p=dropout_prob),
-            nn.Linear(out_dim, out_dim)
+            nn.Linear(out_dim, out_dim, bias=bias)
         )
 
     def forward(self, x):

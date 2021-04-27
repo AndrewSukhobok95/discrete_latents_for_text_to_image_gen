@@ -46,7 +46,7 @@ class Generator(nn.Module):
         noise_codes = self.noise_mlp(noise)
         noise_codes = noise_codes.view(-1, self.num_latent_positions, self.embedding_dim)
         noise_codes = self.noise_pe(noise_codes)
-        x = noise_codes.permute(1, 0, 2)
+        x = noise_codes.permute(1, 0, 2)  # -> seq_len x batch_size x embedding_dim
 
         for i, block in enumerate(self.tr_encoder_blocks):
             x = block(x)
