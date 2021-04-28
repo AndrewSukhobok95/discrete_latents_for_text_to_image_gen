@@ -40,7 +40,7 @@ class VQVAE(nn.Module):
     def forward(self, x):
         latent = self.encoder(x)
         vq_loss, quantized, perplexity, encoding_info = self.quantizer(latent)
-        x_recon = self.decoder(quantized)
+        x_recon = torch.sigmoid(self.decoder(quantized))
         return vq_loss, quantized, x_recon, perplexity
 
     def get_encoder_decoder_params(self):
