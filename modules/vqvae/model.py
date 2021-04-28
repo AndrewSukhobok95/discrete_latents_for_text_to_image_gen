@@ -7,6 +7,7 @@ from modules.vqvae.quantizer import VectorQuantizer, VectorQuantizerEMA
 
 class VQVAE(nn.Module):
     def __init__(self,
+                 img_channels,
                  num_embeddings,
                  embedding_dim,
                  commitment_cost,
@@ -17,7 +18,7 @@ class VQVAE(nn.Module):
                  use_batch_norm=False,
                  use_conv1x1=False):
         super(VQVAE, self).__init__()
-        self.encoder = Encoder(in_channels=3,
+        self.encoder = Encoder(in_channels=img_channels,
                                out_channels=embedding_dim,
                                num_downsamples=num_x2downsamples,
                                num_resid_downsample=num_resid_downsample_layers,
@@ -29,7 +30,7 @@ class VQVAE(nn.Module):
         else:
             self.quantizer = VectorQuantizer(num_embeddings, embedding_dim, commitment_cost)
         self.decoder = Decoder(in_channels=embedding_dim,
-                               out_channels=3,
+                               out_channels=img_channels,
                                num_upsamples=num_x2downsamples,
                                num_resid_upsample=num_resid_downsample_layers,
                                num_resid_bottleneck=num_resid_bottleneck_layers,
