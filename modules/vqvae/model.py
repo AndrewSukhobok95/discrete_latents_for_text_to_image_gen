@@ -40,10 +40,10 @@ class VQVAE(nn.Module):
                                use_bn=use_batch_norm,
                                use_conv1x1=use_conv1x1)
 
-    def forward(self, x):
-        latent = self.encoder(x)
-        vq_loss, quantized, perplexity, encoding_info = self.quantizer(latent)
-        x_recon = self.decoder(quantized)
+    def forward(self, x, sigmoid_activation=True):
+        latent = self.encode(x)
+        vq_loss, quantized, perplexity, encoding_info = self.quantize(latent)
+        x_recon = self.decode(quantized, sigmoid_activation=sigmoid_activation)
         return vq_loss, quantized, x_recon, perplexity
 
     def encode(self, x):
