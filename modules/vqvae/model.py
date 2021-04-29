@@ -66,10 +66,15 @@ class VQVAE(nn.Module):
     def get_quantizer_params(self):
         return self.quantizer.parameters()
 
-    def encode_and_quantize(self, x):
-        z = self.encoder(x)
-        loss, quantized, perplexity, encoding_info = self.quantizer(z)
+    def q_encode(self, x):
+        z = self.encode(x)
+        loss, quantized, perplexity, encoding_info = self.quantize(z)
         return quantized, encoding_info
+
+    def q_decode(self, z, sigmoid_activation=True):
+        loss, quantized, perplexity, encoding_info = self.quantize(z)
+        x_recon = self.decode(quantized, sigmoid_activation=sigmoid_activation)
+        return x_recon
 
     def decode_by_index_mask(self, index_mask):
         z = self.quantizer.get_by_index(index_mask).permute(0, 3, 1, 2)
