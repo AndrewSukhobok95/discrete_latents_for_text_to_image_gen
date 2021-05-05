@@ -37,7 +37,7 @@ class DVAE(nn.Module):
         z_logits = self.encoder(x)
         return z_logits
 
-    def quantize(self, z_logits, tau=1/16, hard=False):
+    def gumbel_quantize(self, z_logits, tau=1 / 16, hard=False):
         return F.gumbel_softmax(z_logits, tau=tau, hard=hard, dim=1)
 
     def decode(self, z):
@@ -48,6 +48,24 @@ class DVAE(nn.Module):
         z_logits = self.encoder(x)
         z = F.softmax(z_logits, dim=1)
         return z
+
+    def ng_quantize(self, z_logits):
+        z = torch.zeros(z_logits.size(), device=z_logits.device)
+        index = z_logits.argmax(dim=1)
+        z = torch.scatter(z, 1, index.unsqueeze(dim=1), 1.0)
+        return z
+
+    def ng_q_encode(self, x):
+        with torch.no_grad():
+            z_logits = self.encoder(x)
+            z = self.ng_quantize(z_logits)
+        return z
+
+    def ng_q_decode(self, z_logits):
+        with torch.no_grad():
+            z = self.ng_quantize(z_logits)
+            x_rec = self.decoder(z)
+        return x_rec
 
     def q_encode(self, x, tau=1/16, hard=False):
         z_logits = self.encoder(x)
@@ -61,7 +79,7 @@ class DVAE(nn.Module):
 
     def forward(self, x, tau=1/16, hard=False):
         z_logits = self.encode(x)
-        z = self.quantize(z_logits, tau=tau, hard=hard)
+        z = self.gumbel_quantize(z_logits, tau=tau, hard=hard)
         x_rec = self.decode(z)
         return x_rec, z_logits, z
 
