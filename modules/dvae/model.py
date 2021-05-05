@@ -4,7 +4,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from modules.dvae.blocks import Encoder, Decoder
-from modules.dvae.gumble import gumbel_softmax
+from modules.dvae.funcs import ng_quantize
 
 
 class DVAE(nn.Module):
@@ -49,21 +49,15 @@ class DVAE(nn.Module):
         z = F.softmax(z_logits, dim=1)
         return z
 
-    def ng_quantize(self, z_logits):
-        z = torch.zeros(z_logits.size(), device=z_logits.device)
-        index = z_logits.argmax(dim=1)
-        z = torch.scatter(z, 1, index.unsqueeze(dim=1), 1.0)
-        return z
-
     def ng_q_encode(self, x):
         with torch.no_grad():
             z_logits = self.encoder(x)
-            z = self.ng_quantize(z_logits)
+            z = ng_quantize(z_logits)
         return z
 
     def ng_q_decode(self, z_logits):
         with torch.no_grad():
-            z = self.ng_quantize(z_logits)
+            z = ng_quantize(z_logits)
             x_rec = self.decoder(z)
         return x_rec
 
