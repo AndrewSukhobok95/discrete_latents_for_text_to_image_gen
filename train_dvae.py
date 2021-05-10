@@ -65,31 +65,25 @@ if __name__ == '__main__':
 
             temp = temp_annealer.step(iteration)
             x_recon, z_logits, z = model(x, temp)
-            loss = F.binary_cross_entropy(x_recon, x)
-            # recon_loss = F.binary_cross_entropy(x_recon, x)
-            # kld_codes_loss = KLD_codes_uniform_loss(z)
-            # loss = recon_loss + 0.1 * kld_codes_loss
+            recon_loss = F.binary_cross_entropy(x_recon, x)
+            kld_codes_loss = KLD_codes_uniform_loss(z)
+            loss = recon_loss + 0.01 * kld_codes_loss
 
             loss.backward()
             optimizer.step()
 
             with torch.no_grad():
                 n_used_codes = len(z.detach().cpu().argmax(dim=1).view(-1).unique())
-                print("Epoch: {} Iter: {} Loss: {} N codes used: {}".format(
+                print("Epoch: {} Iter: {} Loss: {} KL Loss (weighted): {} Recon Loss {} N codes used: {}".format(
                     epoch,
                     iteration,
                     round(loss.item(), 4),
+                    round(kld_codes_loss.item(), 4),
+                    round(recon_loss.item(), 4),
                     n_used_codes))
-                # print("Epoch: {} Iter: {} Loss: {} KL Loss (weighted): {} Recon Loss {} N codes used: {}".format(
-                #     epoch,
-                #     iteration,
-                #     round(loss.item(), 4),
-                #     round(kld_codes_loss.item(), 4),
-                #     round(recon_loss.item(), 4),
-                #     n_used_codes))
 
-            # writer.add_scalar('loss/recon_loss', recon_loss.item(), iteration)
-            # writer.add_scalar('loss/kld_codes_loss', kld_codes_loss.item(), iteration)
+            writer.add_scalar('loss/recon_loss', recon_loss.item(), iteration)
+            writer.add_scalar('loss/kld_codes_loss', kld_codes_loss.item(), iteration)
             writer.add_scalar('rates/temperature', temp, iteration)
 
             iteration += 1
