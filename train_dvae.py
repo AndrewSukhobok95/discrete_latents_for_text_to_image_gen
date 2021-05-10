@@ -74,14 +74,13 @@ if __name__ == '__main__':
 
             with torch.no_grad():
                 n_used_codes = len(z.detach().cpu().argmax(dim=1).view(-1).unique())
-                if (iteration + 1) % 40 == 0:
-                    print("Epoch: {} Iter: {} Loss: {} KL Loss (weighted): {} Recon Loss {} N codes used: {}".format(
-                        epoch,
-                        iteration,
-                        loss.item(),
-                        kld_codes_loss.item(),
-                        recon_loss.item(),
-                        n_used_codes))
+                print("Epoch: {} Iter: {} Loss: {} KL Loss (weighted): {} Recon Loss {} N codes used: {}".format(
+                    epoch,
+                    iteration,
+                    round(loss.item(), 4),
+                    round(kld_codes_loss.item(), 4),
+                    round(recon_loss.item(), 4),
+                    n_used_codes))
 
             writer.add_scalar('loss/recon_loss', recon_loss.item(), iteration)
             writer.add_scalar('loss/kld_codes_loss', kld_codes_loss.item(), iteration)
