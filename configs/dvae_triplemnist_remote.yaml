@@ -1,15 +1,15 @@
 paths:
-  save_model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/dvae/"
-  save_model_name: "DVAE"
+  save_model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/dvae_vocab64_tripleMnist/"
+  save_model_name: "dvae_vocab64_tripleMnist"
   root_img_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/triple_mnist/train"
 
 model:
   in_channels: 1
-  vocab_size: 16
+  vocab_size: 64
   num_x2downsamples: 2
   num_resids_downsample: 3
   num_resids_bottleneck: 4
-  hidden_dim: 64
+  hidden_dim: 256
 
 training:
   NUM_EPOCHS: 300

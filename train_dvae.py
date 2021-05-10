@@ -65,14 +65,9 @@ if __name__ == '__main__':
 
             temp = temp_annealer.step(iteration)
             x_recon, z_logits, z = model(x, temp)
-
             recon_loss = F.binary_cross_entropy(x_recon, x)
-            kld_loss = KLD_uniform_loss(z_logits)
-            kl_weight = kl_annealer.step(iteration)
-
             kld_codes_loss = KLD_codes_uniform_loss(z)
-
-            loss = recon_loss - kl_weight * kld_loss + kld_codes_loss
+            loss = recon_loss + 0.1 * kld_codes_loss
 
             loss.backward()
             optimizer.step()
@@ -81,13 +76,16 @@ if __name__ == '__main__':
                 n_used_codes = len(z.detach().cpu().argmax(dim=1).view(-1).unique())
                 if (iteration + 1) % 40 == 0:
                     print("Epoch: {} Iter: {} Loss: {} KL Loss (weighted): {} Recon Loss {} N codes used: {}".format(
-                        epoch, iteration, loss.item(), kl_weight * kld_loss.mean().item(), recon_loss.mean().item(),
+                        epoch,
+                        iteration,
+                        loss.item(),
+                        kld_codes_loss.item(),
+                        recon_loss.item(),
                         n_used_codes))
 
             writer.add_scalar('loss/recon_loss', recon_loss.item(), iteration)
-            writer.add_scalar('loss/kld_loss', kld_loss.item(), iteration)
+            writer.add_scalar('loss/kld_codes_loss', kld_codes_loss.item(), iteration)
             writer.add_scalar('rates/temperature', temp, iteration)
-            writer.add_scalar('rates/kl_weight', kl_weight, iteration)
 
             iteration += 1
 
