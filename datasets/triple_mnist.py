@@ -61,7 +61,7 @@ class TripleMnistDataset(Dataset):
         digit = os.path.dirname(img_path).split("/")[-1]
         labels = list(map(int, digit))
 
-        return x, labels
+        return x, torch.LongTensor(labels)
 
 
 if __name__ == '__main__':
