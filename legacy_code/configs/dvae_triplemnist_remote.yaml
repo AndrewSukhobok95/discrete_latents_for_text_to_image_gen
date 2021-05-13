@@ -1,7 +1,7 @@
 paths:
   save_model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/dvae/"
   save_model_name: "DVAE"
-  root_img_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/triple_mnist/train"
+  root_img_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/tripleMNIST/train"
 
 model:
   in_channels: 1

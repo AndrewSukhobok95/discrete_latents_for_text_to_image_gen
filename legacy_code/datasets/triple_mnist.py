@@ -65,9 +65,9 @@ class TripleMnistDataset(Dataset):
 
 
 if __name__ == '__main__':
-    # files = _recusive_collect_files_paths(root_path="/home/andrey/Aalto/thesis/TA-VQVAE/data/triple_mnist/train")
+    # files = _recusive_collect_files_paths(root_path="/home/andrey/Aalto/thesis/TA-VQVAE/data/tripleMNIST/train")
 
-    d = TripleMnistDataset(root_img_path="/home/andrey/Aalto/thesis/TA-VQVAE/data/triple_mnist/train")
+    d = TripleMnistDataset(root_img_path="/data/tripleMNIST/train")
     print(d[51])
 
     print()

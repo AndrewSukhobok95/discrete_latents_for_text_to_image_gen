@@ -40,14 +40,15 @@ def get_data_paths(root_path):
 class TripleMnistDataset(Dataset):
     def __init__(self,
                  root_img_path,
-                 transform=None):
-        self.data_paths = get_data_paths(root_img_path)
-        if transform is None:
-            transform = torch_transforms.Compose([
+                 transforms=None):
+        train_path = os.path.join(root_img_path, "train")
+        self.data_paths = get_data_paths(train_path)
+        if transforms is None:
+            transforms = torch_transforms.Compose([
                 torch_transforms.RandomRotation(5),
                 torch_transforms.ToTensor()
             ])
-        self.transform = transform
+        self.transform = transforms
 
     def __len__(self):
         return len(self.data_paths)
@@ -65,9 +66,9 @@ class TripleMnistDataset(Dataset):
 
 
 if __name__ == '__main__':
-    # files = _recusive_collect_files_paths(root_path="/home/andrey/Aalto/thesis/TA-VQVAE/data/triple_mnist/train")
+    # files = _recusive_collect_files_paths(root_path="/home/andrey/Aalto/thesis/TA-VQVAE/data/tripleMNIST/train")
 
-    d = TripleMnistDataset(root_img_path="/home/andrey/Aalto/thesis/TA-VQVAE/data/triple_mnist/train")
+    d = TripleMnistDataset(root_img_path="/data/tripleMNIST/train")
     print(d[51])
 
     print()

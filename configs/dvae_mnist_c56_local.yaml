@@ -1,14 +1,18 @@
-paths:
+data:
+  mnist_type: "classic_56"
+  root_img_path: "/home/andrey/Aalto/thesis/TA-VQVAE/data/tripleMNIST/train"
+
+model_paths:
   save_model_path: "/home/andrey/Aalto/thesis/TA-VQVAE/models/dvae/"
   save_model_name: "DVAE"
-  root_img_path: "/home/andrey/Aalto/thesis/TA-VQVAE/data/triple_mnist/train"
 
 model:
   in_channels: 1
-  vocab_size: 64
+  vocab_size: 32
   num_x2downsamples: 2
   num_resids_downsample: 2
   num_resids_bottleneck: 2
+  hidden_dim: 256
 
 training:
   NUM_EPOCHS: 800
@@ -16,11 +20,9 @@ training:
   LR: 0.0001
   LR_gamma: 0.35
   step_LR_milestones:
-    - 50
-    - 100
+    - 1
+    - 20
+    - 30
   temp_start: 1
   temp_end: 0.0625
   temp_steps: 50000
-  KLD_lambda_start: 0
-  KLD_lambda_end: 6
-  KLD_lambda_steps: 2500

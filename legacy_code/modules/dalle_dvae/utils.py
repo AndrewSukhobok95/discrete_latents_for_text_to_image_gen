@@ -29,7 +29,7 @@ class Conv2d(nn.Module):
 		self.w, self.b = nn.Parameter(w), nn.Parameter(b)
 
 	def forward(self, x: torch.Tensor) -> torch.Tensor:
-		if self.use_float16 and 'cuda' in self.w.device.type:
+		if self.use_float16 and 'cuda' in self.w.device.img_type:
 			if x.dtype != torch.float16:
 				x = x.half()
 

@@ -1,28 +1,28 @@
-paths:
+data:
+  mnist_type: "classic_56"
+  root_img_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/tripleMNIST/"
+
+model_paths:
   save_model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/dvae_vocab64_tripleMnist/"
   save_model_name: "dvae_vocab64_tripleMnist"
-  root_img_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/triple_mnist/train"
 
 model:
   in_channels: 1
-  vocab_size: 64
+  vocab_size: 32
   num_x2downsamples: 2
   num_resids_downsample: 3
   num_resids_bottleneck: 4
-  hidden_dim: 128
+  hidden_dim: 256
 
 training:
-  NUM_EPOCHS: 300
+  NUM_EPOCHS: 80
   BATCH_SIZE: 256
   LR: 0.1
   LR_gamma: 0.1
   step_LR_milestones:
-    - 5
     - 10
     - 30
+    - 60
   temp_start: 1
   temp_end: 0.0625
   temp_steps: 8000
-  KLD_lambda_start: 0
-  KLD_lambda_end: 0.01
-  KLD_lambda_steps: 2500

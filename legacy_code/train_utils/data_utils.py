@@ -1,8 +1,8 @@
 import torch
 from torch.utils.data import DataLoader
-from datasets.common import collate_fn, Collater
+from datasets.common import Collater
 
-from datasets.cub import CubDataset
+from datasets.datasets.cub import CubDataset
 
 
 def get_cub_dataloaders(tokenizer,

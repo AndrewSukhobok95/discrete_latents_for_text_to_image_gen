@@ -1,4 +1,3 @@
-import os
 import torch
 import torchvision
 import torch.nn.functional as F
@@ -7,25 +6,23 @@ from torch.optim.lr_scheduler import MultiStepLR
 from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 from config_reader import ConfigReader
-from datasets.triple_mnist import TripleMnistDataset
+from datasets.mnist_loader import MNISTData
 from modules.dvae.model import DVAE
-from train_utils.dvae_utils import TemperatureAnnealer, KLDWeightAnnealer, KLD_uniform_loss, KLD_codes_uniform_loss
+from train_utils.dvae_utils import TemperatureAnnealer, KLDWeightAnnealer, KLD_codes_uniform_loss
 
 
-# CONFIG = ConfigReader(config_path="/home/andrey/Aalto/thesis/TA-VQVAE/configs/dvae_triplemnist_local.yaml")
-CONFIG = ConfigReader(config_path="/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/dvae_triplemnist_remote.yaml")
+# CONFIG = ConfigReader(config_path="/home/andrey/Aalto/thesis/TA-VQVAE/configs/dvae_mnist_c56_local.yaml")
+CONFIG = ConfigReader(config_path="/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/dvae_mnist_c56_remote.yaml")
 CONFIG.print_config_info()
 
 writer = SummaryWriter()
 
 
-dataset = TripleMnistDataset(
-    root_img_path=CONFIG.root_img_path)
-
-train_loader = DataLoader(
-    dataset=dataset,
-    batch_size=CONFIG.BATCH_SIZE,
-    shuffle=True)
+data_source = MNISTData(
+    img_type=CONFIG.mnist_type,
+    root_path=CONFIG.root_img_path,
+    batch_size=CONFIG.BATCH_SIZE)
+train_loader = data_source.get_train_loader()
 
 model = DVAE(in_channels=CONFIG.in_channels,
              vocab_size=CONFIG.vocab_size,
@@ -39,19 +36,14 @@ model.show_model_architecture()
 optimizer = optim.Adam(model.parameters(), lr=CONFIG.LR)
 lr_scheduler = MultiStepLR(optimizer, milestones=CONFIG.step_LR_milestones, gamma=CONFIG.LR_gamma)
 
+temp_annealer = TemperatureAnnealer(
+    start_temp=CONFIG.temp_start,
+    end_temp=CONFIG.temp_end,
+    n_steps=CONFIG.temp_steps)
+
 
 if __name__ == '__main__':
     print("Device in use: {}".format(CONFIG.DEVICE))
-
-    temp_annealer = TemperatureAnnealer(
-        start_temp=CONFIG.temp_start,
-        end_temp=CONFIG.temp_end,
-        n_steps=CONFIG.temp_steps)
-
-    kl_annealer = KLDWeightAnnealer(
-        start_lambda=CONFIG.KLD_lambda_start,
-        end_lambda=CONFIG.KLD_lambda_end,
-        n_steps=CONFIG.KLD_lambda_steps)
 
     model.train()
     model.to(CONFIG.DEVICE)
@@ -65,6 +57,7 @@ if __name__ == '__main__':
 
             temp = temp_annealer.step(iteration)
             x_recon, z_logits, z = model(x, temp)
+
             recon_loss = F.binary_cross_entropy(x_recon, x)
             kld_codes_loss = KLD_codes_uniform_loss(z)
             loss = recon_loss + 0.01 * kld_codes_loss
