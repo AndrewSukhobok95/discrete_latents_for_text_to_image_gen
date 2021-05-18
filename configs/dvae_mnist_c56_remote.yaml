@@ -1,10 +1,10 @@
 data:
   mnist_type: "classic_56"
-  root_img_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/tripleMNIST/"
+  root_img_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/MNIST/"
 
 model_paths:
-  save_model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/dvae_vocab64_tripleMnist/"
-  save_model_name: "dvae_vocab64_tripleMnist"
+  save_model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/mnist/dvae_vocab32_mnist56/"
+  save_model_name: "dvae_vocab32_mnist56"
 
 model:
   in_channels: 1
@@ -23,6 +23,6 @@ training:
     - 10
     - 30
     - 60
-  temp_start: 1
-  temp_end: 0.0625
-  temp_steps: 8000
+  temp_start: 5
+  temp_end: 0.01
+  temp_steps: 3000
