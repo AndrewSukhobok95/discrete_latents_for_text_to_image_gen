@@ -17,7 +17,6 @@ CONFIG.print_config_info()
 
 writer = SummaryWriter()
 
-
 data_source = MNISTData(
     img_type=CONFIG.mnist_type,
     root_path=CONFIG.root_img_path,
