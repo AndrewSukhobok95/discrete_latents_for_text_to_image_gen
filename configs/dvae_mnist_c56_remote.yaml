@@ -3,7 +3,7 @@ data:
   root_img_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/MNIST/"
 
 model_paths:
-  save_model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/mnist/dvae_vocab32_mnist56/"
+  save_model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/mnist/dvae_vocab32_mnist56_100e/"
   save_model_name: "dvae_vocab32_mnist56"
 
 model:
