@@ -98,5 +98,71 @@ class UpSampleX2(nn.Module):
         return F.relu(x)
 
 
+class TrEncoderBlock(nn.Module):
+    def __init__(self, n_features, n_attn_heads, n_hidden=64, dropout_prob=0.1):
+        super(TrEncoderBlock, self).__init__()
+
+        self.attn = nn.MultiheadAttention(n_features, n_attn_heads)
+        self.ln1 = nn.LayerNorm(n_features)
+        self.dropout1 = nn.Dropout(dropout_prob)
+
+        self.mlp = nn.Sequential(
+            nn.Linear(n_features, n_hidden),
+            nn.Dropout(dropout_prob),
+            nn.GELU(),
+            nn.Linear(n_hidden, n_features)
+        )
+        self.ln2 = nn.LayerNorm(n_features)
+        self.dropout2 = nn.Dropout(dropout_prob)
+
+    def forward(self, x, pad_mask=None, attn_mask=None):
+        xn = self.ln1(x)
+        dx, _ = self.attn(query=xn, key=xn, value=xn,
+                          key_padding_mask=pad_mask,
+                          attn_mask=attn_mask)
+        x = x + self.dropout1(dx)
+
+        xn = self.ln2(x)
+        dx = self.mlp(xn)
+        x = x + self.dropout2(dx)
+
+        return x
+
+
+class TrDecoderBlock(nn.Module):
+    def __init__(self, n_features, n_attn_heads, n_hidden=64, dropout_prob=0.1):
+        super(TrDecoderBlock, self).__init__()
+
+        self.self_attn = nn.MultiheadAttention(n_features, n_attn_heads)
+        self.ln1 = nn.LayerNorm(n_features)
+        self.dropout1 = nn.Dropout(dropout_prob)
+
+        self.cross_attn = nn.MultiheadAttention(n_features, n_attn_heads)
+        self.ln2 = nn.LayerNorm(n_features)
+        self.dropout2 = nn.Dropout(dropout_prob)
+
+        self.mlp = nn.Sequential(
+            nn.Linear(n_features, n_hidden),
+            nn.Dropout(dropout_prob),
+            nn.ReLU(),
+            nn.Linear(n_hidden, n_features)
+        )
+        self.ln3 = nn.LayerNorm(n_features)
+        self.dropout3 = nn.Dropout(dropout_prob)
+
+    def forward(self, x, y, pad_mask=None, attn_mask=None):
+        xn = self.ln1(x)
+        dx, self_attn_map = self.self_attn(query=xn, key=xn, value=xn, attn_mask=attn_mask)
+        x = x + self.dropout1(dx)
+
+        xn = self.ln2(x)
+        dx, cross_attn_map = self.cross_attn(query=xn, key=y, value=y, key_padding_mask=pad_mask)
+        x = x + self.dropout2(dx)
+
+        xn = self.ln3(x)
+        dx = self.mlp(xn)
+        x = x + self.dropout3(dx)
+        return x, self_attn_map, cross_attn_map
+
 
 
