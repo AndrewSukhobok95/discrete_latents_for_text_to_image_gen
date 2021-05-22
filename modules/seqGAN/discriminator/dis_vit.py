@@ -7,12 +7,12 @@ from modules.common_blocks import TrEncoderBlock
 
 class Discriminator(nn.Module):
     def __init__(self,
-                 embedding_dim,
                  hidden_height,
                  hidden_width,
+                 embedding_dim,
                  num_blocks,
-                 n_attn_heads,
                  hidden_dim,
+                 n_attn_heads,
                  dropout_prob):
         super(Discriminator, self).__init__()
         n_classes = 1

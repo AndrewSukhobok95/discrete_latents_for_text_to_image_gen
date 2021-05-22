@@ -21,7 +21,7 @@ def train_discriminator(discriminator,
     discriminator.train()
     discriminator.to(device)
 
-    criterion = nn.CrossEntropyLoss()
+    criterion = nn.BCELoss()
 
     iteration = 0
     for epoch in range(num_epochs):
