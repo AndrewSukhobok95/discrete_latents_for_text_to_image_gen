@@ -10,7 +10,8 @@ def train_generator_MLE(generator,
                         dvae,
                         num_epochs,
                         device,
-                        verbose=True):
+                        verbose=True,
+                        print_iter=50):
     criteriation = nn.CrossEntropyLoss()
 
     dvae.eval()
@@ -44,6 +45,6 @@ def train_generator_MLE(generator,
             optimizer.zero_grad()
 
             iteration += 1
-            if verbose and (iteration % 55 == 0):
+            if verbose and (iteration % print_iter == 0):
                 print("MLE Gen train: Epoch {} Iter {} Loss = {}".format(epoch, iteration, round(loss.item(), 5)))
 

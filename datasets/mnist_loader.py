@@ -51,9 +51,11 @@ class MNISTData:
         else:
             self.collate_fn = None
 
-    def get_train_loader(self):
+    def get_train_loader(self, batch_size=None):
+        if batch_size is None:
+            batch_size = self.batch_size
         train_loader = torch.utils.data.DataLoader(
-            dataset=self.trainset, batch_size=self.batch_size, shuffle=True, collate_fn=self.collate_fn)
+            dataset=self.trainset, batch_size=batch_size, shuffle=True, collate_fn=self.collate_fn)
         return train_loader
 
 
