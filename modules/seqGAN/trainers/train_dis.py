@@ -51,6 +51,8 @@ def train_discriminator(discriminator,
 
             iteration += 1
 
+    return discriminator
+
 
 
 

@@ -48,3 +48,5 @@ def train_generator_MLE(generator,
             if verbose and (iteration % print_iter == 0):
                 print("MLE Gen train: Epoch {} Iter {} Loss = {}".format(epoch, iteration, round(loss.item(), 5)))
 
+    return generator
+
