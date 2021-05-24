@@ -11,7 +11,7 @@ def train_discriminator(discriminator,
                         train_loader,
                         dvae,
                         hidden_height,
-                        heddin_width,
+                        hidden_width,
                         num_epochs,
                         device,
                         verbose=True,
@@ -35,7 +35,7 @@ def train_discriminator(discriminator,
 
             with torch.no_grad():
                 latent_fake = generator.sample(n_samples=batch, device=device)
-                fake = latent_to_img(latent_fake, dvae, hidden_height, heddin_width)
+                fake = latent_to_img(latent_fake, dvae, hidden_height, hidden_width)
 
             inp = torch.cat([real, fake], dim=0)
             target = torch.cat([torch.ones(batch, device=device), torch.zeros(batch, device=device)], dim=0)
