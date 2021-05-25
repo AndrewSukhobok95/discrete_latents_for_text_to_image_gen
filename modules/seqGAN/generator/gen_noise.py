@@ -51,10 +51,16 @@ class Generator(nn.Module):
         x = self.proj_out(x)
         return x
 
-    def sample(self, n_samples, device):
+    def sample(self, n_samples, device, noise=None, return_start_token=False):
+        noise_dim = (1, n_samples, self.embedding_dim)
+        if noise is None:
+            noise = torch.randn(noise_dim, device=device)
+        else:
+            assert noise.size() == noise_dim, "Wrong dimension, must be " + str(noise_dim)
+            assert noise.device == device, "Noise must be on the provided device: " + str(device)
+
         seq_len = self.hidden_width * self.hidden_height
         samples = torch.zeros(seq_len + 1, n_samples, self.embedding_dim, device=device)
-        noise = torch.randn(1, n_samples, self.embedding_dim, device=device)
         for i in range(seq_len):
             out = self.forward(samples[:-1, :, :], noise)
             probs = F.softmax(out[i, :, :], dim=-1)
@@ -62,7 +68,13 @@ class Generator(nn.Module):
             one_hot_sample = torch.zeros(n_samples, self.embedding_dim, device=device)
             one_hot_sample = torch.scatter(one_hot_sample, 1, index, 1.0)
             samples[i + 1, :, :] = one_hot_sample
+
+        if return_start_token:
+            return samples
         return samples[1:, :, :]
+
+    def sample_from(self, start_seq, start_index, noise, device):
+        return
 
     def save_model(self, root_path, model_name):
         if not os.path.exists(root_path):
