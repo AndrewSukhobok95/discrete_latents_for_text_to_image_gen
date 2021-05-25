@@ -57,7 +57,6 @@ class Generator(nn.Module):
             noise = torch.randn(noise_dim, device=device)
         else:
             assert noise.size() == noise_dim, "Wrong dimension, must be " + str(noise_dim)
-            assert noise.device == device, "Noise must be on the provided device: " + str(device)
 
         seq_len = self.hidden_width * self.hidden_height
         samples = torch.zeros(seq_len + 1, n_samples, self.embedding_dim, device=device)
