@@ -11,6 +11,8 @@ def one_step_pg_loss(seq, noise, G, G_rollout, D, dvae, start_index,
     s_seq_len, n_samples, embedding_dim = seq.size()
     n_iters = s_seq_len - start_index
 
+    n_rollout_samples = n_samples * n_rollouts
+
     out = G.forward(seq[:-1, :, :], noise)
     log_P = F.log_softmax(out[start_index, :, :], dim=-1)
 
