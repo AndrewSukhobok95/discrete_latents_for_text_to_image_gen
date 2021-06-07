@@ -2,7 +2,7 @@ import os
 import torch
 from torch import nn
 import torch.nn.functional as F
-from modules.seqGAN.funcs import latent_to_img
+from modules.common_utils import latent_to_img
 
 
 def train_discriminator(discriminator,
