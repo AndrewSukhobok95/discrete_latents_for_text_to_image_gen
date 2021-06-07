@@ -14,8 +14,10 @@ class ViT(nn.Module):
                  hidden_dim,
                  n_attn_heads,
                  dropout_prob,
-                 n_classes):
+                 n_classes,
+                 device=torch.device('cpu')):
         super(ViT, self).__init__()
+        self.device = device
 
         num_positions = input_height * input_width + 1
         self.pe = nn.Parameter(torch.randn(num_positions, 1, input_channels))
@@ -36,6 +38,8 @@ class ViT(nn.Module):
             nn.LayerNorm(input_channels),
             nn.Linear(input_channels, n_classes),
         )
+
+        self.to(self.device)
 
     def forward(self, x, average_cls_token=False):
         seq_len, batch, emb = x.size()
