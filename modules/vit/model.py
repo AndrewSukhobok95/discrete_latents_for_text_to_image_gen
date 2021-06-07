@@ -16,9 +16,11 @@ class ViT(nn.Module):
                  n_attn_heads,
                  dropout_prob,
                  n_classes,
+                 sigmoid_output=False,
                  device=torch.device('cpu')):
         super(ViT, self).__init__()
         self.device = device
+        self.sigmoid_output = sigmoid_output
 
         num_positions = input_height * input_width + 1
         self.pe = nn.Parameter(torch.randn(num_positions, 1, input_channels))
@@ -59,6 +61,9 @@ class ViT(nn.Module):
             cls_input = x[0, :, :]
 
         cls = self.mlp_head(cls_input).squeeze()
+
+        if self.sigmoid_output:
+            return torch.sigmoid(cls)
         return cls
 
     def save_model(self, root_path, model_name):
