@@ -1,3 +1,4 @@
+import os
 import torch
 import torch.nn.functional as F
 from torch import nn, optim
@@ -68,6 +69,17 @@ class LatentGenerator(nn.Module):
         if return_start_token:
             return samples
         return samples[1:, :, :]
+
+    def save_model(self, root_path, model_name):
+        if not os.path.exists(root_path):
+            os.makedirs(root_path)
+        path = os.path.join(root_path, model_name + ".pth")
+        torch.save(self.state_dict(), path)
+
+    def load_model(self, root_path, model_name, map_location=torch.device('cpu')):
+        path = os.path.join(root_path, model_name + ".pth")
+        self.load_state_dict(torch.load(path, map_location=map_location))
+
 
 
 
