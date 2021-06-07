@@ -40,6 +40,8 @@ class MNISTData:
         if img_type in mnist_types[:2]:
             self.trainset = torch_datasets.MNIST(
                 root=root_path, train=True, transform=self.transforms, download=False)
+            self.testset = torch_datasets.MNIST(
+                root=root_path, train=False, transform=self.transforms, download=False)
         elif img_type == mnist_types[2]:
             self.trainset = TripleMnistDataset(
                 root_img_path=root_path, transforms=transforms)
@@ -54,9 +56,22 @@ class MNISTData:
     def get_train_loader(self, batch_size=None):
         if batch_size is None:
             batch_size = self.batch_size
-        train_loader = torch.utils.data.DataLoader(
-            dataset=self.trainset, batch_size=batch_size, shuffle=True, collate_fn=self.collate_fn)
-        return train_loader
+        loader = DataLoader(
+            dataset=self.trainset,
+            batch_size=batch_size,
+            shuffle=True,
+            collate_fn=self.collate_fn)
+        return loader
+
+    def get_test_loader(self, batch_size=None):
+        if batch_size is None:
+            batch_size = self.batch_size
+        loader = DataLoader(
+            dataset=self.testset,
+            batch_size=batch_size,
+            shuffle=True,
+            collate_fn=self.collate_fn)
+        return loader
 
 
 
