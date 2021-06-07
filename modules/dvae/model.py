@@ -14,8 +14,10 @@ class DVAE(nn.Module):
                  num_x2downsamples=2,
                  num_resids_downsample=2,
                  num_resids_bottleneck=2,
-                 hidden_dim=None):
+                 hidden_dim=None,
+                 device=torch.device('cpu')):
         super(DVAE, self).__init__()
+        self.device = device
         self.encoder = Encoder(in_channels=in_channels,
                                out_channels=vocab_size,
                                num_x2downsamples=num_x2downsamples,
@@ -32,6 +34,8 @@ class DVAE(nn.Module):
                                hidden_channels=hidden_dim,
                                bias=True,
                                use_bn=True)
+        self.encoder.to(self.device)
+        self.decoder.to(self.device)
 
     def encode(self, x):
         z_logits = self.encoder(x)
