@@ -175,29 +175,29 @@ def create_dataset(n_samples,
 
 
 if __name__=="__main__":
-    # create_dataset(
-    #     n_samples=100_000,
-    #     data_root_save_folder='/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/multi_descriptive_MNIST/',
-    #     path_train_images='/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/MNIST/MNIST/raw/train-images-idx3-ubyte',
-    #     path_train_labels='/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/MNIST/MNIST/raw/train-labels-idx1-ubyte',
-    #     path_test_images='/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/MNIST/MNIST/raw/t10k-images-idx3-ubyte',
-    #     path_test_labels='/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/MNIST/MNIST/raw/t10k-labels-idx1-ubyte',
-    #     border_size_list=[20, 30, 40],
-    #     color_list=['w', 'r', 'g', 'b'],
-    #     position_list=['up', 'middle', 'down'],
-    #     verbose=True)
-
     create_dataset(
-        n_samples=100,
-        data_root_save_folder='/home/andrey/Aalto/thesis/TA-VQVAE/data/multi_descriptive_MNIST/',
-        path_train_images='/home/andrey/Aalto/thesis/TA-VQVAE/data/MNIST/MNIST/raw/train-images-idx3-ubyte',
-        path_train_labels='/home/andrey/Aalto/thesis/TA-VQVAE/data/MNIST/MNIST/raw/train-labels-idx1-ubyte',
-        path_test_images='/home/andrey/Aalto/thesis/TA-VQVAE/data/MNIST/MNIST/raw/t10k-images-idx3-ubyte',
-        path_test_labels='/home/andrey/Aalto/thesis/TA-VQVAE/data/MNIST/MNIST/raw/t10k-labels-idx1-ubyte',
+        n_samples=100_000,
+        data_root_save_folder='/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/multi_descriptive_MNIST/',
+        path_train_images='/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/MNIST/MNIST/raw/train-images-idx3-ubyte',
+        path_train_labels='/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/MNIST/MNIST/raw/train-labels-idx1-ubyte',
+        path_test_images='/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/MNIST/MNIST/raw/t10k-images-idx3-ubyte',
+        path_test_labels='/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/MNIST/MNIST/raw/t10k-labels-idx1-ubyte',
         border_size_list=[20, 30, 40],
         color_list=['w', 'r', 'g', 'b'],
         position_list=['up', 'middle', 'down'],
         verbose=True)
+
+    # create_dataset(
+    #     n_samples=100,
+    #     data_root_save_folder='/home/andrey/Aalto/thesis/TA-VQVAE/data/multi_descriptive_MNIST/',
+    #     path_train_images='/home/andrey/Aalto/thesis/TA-VQVAE/data/MNIST/MNIST/raw/train-images-idx3-ubyte',
+    #     path_train_labels='/home/andrey/Aalto/thesis/TA-VQVAE/data/MNIST/MNIST/raw/train-labels-idx1-ubyte',
+    #     path_test_images='/home/andrey/Aalto/thesis/TA-VQVAE/data/MNIST/MNIST/raw/t10k-images-idx3-ubyte',
+    #     path_test_labels='/home/andrey/Aalto/thesis/TA-VQVAE/data/MNIST/MNIST/raw/t10k-labels-idx1-ubyte',
+    #     border_size_list=[20, 30, 40],
+    #     color_list=['w', 'r', 'g', 'b'],
+    #     position_list=['up', 'middle', 'down'],
+    #     verbose=True)
 
 
 
