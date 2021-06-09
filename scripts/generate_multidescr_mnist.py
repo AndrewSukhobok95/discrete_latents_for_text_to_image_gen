@@ -93,13 +93,27 @@ def get_sample(index_list, images, labels, border_size_list, color_list, positio
     return new_img, new_label
 
 
-def save_image(img, dir_path, file_name):
+def save_separate_image(img, dir_path, file_name):
     full_name = file_name + '.png'
     path = os.path.join(dir_path, full_name)
     plt.imsave(path, np.moveaxis(img, 0, 2))
 
 
-def save_description(desription, dir_path, file_name):
+def save_full_txt_description(desription, dir_path, file_name, obs_name):
+    full_name = file_name + '.txt'
+    path = os.path.join(dir_path, full_name)
+    txt_info = 'Obs {}\n'.format(obs_name)
+    for i in range(3):
+        txt_info += 'digit_{}\n'.format(i)
+        txt_info += '+ value: {}\n'.format(int(desription[4 * i + 0]))
+        txt_info += '+ size: {}\n'.format(int(desription[4 * i + 1]))
+        txt_info += '+ color: {}\n'.format(str(desription[4 * i + 2]))
+        txt_info += '+ position: {}\n'.format(str(desription[4 * i + 3]))
+    with open(path, 'a') as outfile:
+        outfile.write(txt_info)
+
+
+def save_separate_json_description(desription, dir_path, file_name):
     full_name = file_name + '.json'
     path = os.path.join(dir_path, full_name)
     desc_dict = {}
@@ -142,7 +156,6 @@ def create_dataset(n_samples,
         os.makedirs(data_desc_path)
 
     index = get_randomized_index(n_obs=images.shape[0], n_samples=n_digit_samples)
-
     start_digit_i = 0
     for sample_num in range(n_samples):
         new_img, new_label = get_sample(
@@ -153,40 +166,38 @@ def create_dataset(n_samples,
             color_list=color_list,
             position_list=position_list)
 
-        file_name = str(sample_num) + '_' + ''.join(map(str, new_label))
+        obs_name = str(sample_num) + '_' + ''.join(map(str, new_label))
+        save_separate_image(new_img, data_img_path, obs_name)
+        save_full_txt_description(new_label, data_desc_path, 'images_description', obs_name)
 
-        if verbose: print('{:<10} {}'.format(sample_num, file_name))
-
-        save_image(new_img, data_img_path, file_name)
-        save_description(new_label, data_desc_path, file_name)
-
+        if verbose: print('{:<10} {}'.format(sample_num, obs_name))
         start_digit_i += 3
 
 
 if __name__=="__main__":
-    create_dataset(
-        n_samples=100_000,
-        data_root_save_folder='/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/multi_descriptive_MNIST/',
-        path_train_images='/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/MNIST/MNIST/raw/train-images-idx3-ubyte',
-        path_train_labels='/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/MNIST/MNIST/raw/train-labels-idx1-ubyte',
-        path_test_images='/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/MNIST/MNIST/raw/t10k-images-idx3-ubyte',
-        path_test_labels='/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/MNIST/MNIST/raw/t10k-labels-idx1-ubyte',
-        border_size_list=[20, 30, 40],
-        color_list=['w', 'r', 'g', 'b'],
-        position_list=['up', 'middle', 'down'],
-        verbose=True)
-
     # create_dataset(
-    #     n_samples=100,
-    #     data_root_save_folder='/home/andrey/Aalto/thesis/TA-VQVAE/data/multi_descriptive_MNIST/',
-    #     path_train_images='/home/andrey/Aalto/thesis/TA-VQVAE/data/MNIST/MNIST/raw/train-images-idx3-ubyte',
-    #     path_train_labels='/home/andrey/Aalto/thesis/TA-VQVAE/data/MNIST/MNIST/raw/train-labels-idx1-ubyte',
-    #     path_test_images='/home/andrey/Aalto/thesis/TA-VQVAE/data/MNIST/MNIST/raw/t10k-images-idx3-ubyte',
-    #     path_test_labels='/home/andrey/Aalto/thesis/TA-VQVAE/data/MNIST/MNIST/raw/t10k-labels-idx1-ubyte',
+    #     n_samples=100_000,
+    #     data_root_save_folder='/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/multi_descriptive_MNIST/',
+    #     path_train_images='/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/MNIST/MNIST/raw/train-images-idx3-ubyte',
+    #     path_train_labels='/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/MNIST/MNIST/raw/train-labels-idx1-ubyte',
+    #     path_test_images='/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/MNIST/MNIST/raw/t10k-images-idx3-ubyte',
+    #     path_test_labels='/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/MNIST/MNIST/raw/t10k-labels-idx1-ubyte',
     #     border_size_list=[20, 30, 40],
     #     color_list=['w', 'r', 'g', 'b'],
     #     position_list=['up', 'middle', 'down'],
     #     verbose=True)
+
+    create_dataset(
+        n_samples=100,
+        data_root_save_folder='/home/andrey/Aalto/thesis/TA-VQVAE/data/multi_descriptive_MNIST/',
+        path_train_images='/home/andrey/Aalto/thesis/TA-VQVAE/data/MNIST/MNIST/raw/train-images-idx3-ubyte',
+        path_train_labels='/home/andrey/Aalto/thesis/TA-VQVAE/data/MNIST/MNIST/raw/train-labels-idx1-ubyte',
+        path_test_images='/home/andrey/Aalto/thesis/TA-VQVAE/data/MNIST/MNIST/raw/t10k-images-idx3-ubyte',
+        path_test_labels='/home/andrey/Aalto/thesis/TA-VQVAE/data/MNIST/MNIST/raw/t10k-labels-idx1-ubyte',
+        border_size_list=[20, 30, 40],
+        color_list=['w', 'r', 'g', 'b'],
+        position_list=['up', 'middle', 'down'],
+        verbose=True)
 
 
 
