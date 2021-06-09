@@ -1,18 +1,26 @@
+import os
 import torch
 import torchvision
 import torch.nn.functional as F
 import torch.optim as optim
 from torch.optim.lr_scheduler import MultiStepLR
 from torch.utils.data import DataLoader
+import argparse
 from torch.utils.tensorboard import SummaryWriter
 from config_reader import ConfigReader
 from datasets.mnist_loader import MNISTData
 from modules.dvae.model import DVAE
 from train_utils.dvae_utils import TemperatureAnnealer, KLDWeightAnnealer, KLD_codes_uniform_loss
 
+argument_parser = argparse.ArgumentParser()
+argument_parser.add_argument('-cn', '--configname', action='store', type=str, required=True)
+args = argument_parser.parse_args()
 
-# CONFIG = ConfigReader(config_path="/home/andrey/Aalto/thesis/TA-VQVAE/configs/local.yaml")
-CONFIG = ConfigReader(config_path="/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/dvae_mnist_md_remote.yaml")
+# config_dir = '/home/andrey/Aalto/thesis/TA-VQVAE/configs/'
+config_dir = '/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/'
+config_path = os.path.join(config_dir, args.configname)
+
+CONFIG = ConfigReader(config_path=config_path)
 CONFIG.print_config_info()
 
 writer = SummaryWriter()

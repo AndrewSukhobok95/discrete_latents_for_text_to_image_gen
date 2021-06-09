@@ -1,0 +1,28 @@
+data:
+  mnist_type: "md"
+  root_img_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/multi_descriptive_MNIST/"
+
+model_paths:
+  save_model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/mnist/dvae_vocab256_mnist_md/"
+  save_model_name: "dvae_vocab256_mnist_md"
+
+model:
+  in_channels: 3
+  vocab_size: 256
+  num_x2downsamples: 2
+  num_resids_downsample: 4
+  num_resids_bottleneck: 4
+  hidden_dim: 256
+
+training:
+  NUM_EPOCHS: 250
+  BATCH_SIZE: 32
+  LR: 0.01
+  LR_gamma: 0.1
+  step_LR_milestones:
+    - 10
+    - 30
+    - 60
+  temp_start: 5
+  temp_end: 0.01
+  temp_steps: 3000
