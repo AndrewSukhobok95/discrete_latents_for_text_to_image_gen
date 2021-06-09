@@ -128,6 +128,32 @@ def save_separate_json_description(desription, dir_path, file_name):
         json.dump(desc_dict, outfile, indent=4)
 
 
+def save_label_info_json(dir_path, sizes_list, colors_list, positions_list):
+    path = os.path.join(dir_path, 'labels_info.json')
+    desc_dict = {}
+
+    desc_dict['value_id_tree'] = {
+        'number': dict(zip(range(10), range(10))),
+        'size': {},
+        'color': {},
+        'position': {}
+    }
+    end_id = 10
+    for s in sizes_list:
+        desc_dict['value_id_tree']['size'][s] = end_id
+        end_id += 1
+    for c in colors_list:
+        desc_dict['value_id_tree']['color'][c] = end_id
+        end_id += 1
+    for p in positions_list:
+        desc_dict['value_id_tree']['position'][p] = end_id
+        end_id += 1
+
+    desc_dict['num_values'] = end_id
+    with open(path, 'w') as outfile:
+        json.dump(desc_dict, outfile, indent=4)
+
+
 def create_dataset(n_samples,
                    data_root_save_folder,
                    path_train_images,
@@ -155,6 +181,8 @@ def create_dataset(n_samples,
     if not os.path.exists(data_desc_path):
         os.makedirs(data_desc_path)
 
+    save_label_info_json(data_desc_path, border_size_list, color_list, position_list)
+
     index = get_randomized_index(n_obs=images.shape[0], n_samples=n_digit_samples)
     start_digit_i = 0
     for sample_num in range(n_samples):
@@ -175,29 +203,29 @@ def create_dataset(n_samples,
 
 
 if __name__=="__main__":
-    create_dataset(
-        n_samples=100_000,
-        data_root_save_folder='/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/multi_descriptive_MNIST/',
-        path_train_images='/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/MNIST/MNIST/raw/train-images-idx3-ubyte',
-        path_train_labels='/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/MNIST/MNIST/raw/train-labels-idx1-ubyte',
-        path_test_images='/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/MNIST/MNIST/raw/t10k-images-idx3-ubyte',
-        path_test_labels='/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/MNIST/MNIST/raw/t10k-labels-idx1-ubyte',
-        border_size_list=[20, 30, 40],
-        color_list=['w', 'r', 'g', 'b'],
-        position_list=['up', 'middle', 'down'],
-        verbose=True)
-
     # create_dataset(
-    #     n_samples=100,
-    #     data_root_save_folder='/home/andrey/Aalto/thesis/TA-VQVAE/data/multi_descriptive_MNIST/',
-    #     path_train_images='/home/andrey/Aalto/thesis/TA-VQVAE/data/MNIST/MNIST/raw/train-images-idx3-ubyte',
-    #     path_train_labels='/home/andrey/Aalto/thesis/TA-VQVAE/data/MNIST/MNIST/raw/train-labels-idx1-ubyte',
-    #     path_test_images='/home/andrey/Aalto/thesis/TA-VQVAE/data/MNIST/MNIST/raw/t10k-images-idx3-ubyte',
-    #     path_test_labels='/home/andrey/Aalto/thesis/TA-VQVAE/data/MNIST/MNIST/raw/t10k-labels-idx1-ubyte',
+    #     n_samples=100_000,
+    #     data_root_save_folder='/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/multi_descriptive_MNIST/',
+    #     path_train_images='/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/MNIST/MNIST/raw/train-images-idx3-ubyte',
+    #     path_train_labels='/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/MNIST/MNIST/raw/train-labels-idx1-ubyte',
+    #     path_test_images='/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/MNIST/MNIST/raw/t10k-images-idx3-ubyte',
+    #     path_test_labels='/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/MNIST/MNIST/raw/t10k-labels-idx1-ubyte',
     #     border_size_list=[20, 30, 40],
     #     color_list=['w', 'r', 'g', 'b'],
     #     position_list=['up', 'middle', 'down'],
     #     verbose=True)
+
+    create_dataset(
+        n_samples=100,
+        data_root_save_folder='/home/andrey/Aalto/thesis/TA-VQVAE/data/multi_descriptive_MNIST/',
+        path_train_images='/home/andrey/Aalto/thesis/TA-VQVAE/data/MNIST/MNIST/raw/train-images-idx3-ubyte',
+        path_train_labels='/home/andrey/Aalto/thesis/TA-VQVAE/data/MNIST/MNIST/raw/train-labels-idx1-ubyte',
+        path_test_images='/home/andrey/Aalto/thesis/TA-VQVAE/data/MNIST/MNIST/raw/t10k-images-idx3-ubyte',
+        path_test_labels='/home/andrey/Aalto/thesis/TA-VQVAE/data/MNIST/MNIST/raw/t10k-labels-idx1-ubyte',
+        border_size_list=[20, 30, 40],
+        color_list=['w', 'r', 'g', 'b'],
+        position_list=['up', 'middle', 'down'],
+        verbose=True)
 
 
 

@@ -4,6 +4,7 @@ from torch.utils.data import DataLoader
 from torchvision import datasets as torch_datasets
 from torchvision import transforms as torch_transforms
 from datasets.datasets.triple_mnist import TripleMnistDataset
+from datasets.datasets.md_mnist import MDMnistDataset
 
 
 def collate_mnist_56(data_list):
@@ -26,7 +27,7 @@ def collate_mnist_56(data_list):
 
 class MNISTData:
     def __init__(self, img_type, root_path, batch_size, transforms=None):
-        mnist_types = ["classic", "classic_56", "triple"]
+        mnist_types = ["classic", "classic_56", "triple", "md"]
 
         self.img_type = img_type
         self.batch_size = batch_size
@@ -45,6 +46,9 @@ class MNISTData:
         elif img_type == mnist_types[2]:
             self.trainset = TripleMnistDataset(
                 root_img_path=root_path, transforms=transforms)
+        elif img_type == mnist_types[3]:
+            self.trainset = MDMnistDataset(
+                root_data_path=root_path)
         else:
             raise ValueError("Choose one of the following types:" + str(mnist_types))
 

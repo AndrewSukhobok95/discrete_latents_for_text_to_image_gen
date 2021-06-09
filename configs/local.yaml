@@ -1,0 +1,28 @@
+data:
+  mnist_type: "md"
+  root_img_path: "/home/andrey/Aalto/thesis/TA-VQVAE/data/multi_descriptive_MNIST"
+
+model_paths:
+  save_model_path: "/home/andrey/Aalto/thesis/TA-VQVAE/models/test/"
+  save_model_name: "test"
+
+model:
+  in_channels: 3
+  vocab_size: 256
+  num_x2downsamples: 2
+  num_resids_downsample: 4
+  num_resids_bottleneck: 4
+  hidden_dim: 256
+
+training:
+  NUM_EPOCHS: 10
+  BATCH_SIZE: 8
+  LR: 0.0001
+  LR_gamma: 0.35
+  step_LR_milestones:
+    - 1
+    - 20
+    - 30
+  temp_start: 1
+  temp_end: 0.0625
+  temp_steps: 50000
