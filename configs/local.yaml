@@ -3,7 +3,7 @@ data:
   root_img_path: "/home/andrey/Aalto/thesis/TA-VQVAE/data/multi_descriptive_MNIST"
 
 model_paths:
-  save_model_path: "/home/andrey/Aalto/thesis/TA-VQVAE/models/test/"
+  save_model_path: "/home/andrey/Aalto/thesis/TA-VQVAE/models/test/test2/test3/"
   save_model_name: "test"
 
 model:
@@ -16,7 +16,7 @@ model:
 
 training:
   NUM_EPOCHS: 10
-  BATCH_SIZE: 8
+  BATCH_SIZE: 4
   LR: 0.0001
   LR_gamma: 0.35
   step_LR_milestones:

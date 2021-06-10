@@ -3,8 +3,8 @@ data:
   root_img_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/multi_descriptive_MNIST/"
 
 model_paths:
-  save_model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/mnist/dvae_vocab256_mnist_md/"
-  save_model_name: "dvae_vocab256_mnist_md"
+  save_model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/mnist_md/dvae_v256_ds2/"
+  save_model_name: "dvae"
 
 model:
   in_channels: 3
@@ -15,14 +15,13 @@ model:
   hidden_dim: 256
 
 training:
-  NUM_EPOCHS: 250
+  NUM_EPOCHS: 30
   BATCH_SIZE: 32
   LR: 0.01
   LR_gamma: 0.1
   step_LR_milestones:
+    - 5
     - 10
-    - 30
-    - 60
   temp_start: 5
   temp_end: 0.01
   temp_steps: 3000

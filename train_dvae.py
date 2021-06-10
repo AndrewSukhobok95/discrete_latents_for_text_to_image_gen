@@ -18,12 +18,13 @@ args = argument_parser.parse_args()
 
 # config_dir = '/home/andrey/Aalto/thesis/TA-VQVAE/configs/'
 config_dir = '/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/'
-config_path = os.path.join(config_dir, args.configname)
+config_name = args.configname
+config_path = os.path.join(config_dir, config_name)
 
 CONFIG = ConfigReader(config_path=config_path)
 CONFIG.print_config_info()
 
-writer = SummaryWriter()
+writer = SummaryWriter(comment='_' + config_name)
 
 data_source = MNISTData(
     img_type=CONFIG.mnist_type,
@@ -85,6 +86,7 @@ if __name__ == '__main__':
             writer.add_scalar('loss/recon_loss', recon_loss.item(), iteration)
             writer.add_scalar('loss/kld_codes_loss', kld_codes_loss.item(), iteration)
             writer.add_scalar('rates/temperature', temp, iteration)
+            writer.add_scalar('additional_info/n_codes_used', n_used_codes, iteration)
 
             iteration += 1
 
