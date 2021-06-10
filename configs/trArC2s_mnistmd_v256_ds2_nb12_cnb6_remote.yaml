@@ -30,7 +30,7 @@ model:
 
 training:
   NUM_EPOCHS: 20
-  BATCH_SIZE: 8
+  BATCH_SIZE: 12
   LR: 0.001
   LR_gamma: 0.1
   step_LR_milestones:
