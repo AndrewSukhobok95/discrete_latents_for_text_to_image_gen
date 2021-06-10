@@ -72,6 +72,27 @@ class LatentGenerator(nn.Module):
         x = self.proj_out(x)
         return x
 
+    def sample(self, condition, return_start_token=False):
+        '''
+        :param condition: torch.LongTensor of size (seq_len x batch)
+        '''
+        _, n_samples = condition.size()
+        seq_len = self.hidden_width * self.hidden_height
+        samples = torch.zeros(seq_len + 1, n_samples, self.embedding_dim, device=self.device)
+
+        with torch.no_grad():
+            for i in range(seq_len):
+                out = self.forward(samples[:-1, :, :], condition)
+                probs = F.softmax(out[i, :, :], dim=-1)
+                index = torch.multinomial(probs, num_samples=1)
+                one_hot_sample = torch.zeros(n_samples, self.embedding_dim, device=self.device)
+                one_hot_sample = torch.scatter(one_hot_sample, 1, index, 1.0)
+                samples[i + 1, :, :] = one_hot_sample
+
+        if return_start_token:
+            return samples
+        return samples[1:, :, :]
+
     def save_model(self, root_path, model_name):
         if not os.path.exists(root_path):
             os.makedirs(root_path)

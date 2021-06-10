@@ -10,7 +10,8 @@ from torch.utils.tensorboard import SummaryWriter
 from config_reader import ConfigReader
 from datasets.mnist_loader import MNISTData
 from modules.dvae.model import DVAE
-from train_utils.dvae_utils import TemperatureAnnealer, KLDWeightAnnealer, KLD_codes_uniform_loss
+from utilities.dvae_utils import TemperatureAnnealer, KLDWeightAnnealer, KLD_codes_uniform_loss
+
 
 argument_parser = argparse.ArgumentParser()
 argument_parser.add_argument('-cn', '--configname', action='store', type=str, required=True)
