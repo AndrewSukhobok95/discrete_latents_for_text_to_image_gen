@@ -36,12 +36,12 @@ class CondEncoder(nn.Module):
 
     def forward(self, x):
         '''
-        :param x: torch.LongTensor of size (seq_len x batch x emb)
+        :param x: torch.LongTensor of size (seq_len x batch)
         '''
-        batch, cond_seq_len = x.size()
+        _, batch = x.size()
         x = self.cond_embedding(x)
         x = x + self.pe.repeat(1, batch, 1)
-        for i, block in enumerate(self.tr_decoder_blocks):
+        for i, block in enumerate(self.tr_encoder_blocks):
             x = block(x)
         return x
 
