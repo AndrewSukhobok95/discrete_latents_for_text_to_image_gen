@@ -19,13 +19,13 @@ latent:
   cond_vocab_size: 20
 
 model:
-  num_x2downsamples: 2
+  num_x2downsamples: 3
   num_resids_downsample: 3
   num_resids_bottleneck: 4
   hidden_dim: 256
   num_blocks: 12
   cond_num_blocks: 6
-  n_attn_heads: 6
+  n_attn_heads: 8
   dropout_prob: 0.1
 
 training:
