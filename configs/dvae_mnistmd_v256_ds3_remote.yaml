@@ -12,11 +12,11 @@ model:
   num_x2downsamples: 3
   num_resids_downsample: 3
   num_resids_bottleneck: 4
-  hidden_dim: 512
+  hidden_dim: 256
 
 training:
   NUM_EPOCHS: 100
-  BATCH_SIZE: 24
+  BATCH_SIZE: 32
   LR: 0.1
   LR_gamma: 0.1
   step_LR_milestones:
@@ -25,3 +25,9 @@ training:
   temp_start: 5
   temp_end: 0.01
   temp_steps: 3000
+  use_fixed_klU: false
+  klU_const: 0.01
+  use_anneal_klU: true
+  klU_start: 0
+  klU_end: 0.01
+  klU_steps: 10000

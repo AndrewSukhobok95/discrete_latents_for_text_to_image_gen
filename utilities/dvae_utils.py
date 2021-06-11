@@ -52,7 +52,7 @@ def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
 
-class KLDWeightAnnealer:
+class SigmoidAnnealer:
     def __init__(self, start_lambda=0, end_lambda=5, n_steps=5000):
         self.start_lambda = start_lambda
         self.end_lambda = end_lambda
@@ -66,5 +66,6 @@ class KLDWeightAnnealer:
             return self.end_lambda
         else:
             return self.start_lambda + sigmoid(self.lin_space[step]) * self.end_lambda
+
 
 

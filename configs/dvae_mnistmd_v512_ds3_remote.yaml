@@ -25,3 +25,9 @@ training:
   temp_start: 5
   temp_end: 0.01
   temp_steps: 3000
+  use_fixed_klU: true
+  klU_const: 0.01
+  use_anneal_klU: false
+  klU_start: 0
+  klU_end: 0.01
+  klU_steps: 10000

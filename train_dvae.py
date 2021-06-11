@@ -10,7 +10,7 @@ from torch.utils.tensorboard import SummaryWriter
 from config_reader import ConfigReader
 from datasets.mnist_loader import MNISTData
 from modules.dvae.model import DVAE
-from utilities.dvae_utils import TemperatureAnnealer, KLDWeightAnnealer, KLD_codes_uniform_loss
+from utilities.dvae_utils import TemperatureAnnealer, SigmoidAnnealer, KLD_codes_uniform_loss
 
 
 argument_parser = argparse.ArgumentParser()
@@ -50,6 +50,10 @@ temp_annealer = TemperatureAnnealer(
     end_temp=CONFIG.temp_end,
     n_steps=CONFIG.temp_steps)
 
+klU_annealer = SigmoidAnnealer(
+    start_lambda=CONFIG.klU_start,
+    end_lambda=CONFIG.klU_end,
+    n_steps=CONFIG.klU_steps)
 
 if __name__ == '__main__':
     print("Device in use: {}".format(CONFIG.DEVICE))
@@ -67,9 +71,16 @@ if __name__ == '__main__':
             temp = temp_annealer.step(iteration)
             x_recon, z_logits, z = model(x, temp)
 
+            if CONFIG.use_fixed_klU:
+                klU_lambda = CONFIG.klU_const
+            elif CONFIG.use_anneal_klU:
+                klU_lambda = klU_annealer.step(iteration)
+            else:
+                klU_lambda = 0
+
             recon_loss = F.binary_cross_entropy(x_recon, x)
             kld_codes_loss = KLD_codes_uniform_loss(z)
-            loss = recon_loss + 0.01 * kld_codes_loss
+            loss = recon_loss + klU_lambda * kld_codes_loss
 
             loss.backward()
             optimizer.step()
@@ -87,6 +98,7 @@ if __name__ == '__main__':
             writer.add_scalar('loss/recon_loss', recon_loss.item(), iteration)
             writer.add_scalar('loss/kld_codes_loss', kld_codes_loss.item(), iteration)
             writer.add_scalar('rates/temperature', temp, iteration)
+            writer.add_scalar('rates/klU_lambda', klU_lambda, iteration)
             writer.add_scalar('additional_info/n_codes_used', n_used_codes, iteration)
 
             iteration += 1
