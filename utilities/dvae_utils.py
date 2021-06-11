@@ -68,4 +68,20 @@ class SigmoidAnnealer:
             return self.start_lambda + sigmoid(self.lin_space[step]) * self.end_lambda
 
 
+class LinearAnnealer:
+    def __init__(self, start_lambda=0, end_lambda=5, n_steps=5000):
+        self.start_lambda = start_lambda
+        self.end_lambda = end_lambda
+        self.n_steps = n_steps
+        self.lin_space = np.linspace(0, 1, n_steps)
+
+    def step(self, step):
+        if step == 0:
+            return self.start_lambda
+        elif step >= self.n_steps:
+            return self.end_lambda
+        else:
+            return self.start_lambda + self.lin_space[step] * (self.end_lambda - self.start_lambda)
+
+
 

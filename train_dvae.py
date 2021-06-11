@@ -10,7 +10,7 @@ from torch.utils.tensorboard import SummaryWriter
 from config_reader import ConfigReader
 from datasets.mnist_loader import MNISTData
 from modules.dvae.model import DVAE
-from utilities.dvae_utils import TemperatureAnnealer, SigmoidAnnealer, KLD_codes_uniform_loss
+from utilities.dvae_utils import TemperatureAnnealer, SigmoidAnnealer, KLD_codes_uniform_loss, LinearAnnealer
 
 
 argument_parser = argparse.ArgumentParser()
@@ -50,10 +50,18 @@ temp_annealer = TemperatureAnnealer(
     end_temp=CONFIG.temp_end,
     n_steps=CONFIG.temp_steps)
 
-klU_annealer = SigmoidAnnealer(
-    start_lambda=CONFIG.klU_start,
-    end_lambda=CONFIG.klU_end,
-    n_steps=CONFIG.klU_steps)
+if CONFIG.klU_type == 'sigmoid':
+    klU_annealer = SigmoidAnnealer(
+        start_lambda=CONFIG.klU_start,
+        end_lambda=CONFIG.klU_end,
+        n_steps=CONFIG.klU_steps)
+elif CONFIG.klU_type == 'linear':
+    klU_annealer = LinearAnnealer(
+        start_lambda=CONFIG.klU_start,
+        end_lambda=CONFIG.klU_end,
+        n_steps=CONFIG.klU_steps)
+else:
+    raise ValueError('Unknown annelear type.')
 
 if __name__ == '__main__':
     print("Device in use: {}".format(CONFIG.DEVICE))
