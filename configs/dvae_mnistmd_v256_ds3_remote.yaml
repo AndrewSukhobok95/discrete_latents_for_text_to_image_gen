@@ -3,7 +3,7 @@ data:
   root_img_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/multi_descriptive_MNIST/"
 
 model_paths:
-  save_model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/mnist_md/dvae_v256_ds3_LinAnneal/"
+  save_model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/mnist_md/dvae_v256_ds3_0Anneal/"
   save_model_name: "dvae"
 
 model:
