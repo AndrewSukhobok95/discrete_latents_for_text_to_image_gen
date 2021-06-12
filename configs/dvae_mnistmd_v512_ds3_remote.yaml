@@ -1,6 +1,7 @@
 data:
-  mnist_type: "md"
-  root_img_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/multi_descriptive_MNIST/"
+  dataset: "mnist"
+  type: "md"
+  root_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/multi_descriptive_MNIST/"
 
 model_paths:
   save_model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/mnist_md/dvae_v512_ds3/"
@@ -26,9 +27,7 @@ training:
   temp_end: 0.01
   temp_steps: 3000
   klU_type: linear
-  use_fixed_klU: true
   klU_const: 0.01
-  use_anneal_klU: false
   klU_start: 0
   klU_end: 0.01
   klU_steps: 10000

@@ -9,9 +9,11 @@ import argparse
 from torch.utils.tensorboard import SummaryWriter
 from config_reader import ConfigReader
 from datasets.mnist_loader import MNISTData
+from datasets.cub_loader import CUBData
 from modules.dvae.model import DVAE
-from utilities.dvae_utils import TemperatureAnnealer, SigmoidAnnealer, KLD_codes_uniform_loss, LinearAnnealer
-
+from utilities.dvae_utils import TemperatureAnnealer, \
+    SigmoidAnnealer, FixedAnnealer,\
+    KLD_codes_uniform_loss, LinearAnnealer
 
 argument_parser = argparse.ArgumentParser()
 argument_parser.add_argument('-cn', '--configname', action='store', type=str, required=True)
@@ -27,10 +29,18 @@ CONFIG.print_config_info()
 
 writer = SummaryWriter(comment='_' + config_name)
 
-data_source = MNISTData(
-    img_type=CONFIG.mnist_type,
-    root_path=CONFIG.root_img_path,
-    batch_size=CONFIG.BATCH_SIZE)
+if CONFIG.dataset == 'mnist':
+    data_source = MNISTData(
+        img_type=CONFIG.type,
+        root_path=CONFIG.root_path,
+        batch_size=CONFIG.BATCH_SIZE)
+elif CONFIG.dataset == 'cub':
+    data_source = CUBData(
+        img_type=CONFIG.type,
+        root_path=CONFIG.root_path,
+        batch_size=CONFIG.BATCH_SIZE,
+        prct_train_split=0.99)
+
 train_loader = data_source.get_train_loader()
 
 model = DVAE(in_channels=CONFIG.in_channels,
@@ -60,6 +70,12 @@ elif CONFIG.klU_type == 'linear':
         start_lambda=CONFIG.klU_start,
         end_lambda=CONFIG.klU_end,
         n_steps=CONFIG.klU_steps)
+elif CONFIG.klU_type == 'fixed':
+    klU_annealer = FixedAnnealer(
+        const_lambda=CONFIG.klU_const)
+elif CONFIG.klU_type == 'none':
+    klU_annealer = FixedAnnealer(
+        const_lambda=0)
 else:
     raise ValueError('Unknown annelear type.')
 
@@ -77,14 +93,9 @@ if __name__ == '__main__':
             optimizer.zero_grad()
 
             temp = temp_annealer.step(iteration)
-            x_recon, z_logits, z = model(x, temp)
+            klU_lambda = klU_annealer.step(iteration)
 
-            if CONFIG.use_fixed_klU:
-                klU_lambda = CONFIG.klU_const
-            elif CONFIG.use_anneal_klU:
-                klU_lambda = klU_annealer.step(iteration)
-            else:
-                klU_lambda = 0
+            x_recon, z_logits, z = model(x, temp)
 
             recon_loss = F.binary_cross_entropy(x_recon, x)
             kld_codes_loss = KLD_codes_uniform_loss(z)

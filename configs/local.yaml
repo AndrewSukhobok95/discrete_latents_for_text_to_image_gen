@@ -1,6 +1,7 @@
 data:
-  mnist_type: "md"
-  root_img_path: "/home/andrey/Aalto/thesis/TA-VQVAE/data/multi_descriptive_MNIST"
+  dataset: "mnist"
+  type: "md"
+  root_path: "/home/andrey/Aalto/thesis/TA-VQVAE/data/multi_descriptive_MNIST"
 
 model_paths:
   save_model_path: "/home/andrey/Aalto/thesis/TA-VQVAE/models/test/test2/test3/"

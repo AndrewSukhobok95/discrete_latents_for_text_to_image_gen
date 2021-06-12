@@ -67,7 +67,7 @@ class LatentGenerator(nn.Module):
         for i, block in enumerate(self.tr_decoder_blocks):
             full_x = block(full_x, attn_mask=mask)
 
-        x_out = self.proj_out(full_x[self.cond_seq_size:,:,:])
+        x_out = self.proj_out(full_x[self.cond_seq_size:, :, :])
         return x_out
 
     # def sample(self, condition, return_start_token=False):

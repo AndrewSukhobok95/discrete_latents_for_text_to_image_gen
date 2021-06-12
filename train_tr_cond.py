@@ -1,18 +1,16 @@
 import os
-import numpy as np
-import matplotlib.pyplot as plt
 import torch
 import torch.nn.functional as F
 from torch import nn, optim
-from torch.utils.data import DataLoader
 from torch.optim.lr_scheduler import MultiStepLR
-import argparse
 from torch.utils.tensorboard import SummaryWriter
-
+import argparse
 from config_reader import ConfigReader
 from modules.dvae.model import DVAE
-from modules.transformer_gen.ar_cond_2stream.generator import LatentGenerator
+from modules.transformer_gen.ar_cond_2stream.generator import LatentGenerator as LatentGenerator2s
+from modules.transformer_gen.ar_cond_1stream.generator import LatentGenerator as LatentGenerator1s
 from datasets.mnist_loader import MNISTData
+from datasets.cub_loader import CUBData
 
 
 argument_parser = argparse.ArgumentParser()
@@ -30,10 +28,18 @@ CONFIG.print_config_info()
 writer = SummaryWriter(comment='_' + config_name)
 
 
-data_source = MNISTData(
-    img_type=CONFIG.mnist_type,
-    root_path=CONFIG.root_img_path,
-    batch_size=CONFIG.BATCH_SIZE)
+if CONFIG.dataset == 'mnist':
+    data_source = MNISTData(
+        img_type=CONFIG.type,
+        root_path=CONFIG.root_path,
+        batch_size=CONFIG.BATCH_SIZE)
+elif CONFIG.dataset == 'cub':
+    data_source = CUBData(
+        img_type=CONFIG.type,
+        root_path=CONFIG.root_path,
+        batch_size=CONFIG.BATCH_SIZE,
+        prct_train_split=0.95)
+
 train_loader = data_source.get_train_loader()
 
 
@@ -46,18 +52,33 @@ dvae = DVAE(
     hidden_dim=CONFIG.hidden_dim,
     device=CONFIG.DEVICE)
 
-G = LatentGenerator(
-    hidden_width=CONFIG.hidden_width,
-    hidden_height=CONFIG.hidden_height,
-    embedding_dim=CONFIG.vocab_size,
-    num_blocks=CONFIG.num_blocks,
-    cond_num_blocks=CONFIG.cond_num_blocks,
-    cond_seq_size=CONFIG.cond_seq_size,
-    cond_vocab_size=CONFIG.cond_vocab_size,
-    hidden_dim=CONFIG.hidden_dim,
-    n_attn_heads=CONFIG.n_attn_heads,
-    dropout_prob=CONFIG.dropout_prob,
-    device=CONFIG.DEVICE)
+if CONFIG.type == '2s2s':
+    G = LatentGenerator2s(
+        hidden_width=CONFIG.hidden_width,
+        hidden_height=CONFIG.hidden_height,
+        embedding_dim=CONFIG.vocab_size,
+        num_blocks=CONFIG.num_blocks,
+        cond_num_blocks=CONFIG.cond_num_blocks,
+        cond_seq_size=CONFIG.cond_seq_size,
+        cond_vocab_size=CONFIG.cond_vocab_size,
+        hidden_dim=CONFIG.hidden_dim,
+        n_attn_heads=CONFIG.n_attn_heads,
+        dropout_prob=CONFIG.dropout_prob,
+        device=CONFIG.DEVICE)
+elif CONFIG.type == '1s2s':
+    G = LatentGenerator1s(
+        hidden_width=CONFIG.hidden_width,
+        hidden_height=CONFIG.hidden_height,
+        embedding_dim=CONFIG.vocab_size,
+        num_blocks=CONFIG.num_blocks,
+        cond_seq_size=CONFIG.cond_seq_size,
+        cond_vocab_size=CONFIG.cond_vocab_size,
+        hidden_dim=CONFIG.hidden_dim,
+        n_attn_heads=CONFIG.n_attn_heads,
+        dropout_prob=CONFIG.dropout_prob,
+        device=CONFIG.DEVICE)
+else:
+    raise ValueError('Unknown Generator type.')
 
 dvae.eval()
 G.train()
@@ -108,3 +129,8 @@ for epoch in range(CONFIG.NUM_EPOCHS):
     lr_scheduler.step()
 
     G.save_model(CONFIG.model_path, CONFIG.model_name)
+
+
+
+
+

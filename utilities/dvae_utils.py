@@ -84,4 +84,10 @@ class LinearAnnealer:
             return self.start_lambda + self.lin_space[step] * (self.end_lambda - self.start_lambda)
 
 
+class FixedAnnealer:
+    def __init__(self, const_lambda):
+        self.const_lambda = const_lambda
+
+    def step(self, step):
+        return self.const_lambda
 

@@ -26,8 +26,12 @@ def collate_mnist_56(data_list):
 
 
 class MNISTData:
-    def __init__(self, img_type, root_path, batch_size, transforms=None):
-        mnist_types = ["classic", "classic_56", "triple", "md"]
+    def __init__(self,
+                 img_type,
+                 root_path,
+                 batch_size,
+                 transforms=None):
+        types = ["classic", "56", "triple", "md"]
 
         self.img_type = img_type
         self.batch_size = batch_size
@@ -38,21 +42,21 @@ class MNISTData:
                 torch_transforms.ToTensor()
             ])
 
-        if img_type in mnist_types[:2]:
+        if img_type in types[:2]:
             self.trainset = torch_datasets.MNIST(
                 root=root_path, train=True, transform=self.transforms, download=False)
             self.testset = torch_datasets.MNIST(
                 root=root_path, train=False, transform=self.transforms, download=False)
-        elif img_type == mnist_types[2]:
+        elif img_type == types[2]:
             self.trainset = TripleMnistDataset(
                 root_img_path=root_path, transforms=transforms)
-        elif img_type == mnist_types[3]:
+        elif img_type == types[3]:
             self.trainset = MDMnistDataset(
                 root_data_path=root_path)
         else:
-            raise ValueError("Choose one of the following types:" + str(mnist_types))
+            raise ValueError("Choose one of the following types:" + str(types))
 
-        if img_type == mnist_types[1]:
+        if img_type == types[1]:
             self.collate_fn = collate_mnist_56
         else:
             self.collate_fn = None
