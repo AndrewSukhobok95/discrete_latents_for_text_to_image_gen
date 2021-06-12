@@ -36,7 +36,7 @@ if CONFIG.dataset == 'mnist':
         batch_size=CONFIG.BATCH_SIZE)
 elif CONFIG.dataset == 'cub':
     data_source = CUBData(
-        img_type=CONFIG.type,
+        img_type=CONFIG.dataset_type,
         root_path=CONFIG.root_path,
         batch_size=CONFIG.BATCH_SIZE,
         prct_train_split=0.99)
