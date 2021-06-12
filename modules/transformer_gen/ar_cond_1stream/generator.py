@@ -64,7 +64,7 @@ class LatentGenerator(nn.Module):
 
         full_x = torch.cat([c, x], dim=0)
 
-        for i, block in enumerate(self.tr_decoder_blocks):
+        for i, block in enumerate(self.tr_encoder_blocks):
             full_x = block(full_x, attn_mask=mask)
 
         x_out = self.proj_out(full_x[self.cond_seq_size:, :, :])
