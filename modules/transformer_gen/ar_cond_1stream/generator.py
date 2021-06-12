@@ -60,7 +60,7 @@ class LatentGenerator(nn.Module):
         x = x + pe_column + pe_row
 
         c = self.cond_encoder(condition)
-        c = c + self.pe.repeat(1, batch, 1)
+        c = c + self.pe_cond.repeat(1, batch, 1)
 
         full_x = torch.cat([c, x], dim=0)
 
