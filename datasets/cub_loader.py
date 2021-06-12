@@ -39,7 +39,7 @@ class CUBData:
 
         self.trainset, self.testset = torch.utils.data.random_split(
             dataset, lengths=[self.train_length, self.test_length],
-            generator=torch.Generator().manual_seed(seed))
+            generator=torch.Generator().manual_seed(seed) if seed else None)
 
         self.collate_fn = None
 
