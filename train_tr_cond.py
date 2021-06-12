@@ -17,8 +17,8 @@ argument_parser = argparse.ArgumentParser()
 argument_parser.add_argument('-cn', '--configname', action='store', type=str, required=True)
 args = argument_parser.parse_args()
 
-# config_dir = '/home/andrey/Aalto/thesis/TA-VQVAE/configs/'
-config_dir = '/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/'
+config_dir = '/home/andrey/Aalto/thesis/TA-VQVAE/configs/'
+# config_dir = '/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/'
 config_name = args.configname
 config_path = os.path.join(config_dir, config_name)
 
@@ -30,12 +30,12 @@ writer = SummaryWriter(comment='_' + config_name)
 
 if CONFIG.dataset == 'mnist':
     data_source = MNISTData(
-        img_type=CONFIG.type,
+        img_type=CONFIG.dataset_type,
         root_path=CONFIG.root_path,
         batch_size=CONFIG.BATCH_SIZE)
 elif CONFIG.dataset == 'cub':
     data_source = CUBData(
-        img_type=CONFIG.type,
+        img_type=CONFIG.dataset_type,
         root_path=CONFIG.root_path,
         batch_size=CONFIG.BATCH_SIZE,
         prct_train_split=0.95)
@@ -52,7 +52,7 @@ dvae = DVAE(
     hidden_dim=CONFIG.hidden_dim,
     device=CONFIG.DEVICE)
 
-if CONFIG.type == '2s2s':
+if CONFIG.model_type == '2s2s':
     G = LatentGenerator2s(
         hidden_width=CONFIG.hidden_width,
         hidden_height=CONFIG.hidden_height,
@@ -65,7 +65,7 @@ if CONFIG.type == '2s2s':
         n_attn_heads=CONFIG.n_attn_heads,
         dropout_prob=CONFIG.dropout_prob,
         device=CONFIG.DEVICE)
-elif CONFIG.type == '1s2s':
+elif CONFIG.model_type == '1s2s':
     G = LatentGenerator1s(
         hidden_width=CONFIG.hidden_width,
         hidden_height=CONFIG.hidden_height,

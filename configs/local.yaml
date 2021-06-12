@@ -1,6 +1,6 @@
 data:
   dataset: "mnist"
-  type: "md"
+  dataset_type: "md"
   root_path: "/home/andrey/Aalto/thesis/TA-VQVAE/data/multi_descriptive_MNIST"
 
 model_paths:
