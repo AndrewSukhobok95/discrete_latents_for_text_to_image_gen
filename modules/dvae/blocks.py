@@ -108,7 +108,7 @@ class Decoder(nn.Module):
                               bias=bias, use_bn=use_bn)
             ]
 
-            self.model_architecture += "  DownSampleX2(in={}, out={})\n".format(_in_ch, _out_ch)
+            self.model_architecture += "  UpSampleX2(in={}, out={})\n".format(_in_ch, _out_ch)
             self.model_architecture += "  ResidualStack(in={}, out={}, n_resid={})\n".format(_out_ch, _out_ch,
                                                                                              num_resids_upsample)
 

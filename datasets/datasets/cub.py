@@ -64,7 +64,6 @@ class CubDataset(Dataset):
         x = self.transform(img)
         if x.size(0) == 1:
             x = x.repeat(3, 1, 1)
-        x = torch.unsqueeze(x, 0)
 
         texts_list = _parse_text(txt_full_path)
         text_num = np.random.choice(len(texts_list))
@@ -75,9 +74,9 @@ class CubDataset(Dataset):
 
 if __name__ == '__main__':
 
-    d = CubDataset(root_img_path="/home/andrey/Aalto/TA-VQVAE/data/CUB/CUB_200_2011/images",
-                   root_text_path="/home/andrey/Aalto/TA-VQVAE/data/CUB/text",
-                   imgs_list_file_path="/home/andrey/Aalto/TA-VQVAE/data/CUB/CUB_200_2011/images.txt")
+    d = CubDataset(root_img_path="/home/andrey/Aalto/thesis/TA-VQVAE/data/CUB/CUB_200_2011/images",
+                   root_text_path="/home/andrey/Aalto/thesis/TA-VQVAE/data/CUB/text",
+                   imgs_list_file_path="/home/andrey/Aalto/thesis/TA-VQVAE/data/CUB/CUB_200_2011/images.txt")
     print(d[51])
 
     # train_loader = DataLoader(dataset=d,
