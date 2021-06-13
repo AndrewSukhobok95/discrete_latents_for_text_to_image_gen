@@ -12,8 +12,8 @@ model_params:
   vocab_size: 1024
   num_x2downsamples: 2
   num_resids_downsample: 4
-  num_resids_bottleneck: 4
-  hidden_dim: 1024
+  num_resids_bottleneck: 6
+  hidden_dim: 512
 
 training:
   NUM_EPOCHS: 50
