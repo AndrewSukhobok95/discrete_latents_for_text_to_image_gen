@@ -4,7 +4,7 @@ data:
   root_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/CUB/"
 
 model_info:
-  save_model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/cub_128_text/dvae_v1024_ds2/"
+  save_model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/cub_128_text/dvae_v512_ds2/"
   save_model_name: "dvae"
 
 model_params:
@@ -16,17 +16,18 @@ model_params:
   hidden_dim: 512
 
 training:
-  NUM_EPOCHS: 50
+  NUM_EPOCHS: 250
   BATCH_SIZE: 16
-  LR: 0.0001
+  LR: 0.001
   LR_gamma: 0.1
   step_LR_milestones:
-    - 10
+    - 5
+    - 30
   temp_start: 5
   temp_end: 0.01
   temp_steps: 3000
-  klU_type: none
-  klU_const: 0.0001
+  klU_type: fixed
+  klU_const: 0.00001
   klU_start: 0
   klU_end: 0.01
   klU_steps: 10000
