@@ -35,9 +35,12 @@ class CubDataset(Dataset):
                  root_text_path,
                  imgs_list_file_path=None,
                  transform=None,
-                 img_size=256):
+                 img_size=256,
+                 return_all_texts=False):
         self.root_img_path = root_img_path
         self.root_text_path = root_text_path
+        self.return_all_texts = return_all_texts
+
         if imgs_list_file_path is None:
             raise NotImplementedError("File ./CUB_200_2011/CUB_200_2011/images.txt is assumed.")
         else:
@@ -66,10 +69,23 @@ class CubDataset(Dataset):
             x = x.repeat(3, 1, 1)
 
         texts_list = _parse_text(txt_full_path)
+
+        if self.return_all_texts:
+            return x, texts_list
+
         text_num = np.random.choice(len(texts_list))
         text = texts_list[text_num]
-
         return x, text
+
+    def get_texts_only(self, idx):
+        img_path, txt_path = self.data_paths[idx]
+        txt_full_path = os.path.join(self.root_text_path, txt_path)
+        texts_list = _parse_text(txt_full_path)
+        if self.return_all_texts:
+            return texts_list
+        text_num = np.random.choice(len(texts_list))
+        text = texts_list[text_num]
+        return text
 
 
 if __name__ == '__main__':

@@ -11,7 +11,7 @@ model_params:
   in_channels: 3
   vocab_size: 512
   num_x2downsamples: 2
-  num_resids_downsample: 4
+  num_resids_downsample: 6
   num_resids_bottleneck: 6
   hidden_dim: 512
 
