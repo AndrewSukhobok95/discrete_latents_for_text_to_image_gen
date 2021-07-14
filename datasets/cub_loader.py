@@ -3,7 +3,7 @@ import numpy as np
 import torch
 from torch.utils.data import DataLoader
 from datasets.datasets.cub import CubDataset
-from cub_text_indexer import TextIndexer
+from datasets.datasets.cub_text_indexer import TextIndexer
 
 
 class TextCollater:
