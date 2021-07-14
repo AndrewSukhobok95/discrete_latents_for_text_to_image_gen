@@ -25,16 +25,12 @@ def _parse_text(txt_path):
     return texts
 
 
-def _prep_str(text):
-    return "[CLS] " + text.replace("\n", " ") + " [SEP]"
-
-
 class CubDataset(Dataset):
     def __init__(self,
                  root_img_path,
                  root_text_path,
                  imgs_list_file_path=None,
-                 transform=None,
+                 transforms=None,
                  img_size=256,
                  return_all_texts=False):
         self.root_img_path = root_img_path
@@ -45,15 +41,15 @@ class CubDataset(Dataset):
             raise NotImplementedError("File ./CUB_200_2011/CUB_200_2011/images.txt is assumed.")
         else:
             self.data_paths = _read_imgs_list(imgs_list_file_path)
-        if transform is None:
-            transform = torch_transforms.Compose([
+        if transforms is None:
+            transforms = torch_transforms.Compose([
                 torch_transforms.Resize(img_size + 10),
                 torch_transforms.RandomRotation(2),
                 torch_transforms.RandomCrop(img_size),
                 torch_transforms.RandomHorizontalFlip(),
                 torch_transforms.ToTensor()
             ])
-        self.transform = transform
+        self.transforms = transforms
 
     def __len__(self):
         return len(self.data_paths)
@@ -64,7 +60,7 @@ class CubDataset(Dataset):
         txt_full_path = os.path.join(self.root_text_path, txt_path)
 
         img = Image.open(img_full_path)
-        x = self.transform(img)
+        x = self.transforms(img)
         if x.size(0) == 1:
             x = x.repeat(3, 1, 1)
 

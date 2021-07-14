@@ -12,20 +12,20 @@ model_params:
   vocab_size: 512
   num_x2downsamples: 2
   num_resids_downsample: 6
-  num_resids_bottleneck: 6
+  num_resids_bottleneck: 4
   hidden_dim: 512
 
 training:
   NUM_EPOCHS: 250
   BATCH_SIZE: 16
-  LR: 0.0001
+  LR: 0.001
   LR_gamma: 0.1
   step_LR_milestones:
     - 5
     - 100
   temp_start: 5
   temp_end: 0.01
-  temp_steps: 30000
+  temp_steps: 100000
   klU_type: fixed
   klU_const: 0.001
   klU_start: 0
