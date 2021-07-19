@@ -4,7 +4,7 @@ data:
   root_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/CUB/"
 
 model_info:
-  save_model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/cub_128_text/dvae_v512_ds2/"
+  save_model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/cub/dvae_v512_ds2_run1/"
   save_model_name: "dvae"
 
 model_params:
