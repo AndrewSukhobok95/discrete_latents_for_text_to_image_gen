@@ -52,7 +52,7 @@ class Encoder(nn.Module):
 
         self.model_architecture += "  ResidualStack(in={}, out={}, n_resid={})\n".format(_out_ch, _out_ch,
                                                                                          num_resids_bottleneck)
-        self.model_architecture += "  DownSampleX2(in={}, out={})\n".format(_out_ch, out_channels)
+        self.model_architecture += "  ChangeChannels(in={}, out={})\n".format(_out_ch, out_channels)
 
     def forward(self, x):
         x = self._change_ch_block_start(x)
