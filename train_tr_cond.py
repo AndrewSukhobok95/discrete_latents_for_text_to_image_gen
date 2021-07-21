@@ -38,7 +38,10 @@ elif CONFIG.dataset == 'cub':
         img_type=CONFIG.dataset_type,
         root_path=CONFIG.root_path,
         batch_size=CONFIG.BATCH_SIZE,
-        prct_train_split=0.95)
+        prct_train_split=0.99,
+        custom_transform_version=CONFIG.custom_transform_version)
+else:
+    raise ValueError('Unknown dataset:', CONFIG.dataset)
 
 train_loader = data_source.get_train_loader()
 
@@ -98,7 +101,7 @@ iteration = 0
 for epoch in range(CONFIG.NUM_EPOCHS):
     for img, label in train_loader:
         img = img.to(CONFIG.DEVICE)
-        label = label.permute(1,0).to(CONFIG.DEVICE)
+        label = label.permute(1, 0).to(CONFIG.DEVICE)
 
         with torch.no_grad():
             latent = dvae.ng_q_encode(img)

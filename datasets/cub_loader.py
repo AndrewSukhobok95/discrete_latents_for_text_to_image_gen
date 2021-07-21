@@ -1,9 +1,11 @@
 import os
 import numpy as np
 import torch
+from torchvision import transforms as torch_transforms
 from torch.utils.data import DataLoader
 from datasets.datasets.cub import CubDataset
 from datasets.cub_text_indexer import TextIndexer
+from datasets.common import SquarePad
 
 
 class TextCollater:
@@ -29,6 +31,7 @@ class CUBData:
                  batch_size,
                  prct_train_split=0.95,
                  transforms=None,
+                 custom_transform_version=None,
                  seed=None):
         types = ["128_text", "256_text", "128_token_ids", "256_token_ids"]
 
@@ -57,6 +60,24 @@ class CUBData:
             self.collate_fn = text_collater.collate_fn
         else:
             raise ValueError("Choose one of the following types:" + str(types))
+
+        if (transforms is None) and (custom_transform_version == 0):
+            transforms = torch_transforms.Compose([
+                torch_transforms.Resize(img_size + 10),
+                torch_transforms.RandomRotation(2),
+                torch_transforms.RandomCrop(img_size),
+                torch_transforms.RandomHorizontalFlip(),
+                torch_transforms.ToTensor()
+            ])
+        elif (transforms is None) and (custom_transform_version == 1):
+            transforms = torch_transforms.Compose([
+                SquarePad(),
+                torch_transforms.RandomRotation(2),
+                torch_transforms.Resize(img_size + 20),
+                torch_transforms.CenterCrop(img_size),
+                torch_transforms.RandomHorizontalFlip(),
+                torch_transforms.ToTensor()
+            ])
 
         dataset = CubDataset(root_img_path=root_img_path,
                              root_text_path=root_text_path,

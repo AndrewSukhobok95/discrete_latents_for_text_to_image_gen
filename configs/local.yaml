@@ -1,37 +1,47 @@
 data:
+#  dataset: "cub"
+#  dataset_type: "128_token_ids"
+#  custom_transform_version: 1
+#  root_path: "/home/andrey/Aalto/thesis/TA-VQVAE/data/CUB"
   dataset: "mnist"
   dataset_type: "md"
+  custom_transform_version: 1
   root_path: "/home/andrey/Aalto/thesis/TA-VQVAE/data/multi_descriptive_MNIST"
 
-model_paths:
-  save_model_path: "/home/andrey/Aalto/thesis/TA-VQVAE/models/test/test2/test3/"
-  save_model_name: "test"
+model_info:
+  model_type: "2s2s"
+  model_path: "/home/andrey/Aalto/thesis/TA-VQVAE/models//cub/trArC2s2s_v256_ds2_nb12_cnb16/"
+  model_name: "generator"
+  vae_model_path: "/home/andrey/Aalto/thesis/TA-VQVAE/models/cub/dvae_v512_ds2_run1/"
+  vae_model_name: "dvae"
 
-model:
+image:
   in_channels: 3
-  vocab_size: 256
+
+latent:
+  hidden_width: 32
+  hidden_height: 32
+  vocab_size: 512
+  cond_seq_size: 12
+  cond_vocab_size: 20
+
+model_params:
   num_x2downsamples: 2
-  num_resids_downsample: 4
+  num_resids_downsample: 6
   num_resids_bottleneck: 4
-  hidden_dim: 256
+  hidden_dim: 512
+  num_blocks: 12
+  cond_num_blocks: 16
+  n_attn_heads: 8
+  dropout_prob: 0.1
 
 training:
-  NUM_EPOCHS: 10
-  BATCH_SIZE: 4
-  LR: 0.0001
-  LR_gamma: 0.35
+  NUM_EPOCHS: 20
+  BATCH_SIZE: 12
+  LR: 0.001
+  LR_gamma: 0.1
   step_LR_milestones:
-    - 1
-    - 20
-    - 30
-  temp_start: 1
-  temp_end: 0.0625
-  temp_steps: 50000
-  use_fixed_klU: false
-  klU_const: 0.01
-  use_anneal_klU: true
-  klU_start: 0
-  klU_end: 0.01
-  klU_steps: 10000
+    - 5
+    - 10
 
 

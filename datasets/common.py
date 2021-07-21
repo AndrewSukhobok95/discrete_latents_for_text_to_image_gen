@@ -1,7 +1,7 @@
 import os
 import numpy as np
-from PIL import Image
 import torch
+import torchvision.transforms.functional as TF
 
 
 def collate_fn(samples):
@@ -9,14 +9,15 @@ def collate_fn(samples):
     return torch.cat(imgs, dim=0), texts
 
 
-class Collater:
-    def __init__(self, tokenizer):
-        self.tokenizer = tokenizer
+class SquarePad:
+    def __call__(self, image):
+        w, h = image.size
+        max_wh = np.max([w, h])
+        hp = int((max_wh - w) / 2)
+        vp = int((max_wh - h) / 2)
+        padding = (hp, vp, hp, vp)
+        return TF.pad(image, padding, 0, 'symmetric')
 
-    def collate_fn(self, samples):
-        imgs, texts = list(zip(*samples))
-        padded_sequences = self.tokenizer(texts, padding=True)
-        token_tensor = torch.tensor(padded_sequences["input_ids"])
-        token_type_tensor = torch.tensor(padded_sequences["token_type_ids"])
-        attention_mask_tensor = torch.tensor(padded_sequences["attention_mask"])
-        return torch.cat(imgs, dim=0), (token_tensor, token_type_tensor, attention_mask_tensor, texts)
+
+
+

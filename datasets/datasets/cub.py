@@ -44,9 +44,7 @@ class CubDataset(Dataset):
         if transforms is None:
             transforms = torch_transforms.Compose([
                 torch_transforms.Resize(img_size + 10),
-                torch_transforms.RandomRotation(2),
                 torch_transforms.RandomCrop(img_size),
-                torch_transforms.RandomHorizontalFlip(),
                 torch_transforms.ToTensor()
             ])
         self.transforms = transforms
