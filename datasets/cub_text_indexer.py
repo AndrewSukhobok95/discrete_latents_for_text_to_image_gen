@@ -2,7 +2,7 @@ import os
 import re
 import json
 from datasets.datasets.cub import CubDataset
-
+from collections import Counter
 
 class TextIndexer:
     def __init__(self, vocab_file_path):
@@ -22,11 +22,19 @@ class TextIndexer:
             img_size=256,
             return_all_texts=True)
 
+        # tokens_dict = dict()
         tokens_set = set()
         for t in range(len(dataset)):
             texts = dataset.get_texts_only(t)
             new_tokens = sum(map(self.tokenize, texts), [])
             tokens_set.update(new_tokens)
+            # td = dict(Counter(new_tokens))
+            # for k,v in td.items():
+            #     if k in tokens_dict.keys():
+            #         tokens_dict[k] = tokens_dict[k] + v
+            #     else:
+            #         tokens_dict[k] = v
+
         tokens_list = [self.pad_token, self.sos_token, self.eos_token] + list(tokens_set)
         word_to_id = dict(zip(tokens_list, range(len(tokens_list))))
         with open(self.vocab_file_path, 'w') as outfile:

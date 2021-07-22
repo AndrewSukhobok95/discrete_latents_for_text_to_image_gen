@@ -17,8 +17,8 @@ argument_parser = argparse.ArgumentParser()
 argument_parser.add_argument('-cn', '--configname', action='store', type=str, required=True)
 args = argument_parser.parse_args()
 
-# config_dir = '/home/andrey/Aalto/thesis/TA-VQVAE/configs/'
-config_dir = '/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/'
+config_dir = '/home/andrey/Aalto/thesis/TA-VQVAE/configs/'
+# config_dir = '/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/'
 config_name = args.configname
 config_path = os.path.join(config_dir, config_name)
 
@@ -38,6 +38,7 @@ elif CONFIG.dataset == 'cub':
         img_type=CONFIG.dataset_type,
         root_path=CONFIG.root_path,
         batch_size=CONFIG.BATCH_SIZE,
+        description_len=CONFIG.cond_seq_size,
         prct_train_split=0.99,
         custom_transform_version=CONFIG.custom_transform_version)
 else:
@@ -99,7 +100,7 @@ criteriation = nn.CrossEntropyLoss()
 
 iteration = 0
 for epoch in range(CONFIG.NUM_EPOCHS):
-    for img, label in train_loader:
+    for batch_index, (img, label) in enumerate(train_loader):
         img = img.to(CONFIG.DEVICE)
         label = label.permute(1, 0).to(CONFIG.DEVICE)
 
@@ -118,16 +119,17 @@ for epoch in range(CONFIG.NUM_EPOCHS):
         seq_lables_true = x.argmax(dim=2).view(-1)
 
         loss = criteriation(seq_labels_pred, seq_lables_true)
-
         loss.backward()
-        optimizer.step()
-        optimizer.zero_grad()
 
-        writer.add_scalar('loss/CrossEntropy', loss.item(), iteration)
+        if (batch_index + 1) % CONFIG.ACCUMULATION_STEPS == 0:
+            optimizer.step()
+            optimizer.zero_grad()
 
-        iteration += 1
+            writer.add_scalar('loss/CrossEntropy', loss.item(), iteration)
 
-        print("Epoch: {} Iter: {} Loss: {}".format(epoch, iteration, round(loss.item(), 5)))
+            iteration += 1
+
+            print("Epoch: {} Iter: {} Loss: {}".format(epoch, iteration, round(loss.item(), 5)))
 
     lr_scheduler.step()
 

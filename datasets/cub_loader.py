@@ -9,19 +9,20 @@ from datasets.common import SquarePad
 
 
 class TextCollater:
-    def __init__(self, vocab_file_path, pad_value=0):
+    def __init__(self, vocab_file_path, description_len, pad_value=0):
         self.text_indexer = TextIndexer(vocab_file_path=vocab_file_path)
         self.pad_value = pad_value
+        self.description_len = description_len
 
     def collate_fn(self, samples):
         imgs, texts = list(zip(*samples))
         texts_ids = []
         for t in texts:
             texts_ids.append(self.text_indexer.text2ids(t))
-        texts_ids_array = self.pad_value * np.ones((len(texts_ids), max(map(len, texts_ids))))
+        texts_ids_array = self.pad_value * np.ones((len(texts_ids), self.description_len))
         for i, ti in enumerate(texts_ids):
             texts_ids_array[i, :len(ti)] = ti
-        return torch.stack(imgs), torch.tensor(texts_ids_array, dtype=torch.int)
+        return torch.stack(imgs), torch.tensor(texts_ids_array, dtype=torch.long)
 
 
 class CUBData:
@@ -29,6 +30,7 @@ class CUBData:
                  img_type,
                  root_path,
                  batch_size,
+                 description_len,
                  prct_train_split=0.95,
                  transforms=None,
                  custom_transform_version=None,
@@ -44,7 +46,9 @@ class CUBData:
         vocab_file_path = os.path.join(root_path, "vocab.json")
 
         if 'token_ids' in img_type:
-            text_collater = TextCollater(vocab_file_path=vocab_file_path)
+            text_collater = TextCollater(
+                vocab_file_path=vocab_file_path,
+                description_len=description_len)
 
         if img_type == types[0]:
             img_size = 128
@@ -117,7 +121,8 @@ if __name__=="__main__":
     cubdata = CUBData(
         img_type="128_token_ids",#"128_token_ids"
         root_path="/home/andrey/Aalto/thesis/TA-VQVAE/data/CUB",
-        batch_size=4)
+        batch_size=4,
+        description_len=64)
 
     loader = cubdata.get_train_loader()
 

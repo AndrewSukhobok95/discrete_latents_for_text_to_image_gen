@@ -7,7 +7,7 @@ model_info:
   model_type: "2s2s"
   model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/cub/trArC2s2s_v256_ds2_nb12_cnb16/"
   model_name: "generator"
-  vae_model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/cub/dvae_v512_ds2_run1/"
+  vae_model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/cub/dvae_v512_ds2_run2/"
   vae_model_name: "dvae"
 
 image:
@@ -17,12 +17,12 @@ latent:
   hidden_width: 32
   hidden_height: 32
   vocab_size: 512
-  cond_seq_size: 12
-  cond_vocab_size: 20
+  cond_seq_size: 64
+  cond_vocab_size: 5452
 
 model_params:
   num_x2downsamples: 2
-  num_resids_downsample: 4
+  num_resids_downsample: 6
   num_resids_bottleneck: 4
   hidden_dim: 512
   num_blocks: 12
@@ -33,6 +33,7 @@ model_params:
 training:
   NUM_EPOCHS: 150
   BATCH_SIZE: 12
+  ACCUMULATION_STEPS: 1
   LR: 0.001
   LR_gamma: 0.1
   step_LR_milestones:
