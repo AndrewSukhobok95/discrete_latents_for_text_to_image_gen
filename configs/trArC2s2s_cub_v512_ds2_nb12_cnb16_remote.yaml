@@ -1,7 +1,7 @@
 data:
   dataset: "cub"
   dataset_type: "128_token_ids"
-  root_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/multi_descriptive_MNIST/"
+  root_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/CUB/"
 
 model_info:
   model_type: "2s2s"
