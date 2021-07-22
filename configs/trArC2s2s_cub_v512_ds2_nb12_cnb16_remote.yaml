@@ -1,6 +1,7 @@
 data:
   dataset: "cub"
   dataset_type: "128_token_ids"
+  custom_transform_version: 1
   root_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/CUB/"
 
 model_info:
