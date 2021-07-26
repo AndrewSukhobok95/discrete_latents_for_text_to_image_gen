@@ -9,6 +9,7 @@ class TextIndexer:
         self.vocab_file_path = vocab_file_path
         with open(self.vocab_file_path) as json_file:
             self.word_to_id = json.load(json_file)
+        self.id_to_word = dict([(v, k) for k, v in self.word_to_id.items()])
         self.pad_token = "[PAD_TOKEN]"
         self.sos_token = "[SOS_TOKEN]"
         self.eos_token = "[EOS_TOKEN]"
@@ -52,9 +53,16 @@ class TextIndexer:
             tokens_ids.append(self.word_to_id.get(t))
         return tokens_ids
 
+    def ids2text(self, tokens):
+        text = []
+        for t in tokens:
+            text.append(self.id_to_word.get(t))
+        return ' '.join(text)
+
 
 if __name__ == "__main__":
     ti = TextIndexer(vocab_file_path="/home/andrey/Aalto/thesis/TA-VQVAE/data/CUB/vocab.json")
+    ti.ids2text([[1,2,3], [3,4,5]])
     ti.text2ids('solid black bird with a medium beak and a yellow eye.')
 
 
