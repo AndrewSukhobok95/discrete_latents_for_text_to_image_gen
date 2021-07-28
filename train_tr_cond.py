@@ -91,11 +91,18 @@ dvae.load_model(
     root_path=CONFIG.vae_model_path,
     model_name=CONFIG.vae_model_name)
 
+if hasattr(CONFIG, 'load_model_path') and hasattr(CONFIG, 'load_model_name'):
+    G.load_model(
+        root_path=CONFIG.load_model_path,
+        model_name=CONFIG.load_model_name)
 
 print("Device in use: {}".format(CONFIG.DEVICE))
 
 optimizer = optim.Adam(G.parameters(), lr=CONFIG.LR)
-lr_scheduler = MultiStepLR(optimizer, milestones=CONFIG.step_LR_milestones, gamma=CONFIG.LR_gamma)
+
+if hasattr(CONFIG, 'LR_gamma') and hasattr(CONFIG, 'step_LR_milestones'):
+    lr_scheduler = MultiStepLR(optimizer, milestones=CONFIG.step_LR_milestones, gamma=CONFIG.LR_gamma)
+
 criteriation = nn.CrossEntropyLoss()
 
 iteration = 0
@@ -131,7 +138,8 @@ for epoch in range(CONFIG.NUM_EPOCHS):
 
             print("Epoch: {} Iter: {} Loss: {}".format(epoch, iteration, round(loss.item(), 5)))
 
-    lr_scheduler.step()
+    if hasattr(CONFIG, 'LR_gamma') and hasattr(CONFIG, 'step_LR_milestones'):
+        lr_scheduler.step()
 
     G.save_model(CONFIG.model_path, CONFIG.model_name)
 

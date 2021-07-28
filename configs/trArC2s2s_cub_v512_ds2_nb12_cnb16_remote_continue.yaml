@@ -1,0 +1,40 @@
+data:
+  dataset: "cub"
+  dataset_type: "128_token_ids"
+  custom_transform_version: 1
+  root_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/CUB/"
+
+model_info:
+  model_type: "2s2s"
+  model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/cub/trArC2s2s_v256_ds2_nb12_cnb16_continue/"
+  model_name: "generator"
+  load_model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/cub/trArC2s2s_v256_ds2_nb12_cnb16/"
+  load_model_name: "generator"
+  vae_model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/cub/dvae_v512_ds2_run2/"
+  vae_model_name: "dvae"
+
+image:
+  in_channels: 3
+
+latent:
+  hidden_width: 32
+  hidden_height: 32
+  vocab_size: 512
+  cond_seq_size: 66
+  cond_vocab_size: 5452
+
+model_params:
+  num_x2downsamples: 2
+  num_resids_downsample: 6
+  num_resids_bottleneck: 4
+  hidden_dim: 512
+  num_blocks: 12
+  cond_num_blocks: 16
+  n_attn_heads: 8
+  dropout_prob: 0.1
+
+training:
+  NUM_EPOCHS: 250
+  BATCH_SIZE: 8
+  ACCUMULATION_STEPS: 4
+  LR: 0.0001

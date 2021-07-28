@@ -4,6 +4,7 @@ import json
 from datasets.datasets.cub import CubDataset
 from collections import Counter
 
+
 class TextIndexer:
     def __init__(self, vocab_file_path):
         self.vocab_file_path = vocab_file_path

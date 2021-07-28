@@ -99,7 +99,9 @@ class LatentGenerator(nn.Module):
         path = os.path.join(root_path, model_name + ".pth")
         torch.save(self.state_dict(), path)
 
-    def load_model(self, root_path, model_name, map_location=torch.device('cpu')):
+    def load_model(self, root_path, model_name, map_location=None):
+        if map_location is None:
+            map_location = self.device
         path = os.path.join(root_path, model_name + ".pth")
         self.load_state_dict(torch.load(path, map_location=map_location))
 
