@@ -40,5 +40,5 @@ training:
   LR: 0.001
   LR_gamma: 0.1
   step_LR_milestones:
-    - 5
-    - 30
+    - 50
+    - 100
