@@ -30,7 +30,7 @@ class CUBData:
                  img_type,
                  root_path,
                  batch_size,
-                 description_len,
+                 description_len=None,
                  prct_train_split=0.95,
                  transforms=None,
                  custom_transform_version=None,

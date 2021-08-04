@@ -105,31 +105,31 @@ if __name__ == '__main__':
             optimizer.step()
 
             with torch.no_grad():
-                n_used_codes = len(z.detach().cpu().argmax(dim=1).view(-1).unique())
+                n_codes_used = len(z.detach().cpu().argmax(dim=1).view(-1).unique())
                 print("Epoch: {} Iter: {} Loss: {} KL Loss (weighted): {} Recon Loss {} N codes used: {}".format(
                     epoch,
                     iteration,
                     round(loss.item(), 4),
                     round(kld_codes_loss.item(), 4),
                     round(recon_loss.item(), 4),
-                    n_used_codes))
+                    n_codes_used))
 
             writer.add_scalar('loss/recon_loss', recon_loss.item(), iteration)
             writer.add_scalar('loss/kld_codes_loss', kld_codes_loss.item(), iteration)
             writer.add_scalar('rates/temperature', temp, iteration)
             writer.add_scalar('rates/klU_lambda', klU_lambda, iteration)
-            writer.add_scalar('additional_info/n_codes_used', n_used_codes, iteration)
+            writer.add_scalar('additional_info/n_codes_used', n_codes_used, iteration)
 
             iteration += 1
+
+        lr_scheduler.step()
+
+        model.save_model(CONFIG.save_model_path, CONFIG.save_model_name)
 
         img_grid = torchvision.utils.make_grid(x[:8, :, :, :].detach().cpu())
         writer.add_image('images/original', img_grid, epoch)
         img_recon_grid = torchvision.utils.make_grid(x_recon[:8, :, :, :].detach().cpu())
         writer.add_image('images/reconstruction', img_recon_grid, epoch)
-
-        lr_scheduler.step()
-
-        model.save_model(CONFIG.save_model_path, CONFIG.save_model_name)
 
 
 

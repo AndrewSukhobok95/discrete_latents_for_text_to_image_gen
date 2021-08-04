@@ -44,7 +44,8 @@ class VQVAE(nn.Module):
         latent = self.encode(x)
         vq_loss, quantized, perplexity, encoding_info = self.quantize(latent)
         x_recon = self.decode(quantized, sigmoid_activation=sigmoid_activation)
-        return vq_loss, quantized, x_recon, perplexity
+        n_codes_used = len(encoding_info[0].argmax(dim=1).unique())
+        return vq_loss, quantized, x_recon, perplexity, n_codes_used
 
     def encode(self, x):
         z = self.encoder(x)

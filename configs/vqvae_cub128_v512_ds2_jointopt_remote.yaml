@@ -2,10 +2,10 @@ data:
   dataset: "cub"
   dataset_type: "128_text"
   custom_transform_version: 0
-  root_path: "/home/andrey/Aalto/thesis/TA-VQVAE/data/CUB"
+  root_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/CUB"
 
 model_info:
-  save_model_path: "/home/andrey/Aalto/thesis/TA-VQVAE/models/cub/test/"
+  save_model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/cub/vqvae_v512_ds2_jointopt/"
   save_model_name: "dvae"
 
 image:
@@ -23,7 +23,7 @@ model_params:
 
 training:
   NUM_EPOCHS: 250
-  BATCH_SIZE: 2
+  BATCH_SIZE: 16
   OPT_type: "joint"
   LR: 0.001
   LR_q: 0.001
