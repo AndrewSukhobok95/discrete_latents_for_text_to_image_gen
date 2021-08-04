@@ -15,8 +15,8 @@ argument_parser = argparse.ArgumentParser()
 argument_parser.add_argument('-cn', '--configname', action='store', type=str, required=True)
 args = argument_parser.parse_args()
 
-config_dir = '/home/andrey/Aalto/thesis/TA-VQVAE/configs/'
-# config_dir = '/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/'
+# config_dir = '/home/andrey/Aalto/thesis/TA-VQVAE/configs/'
+config_dir = '/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/'
 config_name = args.configname
 config_path = os.path.join(config_dir, config_name)
 
