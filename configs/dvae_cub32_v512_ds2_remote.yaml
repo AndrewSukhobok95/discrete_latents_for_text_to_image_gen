@@ -26,10 +26,10 @@ training:
     - 100
   temp_start: 5
   temp_end: 0.01
-  temp_steps: 80000
+  temp_steps: 6000
   klU_type: linear
   klU_const: 0.001
   klU_start: 0
   klU_end: 0.001
-  klU_steps: 60000
+  klU_steps: 4000
 
