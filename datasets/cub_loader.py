@@ -35,7 +35,8 @@ class CUBData:
                  transforms=None,
                  custom_transform_version=None,
                  seed=None):
-        types = ["128_text", "256_text", "128_token_ids", "256_token_ids"]
+        types = ["32_text", "64_text", "128_text", "256_text",
+                 "32_token_ids", "64_token_ids", "128_token_ids", "256_token_ids"]
 
         self.img_type = img_type
         self.batch_size = batch_size
@@ -51,15 +52,27 @@ class CUBData:
                 description_len=description_len)
 
         if img_type == types[0]:
-            img_size = 128
+            img_size = 32
             self.collate_fn = None
         elif img_type == types[1]:
-            img_size = 256
+            img_size = 64
             self.collate_fn = None
         elif img_type == types[2]:
             img_size = 128
-            self.collate_fn = text_collater.collate_fn
+            self.collate_fn = None
         elif img_type == types[3]:
+            img_size = 256
+            self.collate_fn = None
+        elif img_type == types[4]:
+            img_size = 32
+            self.collate_fn = text_collater.collate_fn
+        elif img_type == types[5]:
+            img_size = 64
+            self.collate_fn = text_collater.collate_fn
+        elif img_type == types[6]:
+            img_size = 128
+            self.collate_fn = text_collater.collate_fn
+        elif img_type == types[7]:
             img_size = 256
             self.collate_fn = text_collater.collate_fn
         else:
