@@ -1,0 +1,35 @@
+data:
+  dataset: "cub"
+  dataset_type: "128_text"
+  custom_transform_version: 0
+  root_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/CUB"
+
+model_info:
+  save_model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/cub/comparison_vqvae_v512_ds2_jointopt/"
+  save_model_name: "dvae"
+
+image:
+  in_channels: 3
+
+model_params:
+  vocab_size: 512
+  vqvae_embedding_dim: 512
+  num_x2downsamples: 2
+  num_resids_downsample: 6
+  num_resids_bottleneck: 4
+  vqvae_commitment_cost: 0.25
+  vqvae_decay: 0.99
+  hidden_dim: 512
+
+training:
+  NUM_EPOCHS: 150
+  BATCH_SIZE: 16
+  OPT_type: "joint"
+  LR: 0.001
+  LR_q: 0.001
+  LR_gamma: 0.1
+  step_LR_milestones:
+    - 5
+    - 100
+
+
