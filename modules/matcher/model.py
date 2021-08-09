@@ -62,7 +62,7 @@ class TrMatcher(nn.Module):
 
         self.to(self.device)
 
-    def forward(self, img, txt_tokens):
+    def forward(self, img, txt_tokens, average_cls_token=False):
         batch, ch, h, w = img.size()
 
         x = self.to_patch_embedding(img)
@@ -82,7 +82,10 @@ class TrMatcher(nn.Module):
         for i, block in enumerate(self.tr_encoder_blocks):
             full_x = block(full_x)
 
-        cls_input = x[0, :, :]
+        if average_cls_token:
+            cls_input = x.mean(dim=0)
+        else:
+            cls_input = x[0, :, :]
 
         cls = self.mlp_head(cls_input).squeeze()
 

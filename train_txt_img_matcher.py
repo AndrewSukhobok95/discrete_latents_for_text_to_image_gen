@@ -16,6 +16,8 @@ config_dir = '/home/andrey/Aalto/thesis/TA-VQVAE/configs/finished/'
 config_path = config_dir + 'trArC1s2s_mnistmd_v256_ds2_nb12_remote.yaml'
 CONFIG = ConfigReader(config_path=config_path)
 
+CONFIG.BATCH_SIZE = 4
+
 
 data_source = MNISTData(
     img_type=CONFIG.dataset_type,
@@ -52,6 +54,7 @@ model = TrMatcher(
     hidden_dim=512,
     n_attn_heads=8,
     dropout_prob=0.1,
+    tr_norm_first=True,
     out_dim=1,
     sigmoid_output=True)
 
