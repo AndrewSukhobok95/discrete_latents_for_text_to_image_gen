@@ -83,9 +83,9 @@ class TrMatcher(nn.Module):
             full_x = block(full_x)
 
         if average_cls_token:
-            cls_input = x.mean(dim=0)
+            cls_input = full_x.mean(dim=0)
         else:
-            cls_input = x[0, :, :]
+            cls_input = full_x[0, :, :]
 
         cls = self.mlp_head(cls_input).squeeze()
 
