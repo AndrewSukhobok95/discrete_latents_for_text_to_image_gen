@@ -20,6 +20,7 @@ class TrMatcher(nn.Module):
                  hidden_dim,
                  n_attn_heads,
                  dropout_prob,
+                 tr_norm_first,
                  out_dim,
                  sigmoid_output=False,
                  device=torch.device('cpu')):
@@ -49,7 +50,8 @@ class TrMatcher(nn.Module):
             TrEncoderBlock(n_features=embed_dim,
                            n_attn_heads=n_attn_heads,
                            n_hidden=hidden_dim,
-                           dropout_prob=dropout_prob)
+                           dropout_prob=dropout_prob,
+                           norm_first=tr_norm_first)
             for _ in range(num_blocks)
         ])
 
