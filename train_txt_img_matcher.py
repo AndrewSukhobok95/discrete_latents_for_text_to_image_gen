@@ -40,17 +40,34 @@ dvae.load_model(
     model_name=CONFIG.vae_model_name)
 
 model = TrMatcher(
-    img_height=CONFIG.hidden_height,
-    img_width=CONFIG.hidden_width,
-    embed_dim=CONFIG.vocab_size,
-    txt_max_length=CONFIG.cond_seq_size,
-    txt_vocab_size=CONFIG.cond_vocab_size,
+    img_height=128,
+    img_width=128,
+    img_channels=3,
+    patch_height=8,
+    patch_width=8,
+    txt_max_length=12,
+    txt_vocab_size=20,
+    embed_dim=128,
     num_blocks=8,
     hidden_dim=512,
     n_attn_heads=8,
     dropout_prob=0.1,
     out_dim=1,
     sigmoid_output=True)
+
+# model = TrMatcher(
+#     img_height=CONFIG.hidden_height,
+#     img_width=CONFIG.hidden_width,
+#     img_embed_dim=256,
+#     txt_max_length=CONFIG.cond_seq_size,
+#     txt_vocab_size=CONFIG.cond_vocab_size,
+#     embed_dim=CONFIG.vocab_size,
+#     num_blocks=8,
+#     hidden_dim=512,
+#     n_attn_heads=8,
+#     dropout_prob=0.1,
+#     out_dim=1,
+#     sigmoid_output=True)
 
 model.train()
 
@@ -73,13 +90,13 @@ if __name__=="__main__":
             txt = txt.permute(1, 0).to(CONFIG.DEVICE)
             match_labels = match_labels.to(CONFIG.DEVICE)
 
-            with torch.no_grad():
-                latent = dvae.ng_q_encode(img)
+            # with torch.no_grad():
+            #     latent = dvae.ng_q_encode(img)
+            #
+            # b, emb, h, w = latent.size()
+            # x = latent.view(b, emb, -1).permute(2, 0, 1)
 
-            b, emb, h, w = latent.size()
-            x = latent.view(b, emb, -1).permute(2, 0, 1)
-
-            pred_labels = model(x, txt)
+            pred_labels = model(img, txt)
 
             loss = F.binary_cross_entropy(pred_labels, match_labels)
             loss.backward()
