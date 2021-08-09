@@ -81,6 +81,12 @@ class DVAE(nn.Module):
         x_rec = self.decode(z)
         return x_rec, z_logits, z
 
+    def get_reconstruction(self, x):
+        z_logits = self.encode(x)
+        z = ng_quantize(z_logits)
+        x_rec = self.decoder(z)
+        return x_rec
+
     def load_model(self, root_path, model_name, map_location=torch.device('cpu')):
         encoder_path = os.path.join(root_path, model_name + "_encoder.pth")
         decoder_path = os.path.join(root_path, model_name + "_decoder.pth")
