@@ -17,19 +17,19 @@ model_params:
   hidden_dim: 512
 
 training:
-  NUM_EPOCHS: 200
+  NUM_EPOCHS: 500
   BATCH_SIZE: 256
   LR: 0.001
   LR_gamma: 0.1
   step_LR_milestones:
-    - 5
-    - 100
-  temp_start: 5
+    - 20
+    - 120
+  temp_start: 8
   temp_end: 0.01
-  temp_steps: 6000
+  temp_steps: 18000
   klU_type: linear
   klU_const: 0.001
   klU_start: 0
-  klU_end: 0.001
-  klU_steps: 4000
+  klU_end: 0.0001
+  klU_steps: 14000
 
