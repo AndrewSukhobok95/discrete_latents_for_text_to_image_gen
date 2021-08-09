@@ -68,8 +68,8 @@ class TrMatcher(nn.Module):
         x = self.to_patch_embedding(img)
         x = x.permute(1, 0, 2)
 
-        pe_column = self.img_pe_col.repeat(self.n_w_patch, 1, 1)
-        pe_row = self.img_pe_row.repeat_interleave(self.n_h_patch, dim=0)
+        pe_column = self.img_pe_col.repeat(self.n_w_patch, batch, 1)
+        pe_row = self.img_pe_row.repeat_interleave(self.n_h_patch, dim=0).repeat(1, batch, 1)
         x = x + pe_column + pe_row
 
         t = self.text_encoder(txt_tokens)
@@ -78,7 +78,6 @@ class TrMatcher(nn.Module):
         cls_tokens = self.cls_token.expand(-1, batch, -1)
 
         full_x = torch.cat([cls_tokens, t, x], dim=0)
-
         for i, block in enumerate(self.tr_encoder_blocks):
             full_x = block(full_x)
 
