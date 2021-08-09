@@ -1,0 +1,35 @@
+data:
+  dataset: "cub"
+  dataset_type: "128_text"
+  custom_transform_version: 0
+  root_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/CUB/"
+
+model_info:
+  save_model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/cub/comparison_dvae_v512_ds2_fixed_kl/"
+  save_model_name: "dvae"
+
+model_params:
+  in_channels: 3
+  vocab_size: 512
+  num_x2downsamples: 2
+  num_resids_downsample: 6
+  num_resids_bottleneck: 4
+  hidden_dim: 512
+
+training:
+  NUM_EPOCHS: 150
+  BATCH_SIZE: 16
+  LR: 0.001
+  LR_gamma: 0.1
+  step_LR_milestones:
+    - 5
+    - 100
+  temp_start: 5
+  temp_end: 0.01
+  temp_steps: 80000
+  klU_type: fixed
+  klU_const: 0
+  klU_start: 0
+  klU_end: 0
+  klU_steps: 70000
+
