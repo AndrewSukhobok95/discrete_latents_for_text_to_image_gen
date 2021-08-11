@@ -33,7 +33,8 @@ class ViT(nn.Module):
             TrEncoderBlock(n_features=input_channels,
                            n_attn_heads=n_attn_heads,
                            n_hidden=hidden_dim,
-                           dropout_prob=dropout_prob)
+                           dropout_prob=dropout_prob,
+                           norm_first=True)
             for _ in range(num_blocks)
         ])
 
