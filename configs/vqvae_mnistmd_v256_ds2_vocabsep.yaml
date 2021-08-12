@@ -22,7 +22,7 @@ model_params:
 
 training:
   NUM_EPOCHS: 250
-  BATCH_SIZE: 16
+  BATCH_SIZE: 64
   OPT_type: "vocab_sep"
   LR: 0.001
   LR_q: 0.01

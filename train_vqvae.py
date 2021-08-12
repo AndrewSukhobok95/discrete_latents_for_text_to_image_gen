@@ -39,6 +39,7 @@ elif CONFIG.dataset == 'cub':
 
 train_loader = data_source.get_train_loader()
 
+
 model = VQVAE(img_channels=CONFIG.in_channels,
               num_embeddings=CONFIG.vocab_size,
               embedding_dim=CONFIG.vqvae_embedding_dim,
