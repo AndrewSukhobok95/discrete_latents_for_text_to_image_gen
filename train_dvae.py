@@ -97,7 +97,15 @@ if __name__ == '__main__':
 
             x_recon, z_logits, z = model(x, temp)
 
-            recon_loss = F.binary_cross_entropy(x_recon, x)
+            if CONFIG.loss_fn == 'bce':
+                recon_loss = F.binary_cross_entropy(x_recon, x)
+            elif CONFIG.loss_fn == 'mse':
+                recon_loss = F.mse_loss(x_recon, x)
+            elif CONFIG.loss_fn == 'smooth_l1':
+                recon_loss = F.smooth_l1_loss(x_recon, x)
+            else:
+                raise ValueError("Proper loss function must be chosen.")
+
             kld_codes_loss = KLD_codes_uniform_loss(z)
             loss = recon_loss + klU_lambda * kld_codes_loss
 

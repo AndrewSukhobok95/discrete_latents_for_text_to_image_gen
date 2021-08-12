@@ -5,7 +5,7 @@ data:
   root_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/CUB/"
 
 model_info:
-  save_model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/cub/comparison_dvae_v512_ds2/"
+  save_model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/cub/comparison_dvae_v512_ds2_fixed_kl/"
   save_model_name: "dvae"
 
 model_params:
@@ -17,6 +17,7 @@ model_params:
   hidden_dim: 512
 
 training:
+  loss_fn: "bce"
   NUM_EPOCHS: 150
   BATCH_SIZE: 16
   LR: 0.001
@@ -27,9 +28,9 @@ training:
   temp_start: 5
   temp_end: 0.01
   temp_steps: 80000
-  klU_type: linear
-  klU_const: 0.001
+  klU_type: fixed
+  klU_const: 0
   klU_start: 0
-  klU_end: 0.001
+  klU_end: 0
   klU_steps: 70000
 

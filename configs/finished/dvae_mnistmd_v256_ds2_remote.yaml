@@ -16,6 +16,7 @@ model_params:
   hidden_dim: 256
 
 training:
+  loss_fn: "bce"
   NUM_EPOCHS: 30
   BATCH_SIZE: 32
   LR: 0.01
