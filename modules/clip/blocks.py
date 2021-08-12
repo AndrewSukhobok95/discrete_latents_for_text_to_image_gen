@@ -113,8 +113,8 @@ class DVAEImgEncoder(nn.Module):
         cls_tokens = self.cls_token.expand(-1, batch, -1)
 
         x = self.lin_proj(x)
-        pe_column = self.img_pe_col.repeat(self.n_w_patch, batch, 1)
-        pe_row = self.img_pe_row.repeat_interleave(self.n_h_patch, dim=0).repeat(1, batch, 1)
+        pe_column = self.img_pe_col.repeat(self.latent_width, batch, 1)
+        pe_row = self.img_pe_row.repeat_interleave(self.latent_height, dim=0).repeat(1, batch, 1)
         x = x + pe_column + pe_row
 
         full_x = torch.cat([cls_tokens, x], dim=0)
