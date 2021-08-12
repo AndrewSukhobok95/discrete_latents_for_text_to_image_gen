@@ -27,7 +27,7 @@ writer = SummaryWriter(comment='_' + config_name)
 
 if CONFIG.dataset == 'mnist':
     data_source = MNISTData(
-        img_type=CONFIG.type,
+        img_type=CONFIG.dataset_type,
         root_path=CONFIG.root_path,
         batch_size=CONFIG.BATCH_SIZE)
 elif CONFIG.dataset == 'cub':
