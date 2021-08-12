@@ -74,6 +74,16 @@ class CLIP(nn.Module):
 
         return logits_per_image, logits_per_text
 
+    def save_model(self, root_path, model_name):
+        if not os.path.exists(root_path):
+            os.makedirs(root_path)
+        path = os.path.join(root_path, model_name + ".pth")
+        torch.save(self.state_dict(), path)
+
+    def load_model(self, root_path, model_name, map_location=torch.device('cpu')):
+        path = os.path.join(root_path, model_name + ".pth")
+        self.load_state_dict(torch.load(path, map_location=map_location))
+
 
 class DVAECLIP(nn.Module):
     def __init__(self,
@@ -137,6 +147,16 @@ class DVAECLIP(nn.Module):
         logits_per_text = logit_scale * text_features @ image_features.t()
 
         return logits_per_image, logits_per_text
+
+    def save_model(self, root_path, model_name):
+        if not os.path.exists(root_path):
+            os.makedirs(root_path)
+        path = os.path.join(root_path, model_name + ".pth")
+        torch.save(self.state_dict(), path)
+
+    def load_model(self, root_path, model_name, map_location=torch.device('cpu')):
+        path = os.path.join(root_path, model_name + ".pth")
+        self.load_state_dict(torch.load(path, map_location=map_location))
 
 
 
