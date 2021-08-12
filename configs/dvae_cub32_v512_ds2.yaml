@@ -17,7 +17,7 @@ model_params:
   hidden_dim: 512
 
 training:
-  loss_fn: "bce"
+  loss_fn: "mse"
   NUM_EPOCHS: 500
   BATCH_SIZE: 256
   LR: 0.001
