@@ -39,7 +39,7 @@ elif CONFIG.dataset == 'cub':
         root_path=CONFIG.root_path,
         batch_size=CONFIG.BATCH_SIZE,
         description_len=CONFIG.cond_seq_size,
-        prct_train_split=0.99,
+        prct_train_split=0.999,
         custom_transform_version=CONFIG.custom_transform_version)
 else:
     raise ValueError('Unknown dataset:', CONFIG.dataset)
