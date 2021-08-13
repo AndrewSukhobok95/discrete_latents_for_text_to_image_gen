@@ -8,18 +8,18 @@ model_info:
   save_model_name: "clip"
 
 model_params:
-    img_height: 128
-    img_width: 128
-    img_channels: 3
-    patch_height: 8
-    patch_width: 8
-    txt_max_length: 12
-    txt_vocab_size: 20
-    embed_dim: 128
-    num_blocks: 8
-    hidden_dim: 256
-    n_attn_heads: 8
-    dropout_prob: 0.1
+  img_height: 128
+  img_width: 128
+  img_channels: 3
+  patch_height: 8
+  patch_width: 8
+  txt_max_length: 12
+  txt_vocab_size: 20
+  embed_dim: 128
+  num_blocks: 8
+  hidden_dim: 256
+  n_attn_heads: 8
+  dropout_prob: 0.1
 
 training:
   NUM_EPOCHS: 30
