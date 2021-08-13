@@ -7,6 +7,16 @@ model_info:
   save_model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/mnist_md/clip/"
   save_model_name: "clip"
 
+vae_model:
+  use_vae: True
+  vae_vocab_size: 256
+  vae_num_x2downsamples: 2
+  vae_num_resids_downsample: 4
+  vae_num_resids_bottleneck: 4
+  vae_hidden_dim: 256
+  vae_model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/mnist_md/dvae_v256_ds2/"
+  vae_model_name: "dvae"
+
 model_params:
   img_height: 128
   img_width: 128
