@@ -30,15 +30,25 @@ class MNISTData:
                  img_type,
                  root_path,
                  batch_size,
-                 transforms=None):
+                 transforms=None,
+                 custom_transform_version=None):
         types = ["classic", "56", "triple", "md"]
 
         self.img_type = img_type
         self.batch_size = batch_size
 
-        if transforms is None:
+        if (transforms is None) and (custom_transform_version == 0):
             self.transforms = torch_transforms.Compose([
                 torch_transforms.RandomRotation(10),
+                torch_transforms.ToTensor()
+            ])
+        elif (transforms is None) and (custom_transform_version == 1):
+            self.transforms = torch_transforms.Compose([
+                torch_transforms.GaussianBlur(kernel_size=3),
+                torch_transforms.ToTensor()
+            ])
+        else:
+            self.transforms = torch_transforms.Compose([
                 torch_transforms.ToTensor()
             ])
 
@@ -52,7 +62,7 @@ class MNISTData:
                 root_img_path=root_path, transforms=transforms)
         elif img_type == types[3]:
             self.trainset = MDMnistDataset(
-                root_data_path=root_path)
+                root_data_path=root_path, transforms=self.transforms)
         else:
             raise ValueError("Choose one of the following types:" + str(types))
 
