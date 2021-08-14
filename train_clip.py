@@ -35,6 +35,21 @@ data_source = MNISTData(
 train_loader = data_source.get_train_loader()
 
 
+if CONFIG.use_vae:
+    dvae = DVAE(
+        in_channels=CONFIG.img_channels,
+        vocab_size=CONFIG.vae_vocab_size,
+        num_x2downsamples=CONFIG.vae_num_x2downsamples,
+        num_resids_downsample=CONFIG.vae_num_resids_downsample,
+        num_resids_bottleneck=CONFIG.vae_num_resids_bottleneck,
+        hidden_dim=CONFIG.vae_hidden_dim,
+        device=CONFIG.DEVICE)
+    dvae.eval()
+    dvae.load_model(
+        root_path=CONFIG.vae_model_path,
+        model_name=CONFIG.vae_model_name)
+
+
 clip = CLIP(
     img_height=128,
     img_width=128,
@@ -68,6 +83,10 @@ if __name__ == '__main__':
             img = img.to(CONFIG.DEVICE)
             txt = txt.permute(1, 0).to(CONFIG.DEVICE)
             labels = torch.arange(current_batch_size).to(CONFIG.DEVICE)
+
+            if CONFIG.use_vae:
+                with torch.no_grad():
+                    img = dvae.get_reconstruction(img)
 
             logits_per_image, logits_per_text = clip(img, txt)
 

@@ -44,7 +44,7 @@ class MNISTData:
             ])
         elif (transforms is None) and (custom_transform_version == 1):
             self.transforms = torch_transforms.Compose([
-                torch_transforms.GaussianBlur(kernel_size=21),
+                torch_transforms.GaussianBlur(kernel_size=5),
                 torch_transforms.ToTensor()
             ])
         else:
