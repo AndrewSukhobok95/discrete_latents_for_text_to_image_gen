@@ -1,0 +1,11 @@
+dataset: "mnist"
+dataset_type: "md"
+root_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/multi_descriptive_MNIST/"
+
+num_iterations: 100
+batch_size: 50
+
+generator_1_config_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/finished/trArC1s2s_mnistmd_v256_ds2_nb12_remote.yaml"
+generator_2_config_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/finished/trArC2s2s_mnistmd_v256_ds2_nb12_cnb6_remote.yaml"
+clip_config_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/clip_mnistmd.yaml"
+

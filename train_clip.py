@@ -51,18 +51,18 @@ if CONFIG.use_vae:
 
 
 clip = CLIP(
-    img_height=128,
-    img_width=128,
-    img_channels=3,
-    patch_height=8,
-    patch_width=8,
-    txt_max_length=12,
-    txt_vocab_size=20,
-    embed_dim=128,
-    num_blocks=8,
-    hidden_dim=256,
-    n_attn_heads=8,
-    dropout_prob=0.1,
+    img_height=CONFIG.img_height,
+    img_width=CONFIG.img_width,
+    img_channels=CONFIG.img_channels,
+    patch_height=CONFIG.patch_height,
+    patch_width=CONFIG.patch_width,
+    txt_max_length=CONFIG.txt_max_length,
+    txt_vocab_size=CONFIG.txt_vocab_size,
+    embed_dim=CONFIG.embed_dim,
+    num_blocks=CONFIG.num_blocks,
+    hidden_dim=CONFIG.hidden_dim,
+    n_attn_heads=CONFIG.n_attn_heads,
+    dropout_prob=CONFIG.dropout_prob,
     device=CONFIG.DEVICE
 )
 
