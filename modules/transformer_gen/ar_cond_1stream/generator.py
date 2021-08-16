@@ -74,7 +74,7 @@ class LatentGenerator(nn.Module):
         '''
         :param condition: torch.LongTensor of size (seq_len x batch)
         '''
-        _, n_samples = condition.sizes()
+        _, n_samples = condition.size()
         seq_len = self.hidden_width * self.hidden_height
         samples = torch.zeros(seq_len + 1, n_samples, self.embedding_dim, device=self.device)
 
