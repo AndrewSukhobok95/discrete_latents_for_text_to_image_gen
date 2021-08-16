@@ -74,7 +74,7 @@ class DescriptionGenerator:
             return self.colors
         elif index == 3:
             return self.positions
-        return list(range(10))
+        return list(map(str, range(10)))
 
     def modify(self, seq, n_changes):
         new_seq = seq.copy()
