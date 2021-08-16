@@ -44,7 +44,7 @@ class LabelsInfo:
 class DescriptionGenerator:
     def __init__(self,
                  batch_size,
-                 sizes=[20, 30, 40],
+                 sizes=['20', '30', '40'],
                  colors=['w', 'r', 'g', 'b'],
                  positions=['up', 'middle', 'down']):
         self.sizes = sizes
@@ -57,10 +57,10 @@ class DescriptionGenerator:
         for _ in range(self.batch_size):
             seq = []
             for i in range(3):
-                num = np.random.randint(10)
-                s = np.random.choice(self.sizes)
-                c = np.random.choice(self.colors)
-                p = np.random.choice(self.positions)
+                num = str(np.random.randint(10))
+                s = str(np.random.choice(self.sizes))
+                c = str(np.random.choice(self.colors))
+                p = str(np.random.choice(self.positions))
                 seq += [num, s, c, p]
             x_txt.append(seq)
         return x_txt

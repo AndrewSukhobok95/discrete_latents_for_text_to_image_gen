@@ -12,6 +12,7 @@ from modules.transformer_gen.ar_cond_1stream.generator import LatentGenerator as
 from modules.transformer_gen.ar_cond_2stream.generator import LatentGenerator as LatentGenerator2s
 from config_reader import ConfigReader
 from datasets.mnist_loader import MNISTData
+from utilities.md_mnist_utils import DescriptionGenerator
 from utilities.md_mnist_utils import LabelsInfo
 from utilities.utils import EvalReport
 from modules.common_utils import latent_to_img, img_to_latent
@@ -103,12 +104,8 @@ clip.load_model(
     model_name=CONFIG_clip.save_model_name)
 
 
-data_source = MNISTData(
-    img_type=CONFIG.dataset_type,
-    root_path=CONFIG.root_path,
-    batch_size=CONFIG.batch_size)
-train_loader = data_source.get_train_loader()
-
+description_gen = DescriptionGenerator(batch_size=CONFIG.batch_size)
+labels_info = LabelsInfo(json_path=CONFIG.labels_info_path)
 
 eval_report = EvalReport(
     root_path=CONFIG.report_root_path,
@@ -121,9 +118,8 @@ if __name__=="__main__":
     g2_score = 0
 
     for _ in range(CONFIG.num_iterations):
-        x_img, x_txt = next(iter(train_loader))
+        txt = description_gen.sample()
 
-        x_img = x_img.to(CONFIG.DEVICE)
         x_txt = x_txt.permute(1, 0).to(CONFIG.DEVICE)
 
         n_obs = x_txt.sizes(1)
