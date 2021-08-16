@@ -13,7 +13,7 @@ from modules.transformer_gen.ar_cond_2stream.generator import LatentGenerator as
 from config_reader import ConfigReader
 from datasets.mnist_loader import MNISTData
 from utilities.md_mnist_utils import LabelsInfo
-from notebooks.utils import show
+from utilities.utils import EvalReport
 from modules.common_utils import latent_to_img, img_to_latent
 
 
@@ -110,8 +110,15 @@ data_source = MNISTData(
 train_loader = data_source.get_train_loader()
 
 
+eval_report = EvalReport(
+    root_path=CONFIG.report_root_path,
+    report_name=CONFIG.report_name)
+
 if __name__=="__main__":
     print("Device in use: {}".format(CONFIG.DEVICE))
+
+    g1_score = 0
+    g2_score = 0
 
     for _ in range(CONFIG.num_iterations):
         x_img, x_txt = next(iter(train_loader))
@@ -134,8 +141,17 @@ if __name__=="__main__":
             l1 = torch.diagonal(logits_per_image[:n_obs, :])
             l2 = torch.diagonal(logits_per_image[n_obs:, :])
 
-            logits = torch.stack([l1, l2], dim=1)
+            probs = F.softmax(torch.stack([l1, l2], dim=1), dim=1)
 
+        n2 = probs.argmax(dim=1).sum().item()
+        n1 = n_obs - n2
+
+        g1_score += n1
+        g2_score += n2
+
+        print('G1 score: {} G2 score: {}'.format(g1_score, g2_score))
+
+    eval_report.save(g1_score, g2_score)
 
 
 
