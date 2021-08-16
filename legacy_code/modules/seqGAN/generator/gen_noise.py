@@ -37,7 +37,7 @@ class Generator(nn.Module):
         ])
 
     def forward(self, x, noise):
-        seq_len, batch, emb = x.sizes()
+        seq_len, batch, emb = x.size()
         mask = subsequent_mask(seq_len).to(x.device)
         x = self.proj_in(x)
 
@@ -56,7 +56,7 @@ class Generator(nn.Module):
         if noise is None:
             noise = torch.randn(noise_dim, device=device)
         else:
-            assert noise.sizes() == noise_dim, "Wrong dimension, must be " + str(noise_dim)
+            assert noise.size() == noise_dim, "Wrong dimension, must be " + str(noise_dim)
 
         seq_len = self.hidden_width * self.hidden_height
         samples = torch.zeros(seq_len + 1, n_samples, self.embedding_dim, device=device)

@@ -49,7 +49,7 @@ class LatentGenerator(nn.Module):
         self.to(self.device)
 
     def forward(self, x, condition):
-        seq_len, batch, emb = x.sizes()
+        seq_len, batch, emb = x.size()
         full_seq_len = self.cond_seq_size + seq_len
 
         mask = subsequent_mask(full_seq_len).to(x.device)

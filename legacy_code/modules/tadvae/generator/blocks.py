@@ -40,7 +40,7 @@ class LearnablePositionalImageEmbedding(nn.Module):
         :return:  Image representation with positional embedding
         :rtype:    torch.tensor of shape (batch x ch x h x w)
         """
-        b, ch, h, w = x.sizes()
+        b, ch, h, w = x.size()
         position_embeddings = self.pe(self.position_ids)
         pe_reshaped = position_embeddings.repeat(b, 1, 1).permute(0, 2, 1).view(b, ch, h, w)
         return x + pe_reshaped
@@ -165,7 +165,7 @@ def masking_sum(x_new, x_old, mask):
     :return:      tensor that combines x_new and x_old with mask
     :rtype:        torch.tensor of shape (batch x ch x h x w)
     """
-    mask_ch = mask.repeat((1, x_new.sizes(1), 1, 1))
+    mask_ch = mask.repeat((1, x_new.size(1), 1, 1))
     masked_x1 = x_new * mask_ch
     masked_x2 = x_old * (1 - mask_ch)
     return masked_x1 + masked_x2

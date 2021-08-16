@@ -16,8 +16,8 @@ class TestTADVAEDiscriminatorBlocks(unittest.TestCase):
         model = Discriminator(txt_in_dim=32)
         model.eval()
         f_cond, f_uncond = model.forward(x, txt, mask)
-        self.assertEqual(f_cond.sizes(0), 2)
-        self.assertEqual(f_uncond.sizes(0), 2)
+        self.assertEqual(f_cond.size(0), 2)
+        self.assertEqual(f_uncond.size(0), 2)
 
 
 if __name__ == '__main__':

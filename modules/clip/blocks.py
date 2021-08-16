@@ -50,7 +50,7 @@ class ImgEncoder(nn.Module):
         self.to(self.device)
 
     def forward(self, x, average_cls_token=False):
-        batch, ch, h, w = x.sizes()
+        batch, ch, h, w = x.size()
 
         x = self.to_patch_embedding(x)
         x = x.permute(1, 0, 2)
@@ -108,7 +108,7 @@ class DVAEImgEncoder(nn.Module):
         self.to(self.device)
 
     def forward(self, x, average_cls_token=False):
-        seq_len, batch, emb = x.sizes()
+        seq_len, batch, emb = x.size()
 
         cls_tokens = self.cls_token.expand(-1, batch, -1)
 
@@ -162,7 +162,7 @@ class TxtEncoder(nn.Module):
         self.to(self.device)
 
     def forward(self, x, average_cls_token=False):
-        seq_len, batch = x.sizes()
+        seq_len, batch = x.size()
 
         t = self.txt_embedding(x)
         t = t + self.txt_pe.repeat(1, batch, 1)

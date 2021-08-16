@@ -22,7 +22,7 @@ class TestTextRebuildBlock(unittest.TestCase):
                                  n_img_hidden_positions=5 * 5)
         model.eval()
         f = model.forward(x, z, mask_z)
-        self.assertEqual(f.sizes(), x.size())
+        self.assertEqual(f.size(), x.size())
 
 
 if __name__ == '__main__':

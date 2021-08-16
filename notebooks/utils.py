@@ -7,7 +7,7 @@ from torchvision.utils import make_grid
 def show(img, figsize=(8, 4), plot_grid=False):
     img_cpu = img.detach().cpu()
     if plot_grid:
-        b, ch, h, w = img_cpu.sizes()
+        b, ch, h, w = img_cpu.size()
         bg = torch.ones(b, ch, h+2, w+2) * 0.7
         bg[:, :, 1:h+1, 1:w+1] = img_cpu
         npimg = make_grid(bg).numpy()

@@ -18,9 +18,9 @@ class TestTAGANDiscriminator(unittest.TestCase):
         expected_disc_size = torch.Size([2])
         expected_sim_size = torch.Size([2])
         expected_sim_n_size = torch.Size([2])
-        self.assertEqual(expected_disc_size, disc.sizes())
-        self.assertEqual(expected_sim_size, sim.sizes())
-        self.assertEqual(expected_sim_n_size, sim_n.sizes())
+        self.assertEqual(expected_disc_size, disc.size())
+        self.assertEqual(expected_sim_size, sim.size())
+        self.assertEqual(expected_sim_n_size, sim_n.size())
 
 
 if __name__ == '__main__':

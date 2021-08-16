@@ -38,7 +38,7 @@ class Discriminator(nn.Module):
         )
 
     def forward(self, x):
-        seq_len, batch, emb = x.sizes()
+        seq_len, batch, emb = x.size()
 
         x = self.lin_proj(x)
         cls_tokens = self.cls_token.expand(-1, batch, -1)

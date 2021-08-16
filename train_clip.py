@@ -78,7 +78,7 @@ if __name__ == '__main__':
     iteration = 0
     for epoch in range(CONFIG.NUM_EPOCHS):
         for batch_index, (img, txt) in enumerate(train_loader):
-            current_batch_size = img.sizes(0)
+            current_batch_size = img.size(0)
 
             img = img.to(CONFIG.DEVICE)
             txt = txt.permute(1, 0).to(CONFIG.DEVICE)

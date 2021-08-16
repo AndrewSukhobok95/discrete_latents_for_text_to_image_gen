@@ -59,7 +59,7 @@ class CubDataset(Dataset):
 
         img = Image.open(img_full_path)
         x = self.transforms(img)
-        if x.sizes(0) == 1:
+        if x.size(0) == 1:
             x = x.repeat(3, 1, 1)
 
         texts_list = _parse_text(txt_full_path)

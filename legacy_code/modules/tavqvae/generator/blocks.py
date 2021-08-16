@@ -16,8 +16,8 @@ class Attention(nn.Module):
         :param texth: seq_len x batch x emb_size
         :param mask: batch x seq_len
         """
-        batch_size = imgh.sizes(0)
-        ih, iw = imgh.sizes(2), imgh.sizes(3)
+        batch_size = imgh.size(0)
+        ih, iw = imgh.size(2), imgh.size(3)
         query_len = ih * iw
 
         # --> batch x emb_size x query_len
@@ -57,14 +57,14 @@ class MaskBlock(nn.Module):
 
 
 def masking_sum(x1, x2, mask):
-    mask_ch = mask.repeat((1, x1.sizes(1), 1, 1))
+    mask_ch = mask.repeat((1, x1.size(1), 1, 1))
     masked_x1 = x1 * mask_ch
     masked_x2 = x2 * (1 - mask_ch)
     return masked_x1 + masked_x2
 
 
 def mask_tensor(x, mask):
-    mask_ch = mask.repeat((1, x.sizes(1), 1, 1))
+    mask_ch = mask.repeat((1, x.size(1), 1, 1))
     return x * mask_ch
 
 

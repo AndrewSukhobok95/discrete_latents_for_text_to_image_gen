@@ -5,7 +5,7 @@ import torch.nn.functional as F
 
 def KLD_uniform_loss(z_logits):
     eps = 1e-20
-    b, lat_dim, h, w = z_logits.sizes()
+    b, lat_dim, h, w = z_logits.size()
     log_prior = torch.log(torch.ones((b, lat_dim, h * w), device=z_logits.device) / lat_dim)
 
     z_probs = F.softmax(z_logits, dim=1)
@@ -19,7 +19,7 @@ def KLD_uniform_loss(z_logits):
 
 def KLD_codes_uniform_loss(z):
     eps = 1e-20
-    b, lat_dim, h, w = z.sizes()
+    b, lat_dim, h, w = z.size()
     N = h * w
 
     log_prior = torch.log(torch.ones((b, lat_dim), device=z.device) / lat_dim)

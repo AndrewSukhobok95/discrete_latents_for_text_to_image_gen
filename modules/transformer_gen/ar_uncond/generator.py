@@ -41,7 +41,7 @@ class LatentGenerator(nn.Module):
         self.to(self.device)
 
     def forward(self, x):
-        seq_len, batch, emb = x.sizes()
+        seq_len, batch, emb = x.size()
         mask = subsequent_mask(seq_len).to(x.device)
         x = self.proj_in(x)
 

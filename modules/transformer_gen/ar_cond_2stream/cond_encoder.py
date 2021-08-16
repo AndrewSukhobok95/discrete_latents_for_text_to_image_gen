@@ -38,7 +38,7 @@ class CondEncoder(nn.Module):
         '''
         :param x: torch.LongTensor of size (seq_len x batch)
         '''
-        _, batch = x.sizes()
+        _, batch = x.size()
         x = self.cond_embedding(x)
         x = x + self.pe.repeat(1, batch, 1)
         for i, block in enumerate(self.tr_encoder_blocks):

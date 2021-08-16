@@ -14,7 +14,7 @@ class TestDVAE(unittest.TestCase):
                      num_resids_bottleneck=2)
         model.eval()
         f = model.forward(x)
-        self.assertEqual(x.size(), f.sizes())
+        self.assertEqual(x.size(), f.size())
 
 
 if __name__ == '__main__':

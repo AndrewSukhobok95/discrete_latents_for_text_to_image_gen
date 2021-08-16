@@ -62,7 +62,7 @@ class CubDataset(Dataset):
 
         img = Image.open(img_full_path)
         x = self.transform(img)
-        if x.sizes(0) == 1:
+        if x.size(0) == 1:
             x = x.repeat(3, 1, 1)
         x = torch.unsqueeze(x, 0)
 

@@ -11,7 +11,7 @@ class TestDVAEBlocks(unittest.TestCase):
         expected_out_size = torch.Size([1, 16, 64, 64])
         model.eval()
         f = model.forward(x)
-        self.assertEqual(expected_out_size, f.sizes())
+        self.assertEqual(expected_out_size, f.size())
 
     def test_dim_UpSampleX2(self):
         x = torch.rand((1, 16, 64, 64))
@@ -19,7 +19,7 @@ class TestDVAEBlocks(unittest.TestCase):
         expected_out_size = torch.Size([1, 3, 128, 128])
         model.eval()
         f = model.forward(x)
-        self.assertEqual(expected_out_size, f.sizes())
+        self.assertEqual(expected_out_size, f.size())
 
     def test_dim_Encoder(self):
         x = torch.rand((1, 3, 128, 128))
@@ -27,7 +27,7 @@ class TestDVAEBlocks(unittest.TestCase):
         expected_out_size = torch.Size([1, 20, 32, 32])
         model.eval()
         f = model.forward(x)
-        self.assertEqual(expected_out_size, f.sizes())
+        self.assertEqual(expected_out_size, f.size())
 
     def test_dim_Encoder_with_hidden_dim(self):
         x = torch.rand((1, 3, 128, 128))
@@ -35,7 +35,7 @@ class TestDVAEBlocks(unittest.TestCase):
         expected_out_size = torch.Size([1, 20, 32, 32])
         model.eval()
         f = model.forward(x)
-        self.assertEqual(expected_out_size, f.sizes())
+        self.assertEqual(expected_out_size, f.size())
 
     def test_dim_Decoder(self):
         x = torch.rand((1, 256, 32, 32))
@@ -43,7 +43,7 @@ class TestDVAEBlocks(unittest.TestCase):
         expected_out_size = torch.Size([1, 3, 128, 128])
         model.eval()
         f = model.forward(x)
-        self.assertEqual(expected_out_size, f.sizes())
+        self.assertEqual(expected_out_size, f.size())
 
     def test_dim_Decoder_with_hidden_dim(self):
         x = torch.rand((1, 32, 21, 21))
@@ -51,7 +51,7 @@ class TestDVAEBlocks(unittest.TestCase):
         expected_out_size = torch.Size([1, 3, 84, 84])
         model.eval()
         f = model.forward(x)
-        self.assertEqual(expected_out_size, f.sizes())
+        self.assertEqual(expected_out_size, f.size())
 
 
 if __name__ == '__main__':

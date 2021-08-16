@@ -18,7 +18,7 @@ class Test(unittest.TestCase):
         model.eval()
         f = model.forward(x)
         expected_output_size = torch.Size([2])
-        self.assertEqual(f.sizes(), expected_output_size)
+        self.assertEqual(f.size(), expected_output_size)
 
 
 if __name__ == '__main__':

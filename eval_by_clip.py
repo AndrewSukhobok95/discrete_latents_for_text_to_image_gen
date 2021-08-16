@@ -122,7 +122,7 @@ if __name__=="__main__":
         x_txt = torch.LongTensor(labels_info.encode_values(txt))
         x_txt = x_txt.permute(1, 0).to(CONFIG.DEVICE)
 
-        n_obs = x_txt.sizes(1)
+        n_obs = x_txt.size(1)
         with torch.no_grad():
             x_img_g1 = G1s.sample(x_txt)
             x_img_g1 = latent_to_img(x_img_g1, dvae, CONFIG_G1.hidden_height, CONFIG_G1.hidden_width)
