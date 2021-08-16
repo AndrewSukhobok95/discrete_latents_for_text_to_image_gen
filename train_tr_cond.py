@@ -114,7 +114,7 @@ for epoch in range(CONFIG.NUM_EPOCHS):
         with torch.no_grad():
             latent = dvae.ng_q_encode(img)
 
-        b, emb, h, w = latent.size()
+        b, emb, h, w = latent.sizes()
         x = latent.view(b, emb, -1).permute(2, 0, 1)
 
         start_vector = torch.zeros(1, b, emb, device=x.device)

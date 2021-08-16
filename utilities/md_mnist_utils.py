@@ -1,4 +1,5 @@
 import json
+import numpy as np
 
 
 class LabelsInfo:
@@ -40,6 +41,58 @@ class LabelsInfo:
         return decoded_seqs
 
 
+class DescriptionGenerator:
+    def __init__(self,
+                 batch_size,
+                 sizes=[20, 30, 40],
+                 colors=['w', 'r', 'g', 'b'],
+                 positions=['up', 'middle', 'down']):
+        self.sizes = sizes
+        self.colors = colors
+        self.positions = positions
+        self.batch_size = batch_size
 
+    def sample(self):
+        x_txt = []
+        for _ in range(self.batch_size):
+            seq = []
+            for i in range(3):
+                num = np.random.randint(10)
+                s = np.random.choice(self.sizes)
+                c = np.random.choice(self.colors)
+                p = np.random.choice(self.positions)
+                seq += [num, s, c, p]
+            x_txt.append(seq)
+        return x_txt
 
+    def get_properties_by_index(self, index):
+        if index > 3:
+            index = index % 4
+        if index == 1:
+            return self.sizes
+        elif index == 2:
+            return self.colors
+        elif index == 3:
+            return self.positions
+        return list(range(10))
+
+    def modify(self, seq, n_changes):
+        new_seq = seq.copy()
+        assert n_changes <= 12, "Can't change more than 12 tokens."
+        change_index = np.random.choice(range(12), size=n_changes)
+        for i in range(12):
+            if i in change_index:
+                properties = self.get_properties_by_index(i)
+                properties = list(set(properties) - set([new_seq[i]]))
+                new_seq[i] = np.random.choice(properties)
+        return new_seq
+
+    def sample_with_modifications(self):
+        x_txt = []
+        samples = self.sample()
+        for s in range(self.batch_size):
+            x_txt.append(samples[s])
+            for m in range(12):
+                x_txt.append(self.modify(samples[s], m))
+        return x_txt
 

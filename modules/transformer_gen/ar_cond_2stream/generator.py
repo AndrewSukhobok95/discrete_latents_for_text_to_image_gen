@@ -56,7 +56,7 @@ class LatentGenerator(nn.Module):
         self.to(self.device)
 
     def forward(self, x, condition):
-        seq_len, batch, emb = x.size()
+        seq_len, batch, emb = x.sizes()
         mask = subsequent_mask(seq_len).to(x.device)
         x = self.proj_in(x)
 
@@ -76,7 +76,7 @@ class LatentGenerator(nn.Module):
         '''
         :param condition: torch.LongTensor of size (seq_len x batch)
         '''
-        _, n_samples = condition.size()
+        _, n_samples = condition.sizes()
         seq_len = self.hidden_width * self.hidden_height
         samples = torch.zeros(seq_len + 1, n_samples, self.embedding_dim, device=self.device)
 

@@ -12,14 +12,14 @@ class TestTADVAEBlocks(unittest.TestCase):
         model.eval()
         f = model.forward(x)
         expected_output_size = torch.Size((2, 20, 4, 4))
-        self.assertEqual(f.size(), expected_output_size)
+        self.assertEqual(f.sizes(), expected_output_size)
 
     def test_dim_LearnablePositionalEmbedding(self):
         x = torch.rand((2, 10, 4, 4))
         model = LearnablePositionalImageEmbedding(embedding_dim=10, n_positions=16)
         model.eval()
         f = model.forward(x)
-        self.assertEqual(x.size(), f.size())
+        self.assertEqual(x.size(), f.sizes())
 
 
 if __name__ == '__main__':

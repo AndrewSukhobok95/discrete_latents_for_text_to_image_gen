@@ -31,7 +31,7 @@ def train_discriminator(discriminator,
     for epoch in range(num_epochs):
         for img, label in train_loader:
             real = img.to(device)
-            batch, _, _, _ = real.size()
+            batch, _, _, _ = real.sizes()
 
             with torch.no_grad():
                 latent_fake = generator.sample(n_samples=batch, device=device)

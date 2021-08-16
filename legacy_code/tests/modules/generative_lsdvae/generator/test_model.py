@@ -26,7 +26,7 @@ class Test(unittest.TestCase):
         model.eval()
         f = model.forward(noise, cond)
         expected_output_size = torch.Size((2, 1, 28, 28))
-        self.assertEqual(f.size(), expected_output_size)
+        self.assertEqual(f.sizes(), expected_output_size)
 
 
 

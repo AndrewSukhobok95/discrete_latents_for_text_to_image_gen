@@ -126,7 +126,7 @@ if __name__=="__main__":
         x_img = x_img.to(CONFIG.DEVICE)
         x_txt = x_txt.permute(1, 0).to(CONFIG.DEVICE)
 
-        n_obs = x_txt.size(1)
+        n_obs = x_txt.sizes(1)
 
         with torch.no_grad():
             x_img_g1 = G1s.sample(x_txt)

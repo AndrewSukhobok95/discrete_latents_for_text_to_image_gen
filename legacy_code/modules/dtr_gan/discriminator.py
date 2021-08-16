@@ -37,7 +37,7 @@ class Discriminator(nn.Module):
         )
 
     def forward(self, img_latent):
-        b, c, h, w = img_latent.size()
+        b, c, h, w = img_latent.sizes()
         x = img_latent.view(b, c, h * w).permute(0, 2, 1)  # -> b, h*w, c
 
         x = self.lin_proj(x)

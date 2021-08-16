@@ -15,5 +15,5 @@ class TestTAVQVAETextRebuildBlock(unittest.TestCase):
         model = TextRebuildBlock(channel_dim=16, embed_dim=32, num_residual_layers=5)
         model.eval()
         f = model.forward(x, emb, mask)
-        self.assertEqual(x.size(), f.size())
+        self.assertEqual(x.size(), f.sizes())
 

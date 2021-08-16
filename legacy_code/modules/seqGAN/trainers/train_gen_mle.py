@@ -27,7 +27,7 @@ def train_generator_MLE(generator,
 
             with torch.no_grad():
                 latent = dvae.ng_q_encode(img)
-            b, emb, h, w = latent.size()
+            b, emb, h, w = latent.sizes()
             target = latent.view(b, emb, -1).permute(2, 0, 1)
             noise = torch.randn(1, b, emb, device=device)
 

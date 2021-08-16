@@ -118,7 +118,7 @@ if __name__ == '__main__':
             with torch.no_grad():
                 real = dvae.q_encode(x, hard=True)
 
-            current_batch_dim = real.size(0)
+            current_batch_dim = real.sizes(0)
             labels_real = torch.full((current_batch_dim,), 1.0, device=CONFIG.DEVICE)
             labels_fake = torch.full((current_batch_dim,), 0.0, device=CONFIG.DEVICE)
 

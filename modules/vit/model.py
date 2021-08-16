@@ -128,7 +128,7 @@ class ViT(nn.Module):
         self.to(self.device)
 
     def forward(self, x, average_cls_token=False):
-        batch, ch, h, w = x.size()
+        batch, ch, h, w = x.sizes()
 
         x = self.to_patch_embedding(x)
         x = x.permute(1, 0, 2)

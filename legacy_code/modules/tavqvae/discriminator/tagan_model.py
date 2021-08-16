@@ -115,7 +115,7 @@ class Discriminator(nn.Module):
 
         sim = 0
         sim_n = 0
-        idx = np.arange(0, img.size(0))
+        idx = np.arange(0, img.sizes(0))
         idx_n = torch.tensor(np.roll(idx, 1), dtype=torch.long, device=txt.device)
 
         for i in range(3):
@@ -139,13 +139,13 @@ class Discriminator(nn.Module):
         return D, sim
 
     def _encode_txt(self, txt, len_txt):
-        hi_f = torch.zeros(txt.size(1), 512, device=txt.device)
-        hi_b = torch.zeros(txt.size(1), 512, device=txt.device)
+        hi_f = torch.zeros(txt.sizes(1), 512, device=txt.device)
+        hi_b = torch.zeros(txt.sizes(1), 512, device=txt.device)
         h_f = []
         h_b = []
         mask = []
-        for i in range(txt.size(0)):
-            mask_i = (txt.size(0) - 1 - i < len_txt).float().unsqueeze(1)
+        for i in range(txt.sizes(0)):
+            mask_i = (txt.sizes(0) - 1 - i < len_txt).float().unsqueeze(1)
             mask.append(mask_i)
             hi_f = self.txt_encoder_f(txt[i], hi_f)
             h_f.append(hi_f)

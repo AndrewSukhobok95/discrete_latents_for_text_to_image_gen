@@ -63,7 +63,7 @@ class TrMatcher(nn.Module):
         self.to(self.device)
 
     def forward(self, img, txt_tokens, average_cls_token=False):
-        batch, ch, h, w = img.size()
+        batch, ch, h, w = img.sizes()
 
         x = self.to_patch_embedding(img)
         x = x.permute(1, 0, 2)

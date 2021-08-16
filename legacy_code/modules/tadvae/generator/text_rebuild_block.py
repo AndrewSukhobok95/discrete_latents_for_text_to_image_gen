@@ -47,7 +47,7 @@ class TextRebuildBlock(nn.Module):
         img_e = self.img_emb(img_h)
         img_e = self.img_pos_emb(img_e)
 
-        eb, ech, eh, ew = img_e.size()
+        eb, ech, eh, ew = img_e.sizes()
         x = img_e.view(eb, ech, eh*ew).permute(2, 0, 1)
 
         mask_img_h = None
