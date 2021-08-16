@@ -92,7 +92,7 @@ class DescriptionGenerator:
         samples = self.sample()
         for s in range(self.batch_size):
             x_txt.append(samples[s])
-            for m in range(12):
+            for m in range(1, 13):
                 x_txt.append(self.modify(samples[s], m))
         return x_txt
 
