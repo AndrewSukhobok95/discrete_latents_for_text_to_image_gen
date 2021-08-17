@@ -6,8 +6,8 @@ data:
 
 model_info:
   model_type: "2s2s"
-  model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/cub/trArC2s2s_v256_ds2_nb12_cnb16_continue/"
-  model_name: "generator"
+  save_model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/cub/trArC2s2s_v256_ds2_nb12_cnb16_continue/"
+  save_model_name: "generator"
   load_model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/cub/trArC2s2s_v256_ds2_nb12_cnb16/"
   load_model_name: "generator"
   vae_model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/cub/dvae_v512_ds2_run2/"

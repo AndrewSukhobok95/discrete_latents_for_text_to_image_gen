@@ -4,9 +4,9 @@ data:
   root_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/multi_descriptive_MNIST/"
 
 model_info:
-  model_type: "2s2s"
-  model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/mnist_md/trArC2s2s_v256_ds2_nb12_cnb6/"
-  model_name: "generator"
+  model_type: "1s2s"
+  save_model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/mnist_md/trArC1s2s_v256_ds2_nb12/"
+  save_model_name: "generator"
   vae_model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/mnist_md/dvae_v256_ds2/"
   vae_model_name: "dvae"
 
@@ -26,7 +26,6 @@ model_params:
   num_resids_bottleneck: 4
   hidden_dim: 256
   num_blocks: 12
-  cond_num_blocks: 6
   n_attn_heads: 8
   dropout_prob: 0.1
 

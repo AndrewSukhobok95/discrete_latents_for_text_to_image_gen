@@ -1,17 +1,14 @@
 import os
+import argparse
 import numpy as np
 import torch
 import torch.nn.functional as F
 from torch import nn, optim
+from collections import Counter
 import matplotlib.pyplot as plt
-import argparse
 
-from modules.dvae.model import DVAE
-from modules.clip.model import CLIP, DVAECLIP
-from modules.transformer_gen.ar_cond_1stream.generator import LatentGenerator as LatentGenerator1s
-from modules.transformer_gen.ar_cond_2stream.generator import LatentGenerator as LatentGenerator2s
+from utilities.model_loading import *
 from config_reader import ConfigReader
-from datasets.mnist_loader import MNISTData
 from utilities.md_mnist_utils import DescriptionGenerator
 from utilities.md_mnist_utils import LabelsInfo
 from utilities.utils import EvalReport
@@ -22,7 +19,8 @@ argument_parser = argparse.ArgumentParser()
 argument_parser.add_argument('-cn', '--configname', action='store', type=str, required=True)
 args = argument_parser.parse_args()
 
-config_dir = '/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/'
+config_dir = '/home/andrey/dev/TA-VQVAE/configs/'
+# config_dir = '/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/'
 config_name = args.configname
 config_path = os.path.join(config_dir, config_name)
 
@@ -33,76 +31,12 @@ CONFIG_G1 = ConfigReader(config_path=CONFIG.generator_1_config_path)
 CONFIG_G2 = ConfigReader(config_path=CONFIG.generator_2_config_path)
 CONFIG_clip = ConfigReader(config_path=CONFIG.clip_config_path)
 
-
-dvae = DVAE(
-    in_channels=CONFIG_G1.in_channels,
-    vocab_size=CONFIG_G1.vocab_size,
-    num_x2downsamples=CONFIG_G1.num_x2downsamples,
-    num_resids_downsample=CONFIG_G1.num_resids_downsample,
-    num_resids_bottleneck=CONFIG_G1.num_resids_bottleneck,
-    hidden_dim=CONFIG_G1.hidden_dim,
-    device=CONFIG_G1.DEVICE)
-
-dvae.eval()
-dvae.load_model(
-    root_path=CONFIG_G1.vae_model_path,
-    model_name=CONFIG_G1.vae_model_name)
-
-G1s = LatentGenerator1s(
-    hidden_width=CONFIG_G1.hidden_width,
-    hidden_height=CONFIG_G1.hidden_height,
-    embedding_dim=CONFIG_G1.vocab_size,
-    num_blocks=CONFIG_G1.num_blocks,
-    cond_seq_size=CONFIG_G1.cond_seq_size,
-    cond_vocab_size=CONFIG_G1.cond_vocab_size,
-    hidden_dim=CONFIG_G1.hidden_dim,
-    n_attn_heads=CONFIG_G1.n_attn_heads,
-    dropout_prob=CONFIG_G1.dropout_prob,
-    device=CONFIG_G1.DEVICE)
-
-G1s.eval()
-G1s.load_model(
-    root_path=CONFIG_G1.model_path,
-    model_name=CONFIG_G1.model_name)
-
-G2s = LatentGenerator2s(
-    hidden_width=CONFIG_G2.hidden_width,
-    hidden_height=CONFIG_G2.hidden_height,
-    embedding_dim=CONFIG_G2.vocab_size,
-    num_blocks=CONFIG_G2.num_blocks,
-    cond_num_blocks=CONFIG_G2.cond_num_blocks,
-    cond_seq_size=CONFIG_G2.cond_seq_size,
-    cond_vocab_size=CONFIG_G2.cond_vocab_size,
-    hidden_dim=CONFIG_G2.hidden_dim,
-    n_attn_heads=CONFIG_G2.n_attn_heads,
-    dropout_prob=CONFIG_G2.dropout_prob,
-    device=CONFIG_G2.DEVICE)
-
-G2s.eval()
-G2s.load_model(
-    root_path=CONFIG_G2.model_path,
-    model_name=CONFIG_G2.model_name)
-
-clip = CLIP(
-    img_height=CONFIG_clip.img_height,
-    img_width=CONFIG_clip.img_width,
-    img_channels=CONFIG_clip.img_channels,
-    patch_height=CONFIG_clip.patch_height,
-    patch_width=CONFIG_clip.patch_width,
-    txt_max_length=CONFIG_clip.txt_max_length,
-    txt_vocab_size=CONFIG_clip.txt_vocab_size,
-    embed_dim=CONFIG_clip.embed_dim,
-    num_blocks=CONFIG_clip.num_blocks,
-    hidden_dim=CONFIG_clip.hidden_dim,
-    n_attn_heads=CONFIG_clip.n_attn_heads,
-    dropout_prob=CONFIG_clip.dropout_prob,
-    device=CONFIG_clip.DEVICE)
-
-clip.eval()
-clip.load_model(
-    root_path=CONFIG_clip.save_model_path,
-    model_name=CONFIG_clip.save_model_name)
-
+_eval = True
+_load = True
+dvae = define_DVAE(CONFIG_G1, eval=_eval, load=_load, compound_config=True)
+G1s = define_LatentGenerator1s(CONFIG_G1, eval=_eval, load=_load)
+G2s = define_LatentGenerator2s(CONFIG_G2, eval=_eval, load=_load)
+clip = define_CLIP(CONFIG_clip, eval=_eval, load=_load)
 
 description_gen = DescriptionGenerator(batch_size=CONFIG.batch_size)
 labels_info = LabelsInfo(json_path=CONFIG.labels_info_path)
@@ -111,42 +45,78 @@ eval_report = EvalReport(
     root_path=CONFIG.report_root_path,
     report_name=CONFIG.report_name)
 
+
+def batch_cics_calculation(x1, x2, t, clip):
+    n_obs = t.size(1)
+
+    x = torch.cat([x1, x2], dim=0)
+    logits_per_image, logits_per_text = clip(x, t)
+
+    l1 = torch.diagonal(logits_per_image[:n_obs, :])
+    l2 = torch.diagonal(logits_per_image[n_obs:, :])
+    probs = F.softmax(torch.stack([l1, l2], dim=1), dim=1)
+
+    n2 = probs.argmax(dim=1).sum().item()
+    n1 = n_obs - n2
+    return n1, n2
+
+
+def batch_ctrs_calculation(x1, x2, t, clip):
+    n_obs = t.size(1) // 13
+
+    _, logits_txt_1 = clip(x1, t)
+    _, logits_txt_2 = clip(x2, t)
+
+    l1 = torch.empty(n_obs, 13)
+    l2 = torch.empty(n_obs, 13)
+    for i in range(n_obs):
+        s = 13 * i
+        e = 13 * i + 13
+        l1[i, :] = F.softmax(logits_txt_1[s:e, i], dim=0)
+        l2[i, :] = F.softmax(logits_txt_2[s:e, i], dim=0)
+
+    d1 = dict(Counter(l1.argmax(dim=1).tolist()))
+    d2 = dict(Counter(l2.argmax(dim=1).tolist()))
+    return d1, d2
+
+
 if __name__=="__main__":
     print("Device in use: {}".format(CONFIG.DEVICE))
 
-    g1_score = 0
-    g2_score = 0
-
     for _ in range(CONFIG.num_iterations):
-        txt = description_gen.sample()
+        txt = description_gen.sample_with_modifications()
         x_txt = torch.LongTensor(labels_info.encode_values(txt))
         x_txt = x_txt.permute(1, 0).to(CONFIG.DEVICE)
 
-        n_obs = x_txt.size(1)
+        n_obs = x_txt.size(1) // 13
+        true_index = [i * 13 for i in range(n_obs)]
+        x_txt_true = x_txt[:, true_index].to(CONFIG.DEVICE)
+
         with torch.no_grad():
-            x_img_g1 = G1s.sample(x_txt)
+            print('+ G1 generation')
+            x_img_g1 = G1s.sample(x_txt_true)
             x_img_g1 = latent_to_img(x_img_g1, dvae, CONFIG_G1.hidden_height, CONFIG_G1.hidden_width)
 
-            x_img_g2 = G2s.sample(x_txt)
+            print('+ G2 generation')
+            x_img_g2 = G2s.sample(x_txt_true)
             x_img_g2 = latent_to_img(x_img_g2, dvae, CONFIG_G2.hidden_height, CONFIG_G2.hidden_width)
 
-            x = torch.cat([x_img_g1, x_img_g2], dim=0)
-            logits_per_image, logits_per_text = clip(x, x_txt)
+        # x_img_g1 = torch.rand((4, 3, 128, 128))
+        # x_img_g2 = torch.rand((4, 3, 128, 128))
 
-            l1 = torch.diagonal(logits_per_image[:n_obs, :])
-            l2 = torch.diagonal(logits_per_image[n_obs:, :])
+        print('+ CICS calculation')
+        s1, s2 = batch_cics_calculation(x_img_g1, x_img_g2, x_txt_true, clip)
+        eval_report.update_cics(score_1=s1, score_2=s2)
 
-            probs = F.softmax(torch.stack([l1, l2], dim=1), dim=1)
+        print('+ CTRS calculation')
+        d1, d2 = batch_ctrs_calculation(x_img_g1, x_img_g2, x_txt, clip)
+        eval_report.update_ctrs(d1=d1, d2=d2)
 
-        n2 = probs.argmax(dim=1).sum().item()
-        n1 = n_obs - n2
+        print('G1 score: {} G2 score: {}'.format(*eval_report.get_cics()))
+        print('G1 peak: {} G2 peak: {}'.format(*eval_report.get_ctrs_peaks()))
+        print()
 
-        g1_score += n1
-        g2_score += n2
-
-        print('G1 score: {} G2 score: {}'.format(g1_score, g2_score))
-
-    eval_report.save(g1_score, g2_score)
+        eval_report.save()
 
 
 

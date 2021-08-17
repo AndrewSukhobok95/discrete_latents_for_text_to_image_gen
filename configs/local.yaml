@@ -1,35 +1,18 @@
-data:
-  dataset: "cub"
-  dataset_type: "128_text"
-  custom_transform_version: 0
-  root_path: "/home/andrey/Aalto/thesis/TA-VQVAE/data/CUB"
 
-model_info:
-  save_model_path: "/home/andrey/Aalto/thesis/TA-VQVAE/models/cub/test/"
-  save_model_name: "dvae"
+dataset: "mnist"
+dataset_type: "md"
+root_path: "/home/andrey/dev/TA-VQVAE/data/multi_descriptive_MNIST/"
 
-image:
-  in_channels: 3
+labels_info_path: "/home/andrey/dev/TA-VQVAE/data/multi_descriptive_MNIST/description/labels_info.json"
 
-model_params:
-  vocab_size: 512
-  vqvae_embedding_dim: 512
-  num_x2downsamples: 2
-  num_resids_downsample: 6
-  num_resids_bottleneck: 4
-  vqvae_commitment_cost: 10
-  vqvae_decay: 0.1
-  hidden_dim: 512
+num_iterations: 10
+batch_size: 4
 
-training:
-  NUM_EPOCHS: 250
-  BATCH_SIZE: 2
-  OPT_type: "joint"
-  LR: 0.001
-  LR_q: 0.001
-  LR_gamma: 0.1
-  step_LR_milestones:
-    - 5
-    - 10
+generator_1_config_path: "/home/andrey/dev/TA-VQVAE/configs/finished/Tr1s2s_mnistmd_v256_ds2_nb12_remote.yaml"
+generator_2_config_path: "/home/andrey/dev/TA-VQVAE/configs/finished/trArC2s2s_mnistmd_v256_ds2_nb12_cnb6_remote.yaml"
+clip_config_path: "/home/andrey/dev/TA-VQVAE/configs/finished/clip_mnistmd.yaml"
+
+report_root_path: "/home/andrey/dev/TA-VQVAE/reports/"
+report_name: "clip_mnist_md"
 
 

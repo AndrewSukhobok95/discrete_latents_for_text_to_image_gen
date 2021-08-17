@@ -13,7 +13,7 @@ from modules.matcher.model import TrMatcher
 
 config_dir = '/home/andrey/Aalto/thesis/TA-VQVAE/configs/finished/'
 # config_dir = '/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/finished/'
-config_path = config_dir + 'trArC1s2s_mnistmd_v256_ds2_nb12_remote.yaml'
+config_path = config_dir + 'Tr1s2s_mnistmd_v256_ds2_nb12_remote.yaml'
 CONFIG = ConfigReader(config_path=config_path)
 
 CONFIG.BATCH_SIZE = 4

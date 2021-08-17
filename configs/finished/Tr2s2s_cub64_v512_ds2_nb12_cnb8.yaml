@@ -6,8 +6,8 @@ data:
 
 model_info:
   model_type: "2s2s"
-  model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/cub/Tr2s2s_cub64_v512_ds2_nb12_cnb8/"
-  model_name: "generator"
+  save_model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/cub/Tr2s2s_cub64_v512_ds2_nb12_cnb8/"
+  save_model_name: "generator"
   vae_model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/cub/dvae64_v512_ds2/"
   vae_model_name: "dvae"
 
