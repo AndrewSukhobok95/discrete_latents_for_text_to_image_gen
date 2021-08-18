@@ -114,9 +114,10 @@ if __name__=="__main__":
 
         print('G1 score: {} G2 score: {}'.format(*eval_report.get_cics()))
         print('G1 peak: {} G2 peak: {}'.format(*eval_report.get_ctrs_peaks()))
-        print()
 
         eval_report.save()
+
+        print()
 
 
 
