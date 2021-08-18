@@ -141,7 +141,7 @@ for epoch in range(CONFIG.NUM_EPOCHS):
     if hasattr(CONFIG, 'LR_gamma') and hasattr(CONFIG, 'step_LR_milestones'):
         lr_scheduler.step()
 
-    G.save_model(CONFIG.model_path, CONFIG.model_name)
+    G.save_model(CONFIG.save_model_path, CONFIG.save_model_name)
 
 
 
