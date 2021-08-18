@@ -47,14 +47,14 @@ train_loader = data_source.get_train_loader()
 
 dvae = define_DVAE(CONFIG, eval=True, load=True, compound_config=True)
 
-_load_to_continue = False
+_load_to_continue, _load = False, False
 if hasattr(CONFIG, 'load_model_path') and hasattr(CONFIG, 'load_model_name'):
-    _load_to_continue = True
+    _load_to_continue, _load = True, True
 
 if CONFIG.model_type == '2s2s':
-    G = define_LatentGenerator2s(CONFIG, eval=False, load=True, load_to_continue=_load_to_continue)
+    G = define_LatentGenerator2s(CONFIG, eval=False, load=_load, load_to_continue=_load_to_continue)
 elif CONFIG.model_type == '1s2s':
-    G = define_LatentGenerator1s(CONFIG, eval=False, load=True, load_to_continue=_load_to_continue)
+    G = define_LatentGenerator1s(CONFIG, eval=False, load=_load, load_to_continue=_load_to_continue)
 else:
     raise ValueError('Unknown Generator type.')
 
