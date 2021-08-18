@@ -1,0 +1,34 @@
+data:
+  dataset: "mnist"
+  dataset_type: "md"
+  root_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/multi_descriptive_MNIST/"
+
+model_info:
+  save_model_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/models/mnist_md/comparison_vqvae_v256_ds2_vocabsep/"
+  save_model_name: "vqvae"
+
+image:
+  in_channels: 3
+
+model_params:
+  vocab_size: 256
+  vqvae_embedding_dim: 256
+  num_x2downsamples: 2
+  num_resids_downsample: 6
+  num_resids_bottleneck: 4
+  vqvae_commitment_cost: 0.25
+  vqvae_decay: 0.99
+  hidden_dim: 256
+
+training:
+  NUM_EPOCHS: 15
+  BATCH_SIZE: 16
+  OPT_type: "vocab_sep"
+  LR: 0.001
+  LR_q: 0.01
+  LR_gamma: 0.1
+  step_LR_milestones:
+    - 5
+    - 10
+
+
