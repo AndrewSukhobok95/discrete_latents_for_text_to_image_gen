@@ -6,9 +6,7 @@ from torch.optim.lr_scheduler import MultiStepLR
 from torch.utils.tensorboard import SummaryWriter
 import argparse
 from config_reader import ConfigReader
-from modules.dvae.model import DVAE
-from modules.transformer_gen.ar_cond_2stream.generator import LatentGenerator as LatentGenerator2s
-from modules.transformer_gen.ar_cond_1stream.generator import LatentGenerator as LatentGenerator1s
+from utilities.model_loading import *
 from datasets.mnist_loader import MNISTData
 from datasets.cub_loader import CUBData
 
@@ -47,54 +45,18 @@ else:
 train_loader = data_source.get_train_loader()
 
 
-dvae = DVAE(
-    in_channels=CONFIG.in_channels,
-    vocab_size=CONFIG.vocab_size,
-    num_x2downsamples=CONFIG.num_x2downsamples,
-    num_resids_downsample=CONFIG.num_resids_downsample,
-    num_resids_bottleneck=CONFIG.num_resids_bottleneck,
-    hidden_dim=CONFIG.hidden_dim,
-    device=CONFIG.DEVICE)
+dvae = define_DVAE(CONFIG, eval=True, load=True, compound_config=True)
+
+_load_to_continue = False
+if hasattr(CONFIG, 'load_model_path') and hasattr(CONFIG, 'load_model_name'):
+    _load_to_continue = True
 
 if CONFIG.model_type == '2s2s':
-    G = LatentGenerator2s(
-        hidden_width=CONFIG.hidden_width,
-        hidden_height=CONFIG.hidden_height,
-        embedding_dim=CONFIG.vocab_size,
-        num_blocks=CONFIG.num_blocks,
-        cond_num_blocks=CONFIG.cond_num_blocks,
-        cond_seq_size=CONFIG.cond_seq_size,
-        cond_vocab_size=CONFIG.cond_vocab_size,
-        hidden_dim=CONFIG.hidden_dim,
-        n_attn_heads=CONFIG.n_attn_heads,
-        dropout_prob=CONFIG.dropout_prob,
-        device=CONFIG.DEVICE)
+    G = define_LatentGenerator2s(CONFIG, eval=False, load=True, load_to_continue=_load_to_continue)
 elif CONFIG.model_type == '1s2s':
-    G = LatentGenerator1s(
-        hidden_width=CONFIG.hidden_width,
-        hidden_height=CONFIG.hidden_height,
-        embedding_dim=CONFIG.vocab_size,
-        num_blocks=CONFIG.num_blocks,
-        cond_seq_size=CONFIG.cond_seq_size,
-        cond_vocab_size=CONFIG.cond_vocab_size,
-        hidden_dim=CONFIG.hidden_dim,
-        n_attn_heads=CONFIG.n_attn_heads,
-        dropout_prob=CONFIG.dropout_prob,
-        device=CONFIG.DEVICE)
+    G = define_LatentGenerator1s(CONFIG, eval=False, load=True, load_to_continue=_load_to_continue)
 else:
     raise ValueError('Unknown Generator type.')
-
-dvae.eval()
-G.train()
-
-dvae.load_model(
-    root_path=CONFIG.vae_model_path,
-    model_name=CONFIG.vae_model_name)
-
-if hasattr(CONFIG, 'load_model_path') and hasattr(CONFIG, 'load_model_name'):
-    G.load_model(
-        root_path=CONFIG.load_model_path,
-        model_name=CONFIG.load_model_name)
 
 print("Device in use: {}".format(CONFIG.DEVICE))
 

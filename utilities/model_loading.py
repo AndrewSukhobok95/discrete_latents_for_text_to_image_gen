@@ -54,7 +54,7 @@ def define_DVAE(config, eval=False, load=False, compound_config=False):
     return model
 
 
-def define_LatentGenerator1s(config, eval=False, load=False):
+def define_LatentGenerator1s(config, eval=False, load=False, load_to_continue=False):
     model = LatentGenerator1s(
         hidden_width=config.hidden_width,
         hidden_height=config.hidden_height,
@@ -70,14 +70,18 @@ def define_LatentGenerator1s(config, eval=False, load=False):
         model.eval()
     else:
         model.train()
-    if load:
+    if load and load_to_continue:
         model.load_model(
             root_path=config.save_model_path,
             model_name=config.save_model_name)
+    elif load and not load_to_continue:
+        model.load_model(
+            root_path=config.load_model_path,
+            model_name=config.load_model_name)
     return model
 
 
-def define_LatentGenerator2s(config, eval=False, load=False):
+def define_LatentGenerator2s(config, eval=False, load=False, load_to_continue=False):
     model = LatentGenerator2s(
         hidden_width=config.hidden_width,
         hidden_height=config.hidden_height,
@@ -94,8 +98,12 @@ def define_LatentGenerator2s(config, eval=False, load=False):
         model.eval()
     else:
         model.train()
-    if load:
+    if load and load_to_continue:
         model.load_model(
             root_path=config.save_model_path,
             model_name=config.save_model_name)
+    elif load and not load_to_continue:
+        model.load_model(
+            root_path=config.load_model_path,
+            model_name=config.load_model_name)
     return model
