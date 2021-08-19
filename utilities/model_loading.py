@@ -70,11 +70,11 @@ def define_LatentGenerator1s(config, eval=False, load=False, load_to_continue=Fa
         model.eval()
     else:
         model.train()
-    if load and load_to_continue:
+    if load and not load_to_continue:
         model.load_model(
             root_path=config.save_model_path,
             model_name=config.save_model_name)
-    elif load and not load_to_continue:
+    elif load and load_to_continue:
         model.load_model(
             root_path=config.load_model_path,
             model_name=config.load_model_name)
