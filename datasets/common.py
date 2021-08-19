@@ -11,7 +11,10 @@ def collate_fn(samples):
 
 class SquarePad:
     def __call__(self, image):
-        w, h = image.size
+        if isinstance(image, torch.Tensor):
+            ch, w, h = image.size()
+        else:
+            w, h = image.size
         max_wh = np.max([w, h])
         hp = int((max_wh - w) / 2)
         vp = int((max_wh - h) / 2)

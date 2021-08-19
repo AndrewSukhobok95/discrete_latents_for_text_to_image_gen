@@ -1,12 +1,12 @@
 
-dataset: "mnist"
-dataset_type: "md"
-root_path: "/home/andrey/dev/TA-VQVAE/data/multi_descriptive_MNIST/"
+dataset: "cub"
+dataset_type: "64_text"
+root_path: "/home/andrey/dev/TA-VQVAE/data/CUB/"
 
 labels_info_path: "/home/andrey/dev/TA-VQVAE/data/multi_descriptive_MNIST/description/labels_info.json"
 
 num_iterations: 10
-batch_size: 4
+BATCH_SIZE: 4
 
 generator_1_config_path: "/home/andrey/dev/TA-VQVAE/configs/finished/Tr1s2s_mnistmd_v256_ds2_nb12_remote.yaml"
 generator_2_config_path: "/home/andrey/dev/TA-VQVAE/configs/finished/trArC2s2s_mnistmd_v256_ds2_nb12_cnb6_remote.yaml"

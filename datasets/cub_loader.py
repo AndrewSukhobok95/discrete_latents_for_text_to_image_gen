@@ -96,17 +96,17 @@ class CUBData:
                 torch_transforms.ToTensor()
             ])
 
-        dataset = CubDataset(root_img_path=root_img_path,
+        self.dataset = CubDataset(root_img_path=root_img_path,
                              root_text_path=root_text_path,
                              imgs_list_file_path=imgs_list_file_path,
                              img_size=img_size,
                              transforms=transforms)
 
-        self.train_length = int(len(dataset) * prct_train_split)
-        self.test_length = len(dataset) - self.train_length
+        self.train_length = int(len(self.dataset) * prct_train_split)
+        self.test_length = len(self.dataset) - self.train_length
 
         self.trainset, self.testset = torch.utils.data.random_split(
-            dataset, lengths=[self.train_length, self.test_length],
+            self.dataset, lengths=[self.train_length, self.test_length],
             generator=torch.Generator().manual_seed(seed) if seed else None)
 
     def get_train_loader(self, batch_size=None):
@@ -129,13 +129,33 @@ class CUBData:
             collate_fn=self.collate_fn)
         return loader
 
+    def get_imgs_by_file_names(self, imgs_paths, img_size=128):
+        transforms = torch_transforms.Compose([
+            SquarePad(),
+            torch_transforms.Resize(img_size + 20),
+            torch_transforms.CenterCrop(img_size)
+        ])
+        data_paths = list(map(lambda x: x[0], self.dataset.data_paths))
+        indices = []
+        for ip in imgs_paths:
+            indices.append(data_paths.index(ip))
+        out = torch.empty(len(indices), 3, img_size, img_size)
+        for i, idx in enumerate(indices):
+            out[i, :, :, :] = transforms(self.dataset[idx][0])
+        return out
+
 
 if __name__=="__main__":
     cubdata = CUBData(
         img_type="128_token_ids",#"128_token_ids"
-        root_path="/home/andrey/Aalto/thesis/TA-VQVAE/data/CUB",
+        root_path="/home/andrey/dev/TA-VQVAE/data/CUB",
         batch_size=4,
         description_len=64)
+
+    cubdata.get_imgs_by_file_names([
+        '001.Black_footed_Albatross/Black_Footed_Albatross_0008_796083.jpg',
+        '009.Brewer_Blackbird/Brewer_Blackbird_0009_2616.jpg'
+    ])
 
     loader = cubdata.get_train_loader()
 
