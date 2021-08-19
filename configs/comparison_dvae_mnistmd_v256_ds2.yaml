@@ -9,7 +9,7 @@ model_info:
 
 model_params:
   in_channels: 3
-  vocab_size: 256
+  vocab_size: 128
   num_x2downsamples: 2
   num_resids_downsample: 6
   num_resids_bottleneck: 4
@@ -17,19 +17,18 @@ model_params:
 
 training:
   loss_fn: "bce"
-  NUM_EPOCHS: 15
+  NUM_EPOCHS: 5
   BATCH_SIZE: 16
   LR: 0.001
   LR_gamma: 0.1
   step_LR_milestones:
-    - 5
-    - 10
+    - 3
   temp_start: 5
   temp_end: 0.01
-  temp_steps: 8000
+  temp_steps: 30000
   klU_type: linear
   klU_const: 0.001
   klU_start: 0
   klU_end: 0.001
-  klU_steps: 7000
+  klU_steps: 25000
 

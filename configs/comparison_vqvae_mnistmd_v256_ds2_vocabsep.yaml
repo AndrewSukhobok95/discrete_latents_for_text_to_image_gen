@@ -11,8 +11,8 @@ image:
   in_channels: 3
 
 model_params:
-  vocab_size: 256
-  vqvae_embedding_dim: 256
+  vocab_size: 128
+  vqvae_embedding_dim: 128
   num_x2downsamples: 2
   num_resids_downsample: 6
   num_resids_bottleneck: 4
@@ -21,14 +21,13 @@ model_params:
   hidden_dim: 256
 
 training:
-  NUM_EPOCHS: 15
+  NUM_EPOCHS: 5
   BATCH_SIZE: 16
   OPT_type: "vocab_sep"
   LR: 0.001
   LR_q: 0.01
   LR_gamma: 0.1
   step_LR_milestones:
-    - 5
-    - 10
+    - 3
 
 
