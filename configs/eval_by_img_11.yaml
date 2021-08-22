@@ -1,0 +1,15 @@
+dataset: "mnist"
+dataset_type: "md"
+root_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/data/multi_descriptive_MNIST/"
+
+labels_info_path: "/m/home/home8/82/sukhoba1/data/Desktop/TA-VQVAE/data/multi_descriptive_MNIST/description/labels_info.json"
+
+num_iterations: 200
+batch_size: 50
+
+generator_1_config_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/finished/Tr1s2s_mnistmd_v256_ds2_nb12_remote.yaml"
+generator_2_config_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/finished/Tr2s2s_mnistmd_v256_ds2_nb12_cnb6_remote.yaml"
+clip_config_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/finished/clip_mnistmd.yaml"
+
+report_root_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/reports/"
+report_name: "clip_mnist_md_report_11"

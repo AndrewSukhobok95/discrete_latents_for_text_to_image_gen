@@ -5,7 +5,7 @@ import torch
 import torch.nn.functional as F
 from torch import nn, optim
 from collections import Counter
-import matplotlib.pyplot as plt
+from torch.utils.tensorboard import SummaryWriter
 
 from utilities.model_loading import *
 from config_reader import ConfigReader
@@ -30,6 +30,8 @@ CONFIG.print_config_info()
 CONFIG_G1 = ConfigReader(config_path=CONFIG.generator_1_config_path)
 CONFIG_G2 = ConfigReader(config_path=CONFIG.generator_2_config_path)
 CONFIG_clip = ConfigReader(config_path=CONFIG.clip_config_path)
+
+writer = SummaryWriter(comment='_' + config_name)
 
 _eval = True
 _load = True
@@ -83,7 +85,7 @@ def batch_ctrs_calculation(x1, x2, t, clip):
 if __name__=="__main__":
     print("Device in use: {}".format(CONFIG.DEVICE))
 
-    for _ in range(CONFIG.num_iterations):
+    for iteration in range(CONFIG.num_iterations):
         txt = description_gen.sample_with_modifications()
         x_txt = torch.LongTensor(labels_info.encode_values(txt))
         x_txt = x_txt.permute(1, 0).to(CONFIG.DEVICE)
@@ -112,11 +114,15 @@ if __name__=="__main__":
         d1, d2 = batch_ctrs_calculation(x_img_g1, x_img_g2, x_txt, clip)
         eval_report.update_ctrs(d1=d1, d2=d2)
 
-        print('G1 score: {} G2 score: {}'.format(*eval_report.get_cics()))
-        print('G1 peak: {} G2 peak: {}'.format(*eval_report.get_ctrs_peaks()))
-
         eval_report.save()
 
+        cics_1, cics_2 = eval_report.get_cics()
+        ctrsp_1, ctrsp_2 = eval_report.get_ctrs_peaks()
+        writer.add_scalars('additional_info/cics', {
+            'G1': cics_1, 'G2': cics_2
+        }, iteration)
+        print('G1 score: {} G2 score: {}'.format(cics_1, cics_2))
+        print('G1 peak: {} G2 peak: {}'.format(ctrsp_1, ctrsp_2))
         print()
 
 
