@@ -12,4 +12,4 @@ generator_2_config_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/finished/
 clip_config_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/finished/clip_mnistmd.yaml"
 
 report_root_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/reports/"
-report_name: "clip_mnist_md_report_12"
+report_name: "clip_mnist_md_report_tb_1"

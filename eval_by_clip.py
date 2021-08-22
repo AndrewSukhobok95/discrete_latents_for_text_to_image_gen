@@ -107,8 +107,8 @@ if __name__=="__main__":
         # x_img_g2 = torch.rand((4, 3, 128, 128))
 
         print('+ CICS calculation')
-        s1, s2 = batch_cics_calculation(x_img_g1, x_img_g2, x_txt_true, clip)
-        eval_report.update_cics(score_1=s1, score_2=s2)
+        b_cics_1, b_cics_2 = batch_cics_calculation(x_img_g1, x_img_g2, x_txt_true, clip)
+        eval_report.update_cics(score_1=b_cics_1, score_2=b_cics_2)
 
         print('+ CTRS calculation')
         d1, d2 = batch_ctrs_calculation(x_img_g1, x_img_g2, x_txt, clip)
@@ -118,7 +118,11 @@ if __name__=="__main__":
 
         cics_1, cics_2 = eval_report.get_cics()
         ctrsp_1, ctrsp_2 = eval_report.get_ctrs_peaks()
+
         writer.add_scalars('additional_info/cics', {
+            'G1': b_cics_1, 'G2': b_cics_2
+        }, iteration)
+        writer.add_scalars('additional_info/cics_cum', {
             'G1': cics_1, 'G2': cics_2
         }, iteration)
         print('G1 score: {} G2 score: {}'.format(cics_1, cics_2))
