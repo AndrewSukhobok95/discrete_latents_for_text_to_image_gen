@@ -74,6 +74,10 @@ class EvalReport:
         with open(self.path, 'w') as outfile:
             yaml.dump(self.report, outfile, allow_unicode=False)
 
+    def load(self):
+        with open(self.path, 'r') as infile:
+            self.report = yaml.safe_load(infile)
+
 
 def label_like(label, x):
     assert label == 0 or label == 1
