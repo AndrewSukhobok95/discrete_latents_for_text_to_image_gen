@@ -10,7 +10,7 @@ This is a repository containing code for experiments with discrete VAE and Trans
 #### CUB
 
 - CUB Text captions: https://github.com/taoxugit/AttnGAN
-- Images: http://www.vision.caltech.edu/visipedia/CUB-200-2011.html
+- CUB Images: http://www.vision.caltech.edu/visipedia/CUB-200-2011.html
 
 #### Multi-Digit MNIST
 
