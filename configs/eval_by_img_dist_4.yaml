@@ -7,8 +7,8 @@ labels_info_path: "/m/home/home8/82/sukhoba1/data/Desktop/TA-VQVAE/data/multi_de
 num_iterations: 100
 batch_size: 100
 
-generator_1_config_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/finished/Tr1s2s_mnistmd_v256_ds2_nb12_remote.yaml"
-generator_2_config_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/finished/Tr2s2s_mnistmd_v256_ds2_nb12_cnb6_remote.yaml"
+generator_1_config_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/finished/Tr1s2s_mnistmd_v256_ds2_nb12.yaml"
+generator_2_config_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/finished/Tr2s2s_mnistmd_v256_ds2_nb12_cnb6.yaml"
 clip_config_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/configs/finished/clip_mnistmd.yaml"
 
 report_root_path: "/u/82/sukhoba1/unix/Desktop/TA-VQVAE/reports/"
